@@ -4,8 +4,11 @@
 2) install ruby (mac may already have this)
     -make sure to add ruby to path when installing
 3) in Webstorm create new project from git which should theoretically pull down everything...
-3) in the server folder from the command line/terminal run:
+4) run:
+    - npm install -g bower
+    - npm install -g nodemon
+5) in the server folder from the command line/terminal run:
     - npm install
-4) in the client folder from the command line/terminal run:
+6) in the client folder from the command line/terminal run:
     - npm install
     - bower install
