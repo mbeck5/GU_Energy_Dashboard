@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingSelectorCtrl', ['$scope', 'buildingSvc',
-    function ($scope, buildingSvc) {
+  .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
         $scope.searchInput = '';
         var buildings = ['Crosby', 'Herak', 'Paccar', 'Kennedy', 'Madonna', 'Roncalli', 'Lincoln', 'Jepson', 'Dillon', 'Goller', 'Campion', 'College Hall'];
         $scope.filteredBuildings = buildings;
@@ -18,4 +17,4 @@ angular.module('clientApp')
         function filterBuildings(element) {
             return element.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }
-  }]);
+  });
