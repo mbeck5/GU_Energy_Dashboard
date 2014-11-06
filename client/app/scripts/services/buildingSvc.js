@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('clientApp')
-  .factory('BuildingService', function () {
-    var selectedBuilding;
+  .factory('buildingSvc', function () {
+    var selectedBuilding = 'DESELECTED';
 
     function getSelectedBuilding() {
       return selectedBuilding;
@@ -13,7 +13,7 @@ angular.module('clientApp')
     }
 
     return {
-      getSelectedBuilding: getSelectedBuilding(),
-      setSelectedBuilding: setSelectedBuilding()
+      getSelectedBuilding: getSelectedBuilding,
+      setSelectedBuilding: setSelectedBuilding
     };
   });
