@@ -23,9 +23,13 @@ angular
         templateUrl: 'views/buildingSelector.html',
         controller: 'BuildingSelectorCtrl'
       })
+      .when('/buildings/:building', {
+        templateUrl: 'views/buildingDisplay.html',
+        controller: 'BuildingDisplayCtrl'
+      })
       .when('/test', {
-            templateUrl: 'views/test.html',
-            controller: 'TestCtrl'
+        templateUrl: 'views/test.html',
+        controller: 'TestCtrl'
         })
       .otherwise({
         redirectTo: '/'
