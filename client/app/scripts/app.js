@@ -23,6 +23,10 @@ angular
         templateUrl: 'views/buildingSelector.html',
         controller: 'BuildingSelectorCtrl'
       })
+      .when('/:building', {
+        templateUrl: 'views/buildingDisplay.html',
+        controller: 'BuildingDisplayCtrl'
+      })
       .when('/test', {
             templateUrl: 'views/test.html',
             controller: 'TestCtrl'
