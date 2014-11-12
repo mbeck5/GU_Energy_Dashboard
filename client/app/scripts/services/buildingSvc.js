@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('clientApp')
-  .factory('buildingSvc', function () {
+  .factory('buildingSvc', function (Restangular) {
     var selectedBuilding = 'DESELECTED';
+
+    function getBuildings() {
+      var allBuildings = Restangular.all('buildings');
+      return allBuildings.getList();
+    }
 
     function getSelectedBuilding() {
       return selectedBuilding;
@@ -13,6 +18,7 @@ angular.module('clientApp')
     }
 
     return {
+      getBuildings: getBuildings,
       getSelectedBuilding: getSelectedBuilding,
       setSelectedBuilding: setSelectedBuilding
     };

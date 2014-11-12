@@ -12,10 +12,11 @@ angular
   .module('clientApp', [
     'ngAnimate',
     'ngCookies',
-    'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'restangular',
+    'lodash'
   ])
   .config(function ($routeProvider) {
     $routeProvider
