@@ -15,10 +15,10 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'restangular',
-    'lodash'
+    'restangular'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, RestangularProvider) {
+    RestangularProvider.setBaseUrl('/api/');
     $routeProvider
       .when('/', {
         templateUrl: 'views/buildingSelector.html',

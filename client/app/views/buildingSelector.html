@@ -4,7 +4,7 @@
     </div>
     <div id="building-list" class="list-group">
         <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building}}" ng-click="selectBuilding($index)">
-            {{building}}
+            {{building.name}}
         </a>
     </div>
 </div>
