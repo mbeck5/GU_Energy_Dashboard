@@ -3,7 +3,7 @@
         <input type="search" class="form-control" placeholder="Search" ng-model="searchInput" ng-change="filterBuildings()">
     </div>
     <div id="building-list" class="list-group">
-        <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building}}" ng-click="selectBuilding($index)">
+        <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building.name}}" ng-click="selectBuilding($index)">
             {{building.name}}
         </a>
     </div>
