@@ -4,9 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var mysql = require('mysql');
 
 var app = express();
 
@@ -26,6 +24,13 @@ if (app.get('env') === 'development') {
     // This covers serving up the index page
     app.use(express.static(path.join(__dirname, '../client/.tmp')));
     app.use(express.static(path.join(__dirname, '../client/app')));
+
+    connection = mysql.createConnection({
+        host: '147.222.165.3',
+        user: 'debert',
+        password: 'debert1234',
+        database: 'energy_dashboard'
+    });
 
     // Error Handling
     app.use(function(err, req, res, next) {
@@ -56,3 +61,4 @@ else if (app.get('env') === 'production') {
 }
 
 module.exports = app;
+routes = require('./routes');
