@@ -23,6 +23,6 @@ angular.module('clientApp')
         };
 
         function filterBuildings(element) {
-            return element.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+            return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }
   });
