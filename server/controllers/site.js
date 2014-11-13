@@ -1,12 +1,14 @@
 exports.getBuildings = function(req, res){
-    console.log('get');
-    connection.query('SELECT building FROM building_data', function(err, rows){
+    connection.connect();
+    connection.query('SELECT name FROM building_data', function(err, rows){
         if(err){
+            console.log(err);
             throw err;
         }
         else {
-            //res.send(rows);
-            console.log('hello');
+            console.log('success');
+            res.send(rows);
         }
     });
+    connection.end();
 };

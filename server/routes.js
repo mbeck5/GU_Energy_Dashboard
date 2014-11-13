@@ -1,4 +1,4 @@
-app = module.parent.exports.app;
+app = module.parent.exports;
 
 var siteController = require('./controllers/site');
 

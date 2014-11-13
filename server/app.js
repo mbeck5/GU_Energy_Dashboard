@@ -26,7 +26,7 @@ if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../client/.tmp')));
     app.use(express.static(path.join(__dirname, '../client/app')));
 
-    var connection = mysql.createConnection({
+    connection = mysql.createConnection({
         host: '147.222.165.3',
         user: 'debert',
         password: 'debert1234',
