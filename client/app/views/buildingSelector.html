@@ -1,15 +1,37 @@
-<div>
-  <div id="building-search" class="form-group">
-    <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
-           ng-change="filterBuildings()">
+<html>
+<body>
+
+<div id="background">
+  <div>
+    <h3>
+      <img id="gu-icon" src="images\energy-dashboard-title-icon.png" alt="some_text"/>
+    </h3>
+  </div>
+
+  <div id="home-screen-pills-and-search" aria-orientation="vertical">
+    <div>
+      <ul class="nav nav-pills pull-right">
+        <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
+        <li ng-class="{active: isActive('/')}"><a ng-href="#/test">Competitions</a></li>
+        <li ng-class="{active: isActive('/')}"><a ng-href="#/test">Tips</a></li>
+      </ul>
+    </div>
+    <div id="building-search" class="form-group">
+      <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+             ng-change="filterBuildings()">
+    </div>
   </div>
 
 
   <div id="building-scroll" class="scroll">
     <div id="building-list" class="list-group">
-        <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building.name}}" ng-click="selectBuilding($index)">
-            {{building.name}}
-        </a>
+      <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building.name}}" ng-click="selectBuilding($index)">
+        {{building.name}}
+      </a>
     </div>
   </div>
+
 </div>
+</body>
+</html>
+
