@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production && nodemon ./bin/www",
-    "test": "NODE_ENV=development && nodemon ./bin/www"
+    "start": "SET \"NODE_ENV=production\" && nodemon ./bin/www",
+    "test": "SET \"NODE_ENV=development\" && nodemon ./bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
@@ -13,7 +13,7 @@
     "morgan": "~1.3.0",
     "serve-favicon": "~2.1.3",
     "debug": "~2.0.0",
-	"node-mysql": "~0.4.0",
+	"mysql": "~2.5.3",
 	"node-compass": "0.2.3"
   }
 }

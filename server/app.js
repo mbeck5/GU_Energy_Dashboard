@@ -62,3 +62,4 @@ else if (app.get('env') === 'production') {
 }
 
 module.exports = app;
+routes = require('./routes');
