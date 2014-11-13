@@ -5,7 +5,7 @@ angular.module('clientApp')
     var selectedBuilding = 'DESELECTED';
 
     function getBuildings() {
-      var allBuildings = Restangular.all('buildings');
+      var allBuildings = Restangular.all('/api/buildings');
       return allBuildings.getList();
     }
 
