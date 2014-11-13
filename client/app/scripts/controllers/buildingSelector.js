@@ -2,19 +2,27 @@
 
 angular.module('clientApp')
   .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
+        var buildings = [];
         $scope.searchInput = '';
-        var buildings = ['Crosby', 'Herak', 'Paccar', 'Kennedy', 'Madonna', 'Roncalli', 'Lincoln', 'Jepson', 'Dillon', 'Goller', 'Campion', 'College Hall'];
-        $scope.filteredBuildings = buildings;
+        $scope.filteredBuildings = [];
 
+        //unpack promise returned from rest call
+        buildingSvc.getBuildings().then(function (data) {
+          buildings = data;
+          $scope.filteredBuildings = buildings;
+        });
+
+        //filters based on search input
         $scope.filterBuildings = function() {
             $scope.filteredBuildings = buildings.filter(filterBuildings);
         };
 
+        //when clicking on building
         $scope.selectBuilding = function (index) {
             buildingSvc.setSelectedBuilding($scope.filteredBuildings[index]);
         };
 
         function filterBuildings(element) {
-            return element.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+            return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }
   });
