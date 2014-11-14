@@ -1,39 +1,54 @@
-GU_Energy_Dashboard
-===================
+# GU Energy Dashboard
 
 This is the senior design repository for the CPSC 002 GU Energy Dashboard
 
-Installing:
-1) install NodeJS from their website
-    -default options should be fine
-2) install ruby (mac may already have this)
-    -make sure to add ruby to path when installing!
+## Installing
+
+1) Install NodeJS from their website.  Default options should be fine.
+
+2) Install ruby (mac may already have this).  Make sure to add ruby to path when installing!
+
 3)  Restart!
-4) in Webstorm create new project from version control which should theoretically pull down everything...
 
-***Linux or Mac users may need "sudo" in front of some of the following commands:
+4) In Webstorm, create new project from version control which should theoretically pull down everything...
 
-5) run:
-    - gem install compass
-    - npm install -g grunt-cli
-    - npm install -g bower
-    - npm install -g nodemon
-6) in the server folder from the command line/terminal run:
-    - npm install
-7) in the client folder from the command line/terminal run:
-    - npm install
-    - bower install
+    > Linux or Mac users may need "sudo" in front of some of the following commands:
+
+5) Run:
+
+    $ gem install compass
+    $ npm install -g grunt-cli bower nodemon
+
+6) In the server folder from the command line/terminal run:
+
+    $ npm install
+
+7) In the client folder from the command line/terminal run:
+
+    $ npm install
+    $ bower install
 
 
-Running:
-In dev (what you will do most of the time):
-    in the client folder run:
-        - grunt serve
-    in the server folder run:
-        - npm test
+## Running
 
-In prod:
-    in the client folder run
-        - grunt
-    in the server folder run:
-        - npm start
+# In development mode (what you will do most of the time):
+
+In the client folder run:
+
+    $ grunt serve
+
+In the server folder run:
+
+    $ npm test
+
+    > make sure your browser is pointing to http://localhost:3000/#/
+
+#In prod:
+
+In the client folder run:
+
+    $ grunt
+
+In the server folder run:
+
+    $ npm start
