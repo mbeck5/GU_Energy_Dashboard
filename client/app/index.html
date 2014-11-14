@@ -23,8 +23,8 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container-fluid" ng-controller="HeaderCtrl">
-      <div class="header">
+    <div class="container-fluid">
+      <div class="header" ng-controller="HeaderCtrl">
         <ul class="nav nav-pills pull-right">
           <li ng-class="{active: isActive('/')}"><a ng-href="#">Buildings</a></li>
           <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Test</a></li>
@@ -34,9 +34,6 @@
 
       <div id="main" ng-view=""></div>
 
-      <div class="footer">
-        <p><i class="fa fa-heart"></i> from DJ, DJ, Mark & Tyler</p>
-      </div>
     </div>
 
 
