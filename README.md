@@ -12,7 +12,7 @@ This is the senior design repository for the CPSC 002 GU Energy Dashboard
 
 4) In Webstorm, create new project from version control which should theoretically pull down everything...
 
-    > Linux or Mac users may need "sudo" in front of some of the following commands:
+> Linux or Mac users may need "sudo" in front of some of the following commands:
 
 5) Run:
 
@@ -31,7 +31,7 @@ This is the senior design repository for the CPSC 002 GU Energy Dashboard
 
 ## Running
 
-# In development mode (what you will do most of the time):
+### In development mode (what you will do most of the time):
 
 In the client folder run:
 
@@ -41,9 +41,9 @@ In the server folder run:
 
     $ npm test
 
-    > make sure your browser is pointing to http://localhost:3000/#/
+> make sure your browser is pointing to http://localhost:3000/#/
 
-#In prod:
+### In prod:
 
 In the client folder run:
 
