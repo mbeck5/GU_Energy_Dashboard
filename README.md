@@ -1,6 +1,6 @@
 # GU Energy Dashboard
 
-This is the senior design repository for the CPSC 002 GU Energy Dashboard
+This is the senior design repository for the CPSC 002 GU Energy Dashboard.
 
 ## Installing
 
@@ -41,7 +41,7 @@ In the server folder run:
 
     $ npm test
 
-> make sure your browser is pointing to http://localhost:3000/#/
+> Make sure your browser is pointing to http://localhost:3000/#/
 
 ### In production mode:
 
