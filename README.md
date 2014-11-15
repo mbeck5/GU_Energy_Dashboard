@@ -43,7 +43,7 @@ In the server folder run:
 
 > make sure your browser is pointing to http://localhost:3000/#/
 
-### In prod:
+### In production mode:
 
 In the client folder run:
 
