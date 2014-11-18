@@ -9,6 +9,17 @@ exports.getBuildings = function(req, res){
     });
 };
 
+exports.getResources = function(req, res, building){
+    connection.query("SELECT water, electricity, gas FROM building_data WHERE name = '" + building + "' ORDER BY date", function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
 exports.getWater = function(req, res, building){
     connection.query("SELECT water FROM building_data WHERE name = '" + building + "' ORDER BY date", function(err, rows){
         if(err){
