@@ -10,7 +10,7 @@ exports.getBuildings = function(req, res){
 };
 
 exports.getResources = function(req, res){
-    connection.query("SELECT water, electricity, gas FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT water, electric, gas FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
@@ -32,7 +32,7 @@ exports.getWater = function(req, res){
 };
 
 exports.getElectricity = function(req, res){
-    connection.query("SELECT electricity FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT electric FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
