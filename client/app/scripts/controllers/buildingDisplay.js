@@ -8,18 +8,7 @@ angular.module('clientApp')
         values: [{}],
         key: $scope.selectedBuilding.name
       }];
-      var resourceName = "";
-      switch ($scope.selectedResource) {
-        case 0: //electricity
-          resourceName = "Electricity";
-          break;
-        case 1: //water
-          resourceName = "Water";
-          break;
-        case 2: //gas
-          resourceName = "Gas";
-          break;
-      }
+
       $scope.options = {
         chart: {
           type: "lineChart",
@@ -38,7 +27,6 @@ angular.module('clientApp')
             }
           },
           yAxis: {
-            axisLabel: resourceName,
             axisLabelDistance: 25,
             tickPadding: [10]
           },
@@ -62,12 +50,15 @@ angular.module('clientApp')
           switch ($scope.selectedResource) {
             case 0: //electricity
               tempPair.y = data[i].electric;
+              $scope.options.chart.yAxis.axisLabel = "Electricity";
               break;
             case 1: //water
               tempPair.y = data[i].water;
+              $scope.options.chart.yAxis.axisLabel = "Water";
               break;
             case 2: //gas
               tempPair.y = data[i].gas;
+              $scope.options.chart.yAxis.axisLabel = "Gas";
               break;
           }
           $scope.data[0].values.push(tempPair);
