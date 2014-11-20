@@ -1,25 +1,6 @@
-<html ng-app="ui.bootstrap.demo">
-<!--<head>
-  <style>
-    div.scroll {
-      width: 200px;
-      height: 150px;
-      overflow: scroll;
-    }
-  </style>
-</head>-->
-<head>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
-  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
-  <script src="example.js"></script>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-
 <div id="background" class="home-background">
   <div>
-    <h3 aria-orientation="vertical">
+    <h3 aria-orientation="horizontal">
       <img id="gu-icon" src="images\energy-dashboard-title-icon.png" alt="some_text"
            align="middle"/>
 
@@ -33,12 +14,10 @@
     </h3>
   </div>
 
-
   <div id="search" class="form-group">
     <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
            ng-change="filterBuildings()">
   </div>
-
 
   <div id="building-scroll" class="scroll">
     <div id="building-list" class="list-group">
@@ -48,19 +27,11 @@
       </a>
     </div>
   </div>
-<div>
-
-  <tabset vertical="true" type="pills">
-    <tab heading="Vertical 1">Vertical content 1</tab>
-    <tab heading="Vertical 2">Vertical content 2</tab>
-  </tabset>
-
-
+  <div>
+    <tabset vertical="true" type="pills">
+      <tab heading="Vertical 1">Vertical content 1</tab>
+      <tab heading="Vertical 2">Vertical content 2</tab>
+    </tabset>
+  </div>
 </div>
 
-
-</div>
-
-
-</body>
-</html>

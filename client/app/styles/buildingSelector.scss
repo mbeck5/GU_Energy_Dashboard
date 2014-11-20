@@ -8,13 +8,20 @@
 #gu-icon {
   margin-left: 30px;
   margin-top: 10px;
+  width: 50%;
 }
 
 #energy-dashboard-icon {
   margin-top: 30px;
 }
 
-#home-screen-pills-and-search {
+#pills{
+  float: right;
+  margin-right: 30px;
+  margin-top: 40px;
+}
+
+#search {
   float: right;
   margin-right: 30px;
   margin-top: 20px;
@@ -30,8 +37,8 @@
 
 #building-scroll {
   width: 25%;
-  height: 90%;
-  overflow: scroll;
+  //height: 90%;
+  //overflow: scroll;
   margin-top: 30px;
   margin-left: 30px;
   margin-bottom: 30px;
