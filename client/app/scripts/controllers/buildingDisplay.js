@@ -28,6 +28,7 @@ angular.module('clientApp')
             }
           },
           yAxis: {
+            showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
           },
