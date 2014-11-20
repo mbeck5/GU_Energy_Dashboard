@@ -54,7 +54,7 @@ angular.module('clientApp')
               tempPair.y = data[i].gas;
               break;
           }
-          $scope.data.values.push(tempPair);
+          $scope.data[0].values.push(tempPair);
         }
       }
   });
