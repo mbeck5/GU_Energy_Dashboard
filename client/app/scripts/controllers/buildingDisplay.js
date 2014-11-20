@@ -19,7 +19,10 @@ angular.module('clientApp')
           },
           useInteractiveGuideline:true,
           xAxis: {
-            axisLabel: "Time"
+            axisLabel: "Time",
+            tickFormat: function(d) {
+              return d3.time.format('%m/%d/%y')(new Date(d))
+            }
           },
           yAxis: {
             axisLabel: "Water",
