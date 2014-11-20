@@ -1,5 +1,5 @@
 exports.getBuildings = function(req, res){
-    connection.query('SELECT DISTINCT name FROM building_data ORDER BY name', function(err, rows){
+    connection.query("SELECT DISTINCT BUILDING_NAME AS name FROM building WHERE BUILDING_NAME != 'undefined' ORDER BY BUILDING_NAME", function(err, rows){
         if(err){
             throw err;
         }

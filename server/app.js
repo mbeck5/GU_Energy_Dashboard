@@ -29,7 +29,7 @@ if (app.get('env') === 'development') {
         host: '147.222.165.3',
         user: 'debert',
         password: 'debert1234',
-        database: 'energy_dashboard'
+        database: 'energy_report'
     });
 
     // Error Handling
