@@ -22,8 +22,9 @@ angular.module('clientApp')
           useInteractiveGuideline:true,
           xAxis: {
             axisLabel: "Time",
+            showMaxMin: false,
             tickFormat: function(d) {
-              return d3.time.format('%m/%d/%y')(new Date(d))
+              return d3.time.format('%m/%d/%y %H:%M:%S')(new Date(d))
             }
           },
           yAxis: {
