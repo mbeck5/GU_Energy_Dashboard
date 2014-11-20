@@ -16,7 +16,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'restangular',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'nvd3'
   ])
   .config(function ($routeProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl('/api/');
