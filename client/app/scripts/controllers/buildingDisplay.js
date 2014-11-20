@@ -5,7 +5,8 @@ angular.module('clientApp')
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
       $scope.selectedResource = 0;
       $scope.data = [{
-        values: [{}]
+        values: [{}],
+        key: $scope.selectedBuilding.name
       }];
       $scope.options = {
         chart: {
