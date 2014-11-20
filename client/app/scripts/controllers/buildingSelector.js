@@ -4,7 +4,7 @@ angular.module('clientApp')
   .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
         $scope.searchInput = '';
         var buildings = ['Crosby', 'Herak', 'Paccar', 'Kennedy', 'Madonna', 'Roncalli', 'Lincoln', 'Jepson', 'Dillon', 'Goller', 'Campion',
-          'College Hall', 'Cog', 'MiniCog','Dead Cog', 'Student Center', 'Corkery'];
+          'College Hall', 'Cog', 'MiniCog','Dead Cog', 'Student Center', 'Corkery', 'Corkereeey', 'Corkeryyyyy', 'Coooorkery'];
         $scope.filteredBuildings = buildings;
 
         $scope.filterBuildings = function() {
