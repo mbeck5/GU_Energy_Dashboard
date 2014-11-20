@@ -12,12 +12,14 @@ angular
   .module('clientApp', [
     'ngAnimate',
     'ngCookies',
-    'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'restangular',
+    'ui.bootstrap'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, RestangularProvider) {
+    RestangularProvider.setBaseUrl('/api/');
     $routeProvider
       .when('/', {
         templateUrl: 'views/buildingSelector.html',
