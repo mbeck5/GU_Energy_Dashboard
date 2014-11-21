@@ -18,7 +18,7 @@ angular.module('clientApp')
     var buildingScrollHeight = $(window).height() * .65;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
 
-    $('.tipText').css({'width': windowWidth * .25 + 'px'});
+    $('.tipText').css({'width': windowWidth * .50 + 'px'});
 
     //filters based on search input
     $scope.filterBuildings = function () {
