@@ -2,7 +2,7 @@
 
 angular.module('clientApp')
   .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
-    var buildings = ['a','b','c','d,','d','d'];
+    var buildings = [];
     $scope.searchInput = '';
     $scope.filteredBuildings = [];
 
@@ -12,8 +12,13 @@ angular.module('clientApp')
       $scope.filteredBuildings = buildings;
     });
 
+    var windowHeight = $(window).height();
+    var windowWidth = $(window).width();
+
     var buildingScrollHeight = $(window).height() * .65;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
+
+    $('.tipText').css({'width': windowWidth * .25 + 'px'});
 
     //filters based on search input
     $scope.filterBuildings = function () {
