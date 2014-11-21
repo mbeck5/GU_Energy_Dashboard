@@ -23,9 +23,9 @@
 
   <div id="building-scroll" class="scroll">
     <div id="building-list" class="list-group">
-      <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building}}"
+      <a ng-repeat="building in filteredBuildings" class="list-group-item" href="{{'#/buildings/' + building.name}}"
          ng-click="selectBuilding($index)">
-        {{building}}
+        {{building.name}}
       </a>
     </div>
   </div>
