@@ -10,7 +10,7 @@ exports.getBuildings = function(req, res){
 };
 
 exports.getResources = function(req, res){
-    connection.query("SELECT water, electric, gas FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT water, electric, gas, date FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
@@ -21,7 +21,7 @@ exports.getResources = function(req, res){
 };
 
 exports.getWater = function(req, res){
-    connection.query("SELECT water FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT water, date FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
@@ -32,7 +32,7 @@ exports.getWater = function(req, res){
 };
 
 exports.getElectricity = function(req, res){
-    connection.query("SELECT electric FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT electric, date FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
@@ -43,7 +43,7 @@ exports.getElectricity = function(req, res){
 };
 
 exports.getGas = function(req, res){
-    connection.query("SELECT gas FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
+    connection.query("SELECT gas, date FROM building_data WHERE name = '" + req.param("building") + "' ORDER BY date", function(err, rows){
         if(err){
             throw err;
         }
