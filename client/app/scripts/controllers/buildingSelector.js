@@ -2,7 +2,7 @@
 
 angular.module('clientApp')
   .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
-    var buildings = [];
+    var buildings = ['a','b','c','d,','d','d'];
     $scope.searchInput = '';
     $scope.filteredBuildings = [];
 
