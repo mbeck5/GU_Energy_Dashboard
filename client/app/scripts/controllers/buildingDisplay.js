@@ -51,7 +51,7 @@ angular.module('clientApp')
           tempPair.x = Date.parse(data[i].date);
           switch ($scope.selectedResource) {
             case 0: //electricity
-              tempPair.y = data[i].electric;
+              tempPair.y = data[i].consumption;
               $scope.options.chart.yAxis.axisLabel = "Electricity";
               break;
             case 1: //water
