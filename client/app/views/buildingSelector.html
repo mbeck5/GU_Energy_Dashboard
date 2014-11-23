@@ -30,27 +30,32 @@
     </div>
   </div>
 
-  <div>
-    <tabset id="tip-tabs" vertical="false" type="pills">
-      <tab class="divtab" id="tabs" heading="Electricity">
-        <div>
-          <textarea class="tipText" id="tab-text">hey look words about electricity usage!
-          </textarea>
-        </div>
-      </tab>
-      <tab class="divtab"  id="tabs" heading="Water">
-        <div>
-          <textarea class="tipText" id="tab-text">hey look words about water usage!
-          </textarea>
-        </div>
-      </tab>
-      <tab class="divtab"  id="tabs" heading="Gas">
-        <div>
-          <textare class="tipText"a id="tab-text">hey look words about gas usage!
-          </textarea>
-        </div>
-      </tab>
-    </tabset>
+  <div class="tabs">
+    <ul class="tab-links">
+      <li class="active"><a href="#tab1">Electricity</a></li>
+      <li><a href="#tab2">Water</a></li>
+      <li><a href="#tab3">Gas</a></li>
+    </ul>
+
+    <div id="tab-text" class="tab-content">
+      <div id="tab1" class="tab active">
+        <p>Electricity Tip #1</p>
+        <p>Electricity Tip #2</p>
+        <p>Electricity Tip #3</p>
+      </div>
+
+      <div id="tab2" class="tab">
+        <p>Water Tip #1</p>
+        <p>Water Tip #2</p>
+        <p>Water Tip #3</p>
+      </div>
+
+      <div id="tab3" class="tab">
+        <p>Gas Tip #1</p>
+        <p>Gas Tip #2</p>
+        <p>Gas Tip #3</p>
+      </div>
+    </div>
   </div>
 </div>
 </body>

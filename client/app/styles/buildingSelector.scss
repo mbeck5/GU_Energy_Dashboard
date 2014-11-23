@@ -15,7 +15,7 @@
   margin-top: 30px;
 }
 
-#pills{
+#pills {
   float: right;
   margin-right: 30px;
   margin-top: 40px;
@@ -48,27 +48,72 @@
   box-shadow: 0 0 75px #00FF00;
 }
 
-#tip-tabs{
+/*----- Tabs -----*/
+.tabs {
+  width: 100%;
+  display: inline-block;
+}
+
+/*----- Tab Links -----*/
+/* Clearfix */
+.tab-links:after {
+  display: block;
+  clear: both;
+  content: '';
+}
+
+.tab-links li {
+  margin: 0px 5px;
+  float: left;
+  list-style: none;
+}
+
+.tab-links a {
+  padding: 9px 15px;
+  display: inline-block;
+  border-radius: 5px 5px 5px 5px;
+  background: #7FB5DA;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4c4c4c;
+  transition: all linear 0.15s;
+}
+
+.tab-links a:hover {
+  background: #a7cce5;
+  text-decoration: none;
+}
+
+li.active a, li.active a:hover {
+  background: #fff;
+  color: #4c4c4c;
+}
+
+/*----- Content of Tabs -----*/
+.tab-content {
+  padding: 15px;
+  border-radius: 3px;
+  box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
+  background: #fff;
   margin-left: 30px;
 }
 
-#tabs{
-  //outline: none;
-  //box-shadow: 0 0 75px #00FF00;
-  //background-color: #00b3ee;
+.tab {
+  display: none;
 }
 
+.tab.active {
+  display: block;
+}
 
-#tab-text{
-  //outline-color: greenyellow;
-  //outline: groove;
+#tab-text {
   border-radius: 10px;
   border-color: greenyellow;
   box-shadow: 0 0 75px #00FF00;
-  //width: 26%;
   height: 130px;
-  //margin-right: 30px;
+  width: 25%;
   margin-bottom: 30px;
+  //margin-leftt: 100px;
 }
 
 #background {
