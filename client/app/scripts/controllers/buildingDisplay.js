@@ -5,6 +5,9 @@ angular.module('clientApp')
       var monthlyView = true; //when changing between monthly and daily tables?
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
       $scope.selectedResource = {meterTypeId: 2, meterType: "electric"};  //maybe use for toggle
+
+      getBuildingData();
+
       $scope.data = [{
         values: [{}],
         key: $scope.selectedBuilding.name
@@ -45,8 +48,6 @@ angular.module('clientApp')
           transitionDuration: 250
         }
       };
-
-      getBuildingData();
 
       function createGraphData(data){
         for (var i = 0; i < data.length; i++) {
