@@ -38,6 +38,7 @@
 #building-scroll {
   width: 25%;
   margin-top: 30px;
+  //float: right;
   margin-left: 30px;
   margin-bottom: 30px;
   border-radius: 10px;
@@ -114,6 +115,12 @@ li.active a, li.active a:hover {
   width: 25%;
   margin-bottom: 30px;
   //margin-leftt: 100px;
+}
+
+#list-and-search{
+  float: right;
+  margin-right: 30px;
+
 }
 
 #background {
