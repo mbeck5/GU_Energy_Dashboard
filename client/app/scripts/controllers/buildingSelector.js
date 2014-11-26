@@ -22,6 +22,11 @@ angular.module('clientApp')
             buildingSvc.setSelectedBuilding($scope.filteredBuildings[index]);
         };
 
+        //can't have '/' in url
+        $scope.returnCorrectName = function(index) {
+            return $scope.filteredBuildings[index].name.replace("/", " ");
+        };
+
         function filterBuildings(element) {
             return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }

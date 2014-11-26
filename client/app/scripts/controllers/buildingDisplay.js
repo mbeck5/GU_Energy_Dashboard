@@ -51,8 +51,8 @@ angular.module('clientApp')
 
       function createGraphData(data){
         for (var i = 0; i < data.length; i++) {
-          //only display data for selected resource type
-          if (data[i].meterTypeId === $scope.selectedResource.meterTypeId) {
+          //only display data for selected resource type and if data is not stupid
+          if ((data[i].meterTypeId === $scope.selectedResource.meterTypeId) && isDataValid(data[i].consumption)) {
             $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
           }
         }
@@ -69,5 +69,10 @@ angular.module('clientApp')
         buildingSvc.getBuildingData($scope.selectedBuilding.name).then(function (data) {
           createGraphData(data);
         });
+      }
+
+      //should not have negative or ridiculously high values
+      function isDataValid(data) {
+        return data > 0 && data < 1000000;
       }
   });
