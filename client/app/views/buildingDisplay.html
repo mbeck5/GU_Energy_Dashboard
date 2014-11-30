@@ -1,33 +1,5 @@
-<head>
-  <style>
-    h1 {
-      color:green;
-      font-family:verdana;
-      font-style: oblique;
-      font-size:400%;
-      margin-left: 30px;
-    }
-  </style>
-</head>
-
-<div id="background" class="home-background">
-  <div>
-    <h3 aria-orientation="horizontal">
-      <img id="gu-icon" src="images\energy-dashboard-title-icon.png" alt="some_text"
-           align="middle"/>
-
-      <div id="pills">
-        <ul class="nav nav-pills pull-right">
-          <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
-          <li ng-class="{active: isActive('/')}"><a ng-href="#/test">Competitions</a></li>
-          <li ng-class="{active: isActive('/')}"><a ng-href="#/test">Tips</a></li>
-        </ul>
-      </div>
-    </h3>
-  </div>
-
-    <h1>{{selectedBuilding.name}}</h1>
-
+<div>
+  <h1>{{selectedBuilding.name}}</h1>
   <div>
     <nvd3 options='options' data='data'></nvd3>
   </div>
