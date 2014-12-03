@@ -2,7 +2,7 @@
 
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
-      var monthlyView = true; //when changing between monthly and daily tables?
+      var monthlyView = false; //when changing between monthly and daily tables?
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
       $scope.selectedResource = {meterTypeId: 2, meterType: "electric"};  //maybe use for toggle
 
