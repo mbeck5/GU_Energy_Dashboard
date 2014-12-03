@@ -3,8 +3,9 @@
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
       var monthlyView = false; //when changing between monthly and daily tables?
+      var selectedResource = 2;
+      var unfilteredData = [];
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
-      $scope.selectedResource = {meterTypeId: 2, meterType: "electric"};  //maybe use for toggle
 
       getBuildingData();
 
@@ -49,10 +50,32 @@ angular.module('clientApp')
         }
       };
 
+      $scope.selectResource = function (value) {
+        selectedResource = value;
+        createGraphData(unfilteredData);
+        switch (selectedResource) {
+          case 2:
+                $scope.options.chart.yAxis.axisLabel = 'Electricity';
+                break;
+          case 3:
+                $scope.options.chart.yAxis.axisLabel = 'Gas';
+                break;
+          default:
+                $scope.options.chart.yAxis.axisLabel = 'Whatever';
+                break;
+        }
+      };
+
       function createGraphData(data){
+        //reset
+        $scope.data = [{
+          values: [{}],
+          key: $scope.selectedBuilding.name
+        }];
+
         for (var i = 0; i < data.length; i++) {
           //only display data for selected resource type and if data is not stupid
-          if ((data[i].meterTypeId === $scope.selectedResource.meterTypeId) && isDataValid(data[i].consumption)) {
+          if ((data[i].meterTypeId === selectedResource) && isDataValid(data[i].consumption)) {
             $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
           }
         }
@@ -67,6 +90,7 @@ angular.module('clientApp')
 
         //get resource info for building
         buildingSvc.getBuildingData($scope.selectedBuilding.name).then(function (data) {
+          unfilteredData = data;
           createGraphData(data);
         });
       }
