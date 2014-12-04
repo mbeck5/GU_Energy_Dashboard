@@ -66,7 +66,7 @@ angular.module('clientApp')
         }
 
         //get resource info for building
-        buildingSvc.getBuildingData($scope.selectedBuilding.name).then(function (data) {
+        buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
           createGraphData(data);
         });
       }
