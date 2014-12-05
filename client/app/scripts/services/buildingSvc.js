@@ -11,7 +11,7 @@ angular.module('clientApp')
 
     function getBuildingData(building) {
       var buildingData = Restangular.all('getBuildingData');
-      return buildingData.getList({"building": building});
+      return buildingData.getList({building: building});
     }
 
     function getSelectedBuilding() {
