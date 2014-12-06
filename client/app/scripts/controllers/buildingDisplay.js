@@ -38,7 +38,7 @@ angular.module('clientApp')
             }
           },
           yAxis: {
-            axisLabel: 'Electricity', //will change dynamically later once we have toggle
+            axisLabel: 'Electricity', //will change with resource toggle
             showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
