@@ -71,7 +71,7 @@ angular.module('clientApp')
         $scope.data[0].values = [{}];
 
         for (var i = 0; i < data.length; i++) {
-          //only display data for selected resource type and if data is not stupid
+          //only display data for selected resource type
           if (data[i].meterTypeId === selectedResource) {
             $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
           }
