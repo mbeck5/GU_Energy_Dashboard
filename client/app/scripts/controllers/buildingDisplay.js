@@ -68,10 +68,7 @@ angular.module('clientApp')
 
       function createGraphData(data){
         //reset
-        $scope.data = [{
-          values: [{}],
-          key: $scope.selectedBuilding.name
-        }];
+        $scope.data.values = [{}];
 
         for (var i = 0; i < data.length; i++) {
           //only display data for selected resource type and if data is not stupid
