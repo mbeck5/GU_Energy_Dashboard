@@ -30,4 +30,26 @@ angular.module('clientApp')
         function filterBuildings(element) {
             return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }
+
+        var buildingScrollHeight = $(window).height() * .55;
+        $('.scroll').css({'height': buildingScrollHeight + 'px'});
+
+        var tipTextWidth = $(window).width() * .25;
+        $('.tipText').css({'width': tipTextWidth  + 'px'});
+
+        jQuery(document).ready(function() {
+          jQuery('.tabs .tab-links a').on('click', function(e)  {
+            var currentAttrValue = jQuery(this).attr('href');
+
+            // Show/Hide Tabs
+            jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+
+            // Change/remove current tab to active
+            jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+            e.preventDefault();
+          });
+        });
+
+
   });

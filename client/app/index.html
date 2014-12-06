@@ -23,14 +23,15 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <div class="container-fluid">
-      <div class="header" ng-controller="HeaderCtrl">
+    <!-- Add your site or application content here-->
+    <div class="container-fluid" ng-controller="HeaderCtrl">
+      <div class="header">
+        <img id="gu-icon" src="images\energy-dashboard-title-icon.png"/>
         <ul class="nav nav-pills pull-right">
-          <li ng-class="{active: isActive('/')}"><a ng-href="#">Buildings</a></li>
-          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Test</a></li>
+          <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
+          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Competitions</a></li>
+          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Tips</a></li>
         </ul>
-        <h3 class="text-muted"><i class="fa fa-leaf"></i> GU Energy Dashboard</h3>
       </div>
 
       <div id="main" ng-view=""></div>
