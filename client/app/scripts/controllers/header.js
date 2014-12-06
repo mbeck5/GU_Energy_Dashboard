@@ -3,6 +3,6 @@
 angular.module('clientApp')
   .controller('HeaderCtrl', function ($scope, $location) {
         $scope.isActive = function (location) {
-          return location === $location.path()
-        }
+          return location === $location.path();
+        };
   });

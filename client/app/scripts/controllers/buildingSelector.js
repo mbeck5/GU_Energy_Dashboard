@@ -31,9 +31,6 @@ angular.module('clientApp')
             return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
         }
 
-        var windowHeight = $(window).height();
-        var windowWidth = $(window).width();
-
         var buildingScrollHeight = $(window).height() * .55;
         $('.scroll').css({'height': buildingScrollHeight + 'px'});
 

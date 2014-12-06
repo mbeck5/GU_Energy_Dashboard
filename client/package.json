@@ -36,8 +36,5 @@
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "dependencies": {
-    "imagemin-pngquant": "^4.0.0"
   }
 }
