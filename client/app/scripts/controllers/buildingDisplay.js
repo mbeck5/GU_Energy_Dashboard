@@ -4,7 +4,7 @@ angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
       var monthlyView = false; //when changing between monthly and daily tables?
       var selectedResource = 2;
-      var unfilteredData = [];
+      var unfilteredData = [];  //need to save for when switching resources
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
       getBuildingData();
