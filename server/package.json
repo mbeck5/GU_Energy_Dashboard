@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "SET \"NODE_ENV=production\" && nodemon ./bin/www",
-    "test": "NODE_ENV=development && nodemon ./bin/www"
+    "test": "SET \"NODE_ENV=development\" && nodemon ./bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
