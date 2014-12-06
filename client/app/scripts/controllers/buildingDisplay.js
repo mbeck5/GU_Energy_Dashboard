@@ -79,16 +79,25 @@ angular.module('clientApp')
       }
 
       function getBuildingData() {
-        //if going to building page correctly, steal name from url (basically a hack)
+        //if going to building page directly or refreshing, steal name from url (basically a hack)
         if ($scope.selectedBuilding === 'DESELECTED') {
           $scope.selectedBuilding = {};
-          $scope.selectedBuilding.name = $location.path().replace('/buildings/', '');
+          $scope.selectedBuilding.name = $location.path().replace('/buildings/', '').replace('--', '/');
+
+          //get resource info for building from name rather than ID
+          buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name).then(function (data) {
+            unfilteredData = data;
+            createGraphData(data);
+          });
         }
 
-        //get resource info for building
-        buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
-          unfilteredData = data;
-          createGraphData(data);
-        });
+        //if coming from the building select page
+        else {
+          //get resource info for building
+          buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
+            unfilteredData = data;
+            createGraphData(data);
+          });
+        }
       }
   });

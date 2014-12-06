@@ -17,7 +17,29 @@ exports.getResources = function(req, res){
                                                 "FROM erb_tree " +
                                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
                                                                             "FROM erb_tree " +
-                                                                            "WHERE BUILDING_ID = " + req.param("building") + ")) ORDER BY date;"
+                                                                            "WHERE BUILDING_ID = " + req.param("building") + ")) ORDER BY date;";
+
+    connection.query(queryString, function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+};
+
+exports.getResourcesFromName = function(req, res) {
+    queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption, meters.meter_type_id as meterTypeId " +
+                    "FROM meters_dly_data " +
+                    "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
+                    "WHERE meters.meter_id IN (SELECT METER_ID " +
+                                                "FROM erb_tree " +
+                                                "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
+                                                                            "FROM erb_tree " +
+                                                                            "WHERE BUILDING_ID IN (SELECT building_id " +
+                                                                                                    "FROM building " +
+                                                                                                    "WHERE building_name = '" + req.param("building") + "'))) ORDER BY date;";
 
     connection.query(queryString, function(err, rows){
         if(err){
