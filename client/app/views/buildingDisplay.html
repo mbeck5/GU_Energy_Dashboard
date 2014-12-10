@@ -1,14 +1,17 @@
-<div>
-  <div>
+
+<div class="row">
+
+  <div class="col-md-4" id="toggles">
+    <img src="images/WATERbaby.png" ng-click="selectResource(18)">
+    <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
+    <img src="images/FIREbaby.png" ng-click="selectResource(3)">
+  </div>
+
+  <div class="col-md-9" id="graph">
     <h1>{{selectedBuilding.name}}</h1>
     <div>
       <nvd3 options='options' data='data'></nvd3>
     </div>
   </div>
 
-  <div id="toggles">
-    <img src="images/WATERbaby.png" align="left" ng-click="selectResource(18)">
-    <img src="images/ELECTRICbaby.png" align="left" ng-click="selectResource(2)">
-    <img src="images/FIREbaby.png" align="left" ng-click="selectResource(3)">
-  </div>
 </div>

@@ -15,6 +15,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+connection = mysql.createConnection({
+    host: '147.222.165.3',
+    user: 'debert',
+    password: 'debert1234',
+    database: 'energy_report'
+});
+
 /**
  * Development Settings
  */
@@ -24,13 +31,6 @@ if (app.get('env') === 'development') {
     // This covers serving up the index page
     app.use(express.static(path.join(__dirname, '../client/.tmp')));
     app.use(express.static(path.join(__dirname, '../client/app')));
-
-    connection = mysql.createConnection({
-        host: '147.222.165.3',
-        user: 'debert',
-        password: 'debert1234',
-        database: 'energy_report'
-    });
 
     // Error Handling
     app.use(function(err, req, res, next) {
