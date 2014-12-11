@@ -4,7 +4,7 @@ angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
       var monthlyView = false; //when changing between monthly and daily tables?
       var selectedResource = 2;
-      var unfilteredData = [];
+      var unfilteredData = [];  //need to save for when switching resources
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
       getBuildingData();
@@ -38,7 +38,7 @@ angular.module('clientApp')
             }
           },
           yAxis: {
-            axisLabel: 'Electricity', //will change dynamically later once we have toggle
+            axisLabel: 'Electricity', //will change with resource toggle
             showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
@@ -71,7 +71,7 @@ angular.module('clientApp')
         $scope.data[0].values = [{}];
 
         for (var i = 0; i < data.length; i++) {
-          //only display data for selected resource type and if data is not stupid
+          //only display data for selected resource type
           if (data[i].meterTypeId === selectedResource) {
             $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
           }
@@ -79,16 +79,25 @@ angular.module('clientApp')
       }
 
       function getBuildingData() {
-        //if going to building page correctly, steal name from url (basically a hack)
+        //if going to building page directly or refreshing, steal name from url (basically a hack)
         if ($scope.selectedBuilding === 'DESELECTED') {
           $scope.selectedBuilding = {};
-          $scope.selectedBuilding.name = $location.path().replace('/buildings/', '');
+          $scope.selectedBuilding.name = $location.path().replace('/buildings/', '').replace('--', '/');
+
+          //get resource info for building from name rather than ID
+          buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name).then(function (data) {
+            unfilteredData = data;
+            createGraphData(data);
+          });
         }
 
-        //get resource info for building
-        buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
-          unfilteredData = data;
-          createGraphData(data);
-        });
+        //if coming from the building select page
+        else {
+          //get resource info for building
+          buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
+            unfilteredData = data;
+            createGraphData(data);
+          });
+        }
       }
   });

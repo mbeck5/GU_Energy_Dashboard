@@ -24,7 +24,7 @@ angular.module('clientApp')
 
         //can't have '/' in url
         $scope.returnCorrectName = function(index) {
-            return $scope.filteredBuildings[index].name.replace("/", " ");
+            return $scope.filteredBuildings[index].name.replace("/", "--");
         };
 
         function filterBuildings(element) {
