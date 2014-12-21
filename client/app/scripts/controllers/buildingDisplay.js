@@ -52,7 +52,7 @@ angular.module('clientApp')
 
       $scope.selectResource = function (value) {
         selectedResource = value;
-        createGraphData(unfilteredData);
+        createGraphData(unfilteredData[value]);
         switch (selectedResource) {
           case 2:
                 $scope.options.chart.yAxis.axisLabel = 'Electricity';
@@ -86,7 +86,7 @@ angular.module('clientApp')
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name).then(function (data) {
-            unfilteredData = data;
+            unfilteredData[selectedResource] = data;
             createGraphData(data);
           });
         }
@@ -95,7 +95,7 @@ angular.module('clientApp')
         else {
           //get resource info for building
           buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
-            unfilteredData = data;
+            unfilteredData[selectedResource] = data;
             createGraphData(data);
           });
         }

@@ -1,3 +1,5 @@
+var stdDev = require('../services/standardDeviation');
+
 exports.getBuildings = function(req, res){
     connection.query("SELECT DISTINCT BUILDING_NAME AS name, BUILDING_ID as id FROM building WHERE BUILDING_NAME != 'undefined' ORDER BY BUILDING_NAME", function(err, rows){
         if(err){
@@ -24,7 +26,7 @@ exports.getResources = function(req, res){
             throw err;
         }
         else {
-            res.send(rows);
+            res.send(stdDev.standardDeviationFilter(rows));
         }
     });
 };
@@ -46,7 +48,7 @@ exports.getResourcesFromName = function(req, res) {
             throw err;
         }
         else {
-            res.send(rows);
+            res.send(stdDev.standardDeviationFilter(rows));
         }
     });
 };
