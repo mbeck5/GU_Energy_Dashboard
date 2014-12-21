@@ -3,11 +3,11 @@
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
       var monthlyView = false; //when changing between monthly and daily tables?
-      var selectedResource = 2;
-      var unfilteredData = [];  //need to save for when switching resources
+      var selectedResource = 2; //default resource
+      var savedData = [];  //save downloaded data to avoid downloading
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
-      getBuildingData();
+      getBuildingData();  //initial call to get data of default type
 
       $scope.data = [{
         values: [{}],
@@ -50,9 +50,14 @@ angular.module('clientApp')
         }
       };
 
-      $scope.selectResource = function (value) {
-        selectedResource = value;
-        createGraphData(unfilteredData[value]);
+      $scope.selectResource = function (resourceType) {
+        selectedResource = resourceType;
+
+        //get data for selected resource if not saved
+        if (!savedData[resourceType]) {
+          getBuildingData();
+        }
+        createGraphData(savedData[resourceType]);
         switch (selectedResource) {
           case 2:
                 $scope.options.chart.yAxis.axisLabel = 'Electricity';
@@ -70,11 +75,9 @@ angular.module('clientApp')
         //reset
         $scope.data[0].values = [{}];
 
+        //create graph points
         for (var i = 0; i < data.length; i++) {
-          //only display data for selected resource type
-          if (data[i].meterTypeId === selectedResource) {
-            $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
-          }
+          $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
         }
       }
 
@@ -85,8 +88,8 @@ angular.module('clientApp')
           $scope.selectedBuilding.name = $location.path().replace('/buildings/', '').replace('--', '/');
 
           //get resource info for building from name rather than ID
-          buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name).then(function (data) {
-            unfilteredData[selectedResource] = data;
+          buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name, selectedResource).then(function (data) {
+            savedData[selectedResource] = data;
             createGraphData(data);
           });
         }
@@ -94,8 +97,8 @@ angular.module('clientApp')
         //if coming from the building select page
         else {
           //get resource info for building
-          buildingSvc.getBuildingData($scope.selectedBuilding.id).then(function (data) {
-            unfilteredData[selectedResource] = data;
+          buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
+            savedData[selectedResource] = data;
             createGraphData(data);
           });
         }
