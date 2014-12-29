@@ -9,14 +9,14 @@ angular.module('clientApp')
       return allBuildings.getList();
     }
 
-    function getBuildingData(buildingId) {
+    function getBuildingData(buildingId, meterTypeId) {
       var buildingData = Restangular.all('getBuildingData');
-      return buildingData.getList({building: buildingId});
+      return buildingData.getList({building: buildingId, meterType: meterTypeId});
     }
 
-    function getBuildingDataFromName(buildingName) {
+    function getBuildingDataFromName(buildingName, meterTypeId) {
       var buildingData = Restangular.all('getBuildingDataFromName');
-      return buildingData.getList({building: buildingName});
+      return buildingData.getList({building: buildingName, meterType: meterTypeId});
     }
 
     function getSelectedBuilding() {
