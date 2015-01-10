@@ -16,7 +16,7 @@ angular.module('clientApp')
       $scope.options = {
         chart: {
           type: 'lineWithFocusChart',
-          height: 500,
+          height: 600,
           margin: {
             top: 30,
             right: 75,
@@ -61,18 +61,6 @@ angular.module('clientApp')
         if (!savedData[resourceType]) {
           getBuildingData();
         }
-        createGraphData(savedData[resourceType]);
-        switch (selectedResource) {
-          case 2:
-                $scope.options.chart.yAxis.axisLabel = 'Electricity';
-                break;
-          case 3:
-                $scope.options.chart.yAxis.axisLabel = 'Gas';
-                break;
-          default:
-                $scope.options.chart.yAxis.axisLabel = 'Whatever';
-                break;
-        }
       };
 
       function createGraphData(data){
@@ -88,11 +76,10 @@ angular.module('clientApp')
       function getBuildingData() {
         //if going to building page directly or refreshing, steal name from url (basically a hack)
         if ($scope.selectedBuilding === 'DESELECTED') {
-          $scope.selectedBuilding = {};
-          $scope.selectedBuilding.name = $location.path().replace('/buildings/', '').replace('--', '/');
+          var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
 
           //get resource info for building from name rather than ID
-          buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name, selectedResource).then(function (data) {
+          buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
             initGraph(data);
           });
         }
@@ -110,5 +97,36 @@ angular.module('clientApp')
       function initGraph(data) {
         savedData[selectedResource] = data;
         createGraphData(data);
+        setResourceLabel();
+        setFocusArea();
+      }
+
+      function setResourceLabel() {
+        switch (selectedResource) {
+          case 2:
+            $scope.options.chart.yAxis.axisLabel = 'Electricity';
+            break;
+          case 3:
+            $scope.options.chart.yAxis.axisLabel = 'Gas';
+            break;
+          default:
+            $scope.options.chart.yAxis.axisLabel = 'Whatever';
+            break;
+        }
+      }
+
+      //sets initial "zoom" view over specified area
+      function setFocusArea() {
+        //creating focus coordinates
+        var curDate = new Date();
+        var prevDate = new Date();
+        prevDate.setMonth(prevDate.getMonth() - 1);
+
+        //not sure why we have to wait...
+        setTimeout(function () {
+          var chart = $scope.api.getScope().chart;  //get chart from view
+          chart.brushExtent([prevDate, curDate]);
+          $scope.api.update();
+        }, 500);
       }
   });
