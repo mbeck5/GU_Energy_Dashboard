@@ -2,7 +2,6 @@
 
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
-      var monthlyView = false; //when changing between monthly and daily tables?
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
@@ -16,7 +15,7 @@ angular.module('clientApp')
 
       $scope.options = {
         chart: {
-          type: 'lineChart',
+          type: 'lineWithFocusChart',
           height: 500,
           margin: {
             top: 30,
@@ -29,12 +28,13 @@ angular.module('clientApp')
             axisLabel: 'Time',
             showMaxMin: false,
             tickFormat: function(d) {
-              if (monthlyView) {
-                return d3.time.format('%m/%y')(new Date(d))
-              }
-              else {
-                return d3.time.format('%m/%d/%y')(new Date(d))
-              }
+              return d3.time.format('%m/%d/%y')(new Date(d));
+            }
+          },
+          x2Axis: {
+            showMaxMin: false,
+            tickFormat: function(d) {
+              return d3.time.format('%m/%y')(new Date(d));
             }
           },
           yAxis: {
@@ -43,10 +43,14 @@ angular.module('clientApp')
             axisLabelDistance: 25,
             tickPadding: [10]
           },
+          y2Axis: {
+            tickValues: 0,
+            showMaxMin: false
+          },
           lines: {
             forceY: [0]
           },
-          transitionDuration: 250
+          transitionDuration: 500
         }
       };
 
@@ -89,8 +93,7 @@ angular.module('clientApp')
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName($scope.selectedBuilding.name, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            createGraphData(data);
+            initGraph(data);
           });
         }
 
@@ -98,9 +101,14 @@ angular.module('clientApp')
         else {
           //get resource info for building
           buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            createGraphData(data);
+            initGraph(data);
           });
         }
+      }
+
+      //called once data is retrieved
+      function initGraph(data) {
+        savedData[selectedResource] = data;
+        createGraphData(data);
       }
   });
