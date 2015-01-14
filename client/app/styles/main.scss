@@ -29,6 +29,11 @@ body {
   width: 50%;
 }
 
+#nav-pills {
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
+
 #main{
   margin-top: 15px;
 }
