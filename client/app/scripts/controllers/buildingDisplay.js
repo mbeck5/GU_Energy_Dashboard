@@ -51,6 +51,10 @@ angular.module('clientApp')
             forceY: [0]
           },
           transitionDuration: 500
+        },
+        title: {
+          enable: true,
+          text: "Daily Electricity Usage"
         }
       };
 
@@ -105,12 +109,15 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
+            $scope.options.title.text = 'Daily Electricity Usage';
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
+            $scope.options.title.text = 'Daily Gas Usage';
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
+            $scope.options.title.text = 'Daily Whatever Usage';
             break;
         }
       }
