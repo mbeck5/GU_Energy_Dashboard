@@ -61,6 +61,9 @@ angular.module('clientApp')
         if (!savedData[resourceType]) {
           getBuildingData();
         }
+        else {
+          initGraph();
+        }
       };
 
       function createGraphData(data){
@@ -80,7 +83,8 @@ angular.module('clientApp')
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
-            initGraph(data);
+            savedData[selectedResource] = data;
+            initGraph();
           });
         }
 
@@ -88,15 +92,15 @@ angular.module('clientApp')
         else {
           //get resource info for building
           buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
-            initGraph(data);
+            savedData[selectedResource] = data;
+            initGraph();
           });
         }
       }
 
       //called once data is retrieved
-      function initGraph(data) {
-        savedData[selectedResource] = data;
-        createGraphData(data);
+      function initGraph() {
+        createGraphData(savedData[selectedResource]);
         setResourceLabel();
         setFocusArea();
       }
