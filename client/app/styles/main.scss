@@ -1,37 +1,28 @@
 //$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "variables.scss";
+@import "bootswatch.scss";
+
 // endbower
 
 //Space out content a bit
 body {
   padding-bottom: 20px;
-  background-color: lightskyblue;
+  background-color: #BFC1C4;
 }
 
 /* Everything gets side spacing for mobile first views */
-.header,
 .marketing,
 .footer {
   padding: 10px 0 10px 0;
   background-color: transparent;
 }
 
-/* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
-}
-
 #gu-icon {
-  max-height: 60px;
+  max-height: 50px;
   max-width: 538px;
   height: auto;
-  width: 50%;
-}
-
-#nav-pills {
-  display: -webkit-inline-flex;
-  display: inline-flex;
 }
 
 #main{
