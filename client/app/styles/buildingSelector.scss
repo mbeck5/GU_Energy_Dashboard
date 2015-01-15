@@ -1,7 +1,7 @@
 #building-search {
-  float: right;
+  float: left;
   max-width: 240px;
-  margin-top: 15px;
+  //margin-top: 15px;
   width: 240px;
 }
 
@@ -20,16 +20,31 @@
 }
 
 #building-scroll {
-  width: 50%;
-  margin-top: 30px;
-  margin-left: 30px;
-  margin-bottom: 30px;
-  border-radius: 10px;
+  //width: 50%;
+  //margin-top: 30px;
+  //margin-left: 30px;
+  //margin-bottom: 30px;
+  //border-radius: 10px;
   overflow-x: hidden !important;
   overflow-y: auto;
-  background-color: #ffffff;
-  outline: none;
-  box-shadow: 0 0 75px #00FF00;
+  //background-color: #ffffff;
+  //outline: none;
+  //box-shadow: 0 0 75px #00FF00;
+  height: 25%;
+}
+
+#building-list-panel{
+  width: 25%;
+  margin-top: 30px;
+  margin-left: 30px;
+  height: 25%;
+}
+
+
+#tip-panel{
+  width: 25%;
+  margin-top: 30px;
+  margin-left: 30px;
 }
 
 /*----- Tabs -----*/
@@ -79,7 +94,7 @@ li.active a, li.active a:hover {
   border-radius: 3px;
   box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
   background: #fff;
-  margin-left: 30px;
+  //margin-left: 30px;
 }
 
 .tab {
@@ -92,11 +107,11 @@ li.active a, li.active a:hover {
 
 #tab-text {
   border-radius: 10px;
-  border-color: greenyellow;
-  box-shadow: 0 0 75px #00FF00;
+  //border-color: greenyellow;
+  //box-shadow: 0 0 75px #00FF00;
   height: 130px;
-  width: 25%;
-  margin-bottom: 30px;
+  //width: 25%;
+  //margin-bottom: 30px;
   overflow: scroll;
   //margin-leftt: 100px;
 
