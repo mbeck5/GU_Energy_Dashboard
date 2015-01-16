@@ -121,16 +121,16 @@ angular.module('clientApp')
 
       //sets initial "zoom" view over specified area
       function setFocusArea() {
+        $scope.$apply();
+
         //creating focus coordinates
         var curDate = new Date();
         var prevDate = new Date();
-        prevDate.setMonth(prevDate.getMonth() - 1);
+        curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
+        prevDate.setMonth(prevDate.getMonth() - 5);
 
-        //not sure why we have to wait...
-        setTimeout(function () {
-          var chart = $scope.api.getScope().chart;  //get chart from view
-          chart.brushExtent([prevDate, curDate]);
-          $scope.api.update();
-        }, 500);
+        var chart = $scope.api.getScope().chart;  //get chart from view
+        chart.brushExtent([prevDate, curDate]);
+        $scope.api.update();
       }
   });
