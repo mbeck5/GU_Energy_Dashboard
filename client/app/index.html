@@ -12,6 +12,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/test.css">
     <link rel="stylesheet" href="styles/buildingSelector.css">
@@ -26,7 +27,7 @@
 
     <!-- Add your site or application content here-->
     <div ng-controller="HeaderCtrl">
-      <div class="navbar navbar-default">
+      <div id="navbar" class="navbar navbar-default navbar-fixed-top">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="navbarCollapsed = !navbarCollapsed">
             <span class="icon-bar"></span>

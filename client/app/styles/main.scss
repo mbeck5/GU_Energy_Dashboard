@@ -1,24 +1,19 @@
-//$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "_variables.scss";
-@import "_bootswatch.scss";
-// endbower
-
-//Space out content a bit
 body {
   padding-bottom: 20px;
-  background-color: #BFC1C4;
+  background-color: #DFD7CA;
+}
+
+#navbar {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 #gu-icon {
-  max-height: 50px;
   max-width: 538px;
-  height: auto;
 }
 
 #main{
-  margin-top: 15px;
+  margin-top: 80px;
 }
 
 //for compatability warning
