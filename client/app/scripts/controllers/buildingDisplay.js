@@ -50,7 +50,8 @@ angular.module('clientApp')
           lines: {
             forceY: [0]
           },
-          transitionDuration: 500
+          transitionDuration: 500,
+          noData: "No Data Available for Selected Resource"
         },
         title: {
           enable: true,
@@ -70,10 +71,14 @@ angular.module('clientApp')
       function createGraphData(data){
         //reset
         $scope.data[0].values = [{}];
+        console.log($scope.data[0])
 
         //create graph points
         for (var i = 0; i < data.length; i++) {
           $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
+        }
+        if (data.length == 0){
+          $scope.data[0].values = []
         }
       }
 
