@@ -1,8 +1,8 @@
 //$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "variables";
-@import "bootswatch";
+@import "_variables.scss";
+@import "_bootswatch.scss";
 // endbower
 
 //Space out content a bit
