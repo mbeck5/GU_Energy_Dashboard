@@ -71,7 +71,6 @@ angular.module('clientApp')
       function createGraphData(data){
         //reset
         $scope.data[0].values = [{}];
-        console.log($scope.data[0])
 
         //create graph points
         for (var i = 0; i < data.length; i++) {
