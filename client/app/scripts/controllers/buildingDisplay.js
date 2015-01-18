@@ -50,7 +50,12 @@ angular.module('clientApp')
           lines: {
             forceY: [0]
           },
-          transitionDuration: 500
+          transitionDuration: 500,
+          noData: "No Data Available for Selected Resource"
+        },
+        title: {
+          enable: true,
+          text: "Daily Electricity Usage"
         }
       };
 
@@ -73,6 +78,9 @@ angular.module('clientApp')
         //create graph points
         for (var i = 0; i < data.length; i++) {
           $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
+        }
+        if (data.length == 0){
+          $scope.data[0].values = []
         }
       }
 
@@ -109,28 +117,31 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
+            $scope.options.title.text = 'Daily Electricity Usage';
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
+            $scope.options.title.text = 'Daily Gas Usage';
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
+            $scope.options.title.text = 'Daily Whatever Usage';
             break;
         }
       }
 
       //sets initial "zoom" view over specified area
       function setFocusArea() {
+        $scope.$apply();
+
         //creating focus coordinates
         var curDate = new Date();
         var prevDate = new Date();
-        prevDate.setMonth(prevDate.getMonth() - 1);
+        curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
+        prevDate.setMonth(prevDate.getMonth() - 5);
 
-        //not sure why we have to wait...
-        setTimeout(function () {
-          var chart = $scope.api.getScope().chart;  //get chart from view
-          chart.brushExtent([prevDate, curDate]);
-          $scope.api.update();
-        }, 500);
+        var chart = $scope.api.getScope().chart;  //get chart from view
+        chart.brushExtent([prevDate, curDate]);
+        $scope.api.update();
       }
   });
