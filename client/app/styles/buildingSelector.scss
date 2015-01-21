@@ -4,11 +4,6 @@
   margin-outside: 20px;
 }
 
-#building-scroll {
-  overflow-x: hidden !important;
-  overflow-y: auto;
-}
-
 #building-list-panel{
   margin-top: 30px;
   height: 25%;
@@ -17,14 +12,12 @@
 
 
 #tip-panel{
-  margin-top: 30px;
   outline: none;
   box-shadow: 0 0 50px #CCCCCC;
 }
 
 /*----- Tabs -----*/
 .tabs {
-  width: 100%;
   display: inline-block;
 }
 
@@ -37,7 +30,7 @@
 }
 
 .tab-links li {
-  margin: 0px 5px;
+  margin: 0 5px;
   float: left;
   list-style: none;
 }
