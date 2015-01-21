@@ -30,9 +30,9 @@ angular
         templateUrl: 'views/buildingDisplay.html',
         controller: 'BuildingDisplayCtrl'
       })
-      .when('/CompetitionDisplay', {
-        templateUrl: 'views/competitionDisplay.html',
-        controller: 'competitionDisplayCtrl'
+      .when('/test', {
+        templateUrl: 'views/test.html',
+        controller: 'TestCtrl'
         })
       .otherwise({
         redirectTo: '/'
