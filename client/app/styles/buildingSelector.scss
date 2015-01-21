@@ -21,7 +21,7 @@
 
 #building-scroll {
   //width: 50%;
-  //margin-top: 30px;
+  margin-top: -30px;
   //margin-left: 30px;
   //margin-bottom: 30px;
   //border-radius: 10px;
@@ -30,7 +30,7 @@
   //background-color: #ffffff;
   //outline: none;
   //box-shadow: 0 0 75px #00FF00;
-  height: 25%;
+  //height: 25%;
 }
 
 #building-list-panel{
@@ -38,6 +38,8 @@
   margin-top: 30px;
   margin-left: 30px;
   height: 25%;
+  box-shadow: 0 0 50px #CCCCCC;
+  //background-color: #777777;
 }
 
 
@@ -45,6 +47,8 @@
   width: 25%;
   margin-top: 30px;
   margin-left: 30px;
+  outline: none;
+  box-shadow: 0 0 50px #CCCCCC;
 }
 
 /*----- Tabs -----*/

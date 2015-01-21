@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="styles/test.css">
     <link rel="stylesheet" href="styles/buildingSelector.css">
     <link rel="stylesheet" href="styles/buildingDisplay.css">
+    <link rel="stylesheet" href="styles/competitionDisplay.css">
+    <link rel="stylesheet" href="styles/competitionCreationDisplay.css">
     <!-- endbuild -->
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
@@ -30,7 +32,7 @@
         <img id="gu-icon" src="images\energy-dashboard-title-icon.png"/>
         <ul class="nav nav-pills pull-right">
           <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
-          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Competitions</a></li>
+          <li ng-class="{active: isActive('/CompetitionDisplay')}"><a ng-href="#/CompetitionDisplay">Competitions</a></li>
           <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Tips</a></li>
         </ul>
       </div>
@@ -82,6 +84,8 @@
         <script src="scripts/controllers/test.js"></script>
         <script src="scripts/controllers/buildingSelector.js"></script>
         <script src="scripts/controllers/buildingDisplay.js"></script>
+        <script src="scripts/controllers/competitionDisplay.js"></script>
+        <script src="scripts/controllers/competitionCreationDisplay.js"></script>
         <script src="scripts/services/buildingSvc.js"></script>
         <!-- endbuild -->
   </body>
