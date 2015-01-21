@@ -10,6 +10,10 @@
   box-shadow: 0 0 50px #CCCCCC;
 }
 
+#building-scroll {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+}
 
 #tip-panel{
   outline: none;
