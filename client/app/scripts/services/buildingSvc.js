@@ -9,6 +9,11 @@ angular.module('clientApp')
       return allBuildings.getList();
     }
 
+    function getBuildingTypes(){
+      var buildingTypes = Restangular.all('getBuildingTypes');
+      return buildingTypes.getList();
+    }
+
     function getBuildingData(buildingId, meterTypeId) {
       var buildingData = Restangular.all('getBuildingData');
       return buildingData.getList({building: buildingId, meterType: meterTypeId});
@@ -29,6 +34,7 @@ angular.module('clientApp')
 
     return {
       getBuildings: getBuildings,
+      getBuildingTypes: getBuildingTypes,
       getBuildingData: getBuildingData,
       getBuildingDataFromName: getBuildingDataFromName,
       getSelectedBuilding: getSelectedBuilding,

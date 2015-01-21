@@ -46,12 +46,8 @@
   </div>
   <div ng-controller="SummaryCtrl">
     <div>
-      <nvd3 options='pieOptions' data='pieData' api="api"></nvd3>
-    </div>
-  </div>
-  <div ng-controller="SummaryCtrl">
-    <div>
-      <nvd3 options='barOptions' data='barData' api="api"></nvd3>
+      <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
+      <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
     </div>
   </div>
 </div>
