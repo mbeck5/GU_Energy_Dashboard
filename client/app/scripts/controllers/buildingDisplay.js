@@ -73,14 +73,11 @@ angular.module('clientApp')
 
       function createGraphData(data){
         //reset
-        $scope.data[0].values = [{}];
+        $scope.data[0].values = [];
 
         //create graph points
         for (var i = 0; i < data.length; i++) {
           $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
-        }
-        if (data.length == 0){
-          $scope.data[0].values = []
         }
       }
 

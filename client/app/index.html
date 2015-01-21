@@ -12,6 +12,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/test.css">
     <link rel="stylesheet" href="styles/buildingSelector.css">
@@ -25,17 +26,26 @@
     <![endif]-->
 
     <!-- Add your site or application content here-->
-    <div class="container-fluid" ng-controller="HeaderCtrl">
-      <div class="header">
-        <img id="gu-icon" src="images/energy-dashboard-title-icon.png"/>
-        <ul class="nav nav-pills pull-right">
-          <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
-          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Competitions</a></li>
-          <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Tips</a></li>
-        </ul>
+    <div ng-controller="HeaderCtrl">
+      <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="navbarCollapsed = !navbarCollapsed">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img id="gu-icon" src="images/energy-dashboard-title-icon.png"/>
+        </div>
+        <div class="navbar-collapse collapse" collapse="navbarCollapsed">
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
+            <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Competitions</a></li>
+            <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Tips</a></li>
+          </ul>
+        </div>
       </div>
 
-      <div id="main" ng-view=""></div>
+      <div id="main" class="container-fluid" ng-view=""></div>
 
     </div>
 
