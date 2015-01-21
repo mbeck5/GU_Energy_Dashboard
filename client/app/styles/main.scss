@@ -13,7 +13,13 @@ body {
 }
 
 #main{
-  margin-top: 80px;
+  margin-top: 50px;
+}
+
+//fix panel padding
+.panel {
+  padding-left: 0;
+  margin-left: 15px;
 }
 
 //for compatability warning
