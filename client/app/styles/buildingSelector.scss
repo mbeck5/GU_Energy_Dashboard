@@ -78,6 +78,7 @@ li.active a, li.active a:hover {
 
 #tab-text {
   border-radius: 10px;
-  height: 130px;
+  height: 250px;
   overflow: scroll;
+  overflow-x: auto;
 }
