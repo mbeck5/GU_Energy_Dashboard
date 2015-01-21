@@ -85,6 +85,8 @@ angular.module('clientApp')
         //if going to building page directly or refreshing, steal name from url (basically a hack)
         if ($scope.selectedBuilding === 'DESELECTED') {
           var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
+          $scope.selectedBuilding = {};
+          $scope.selectedBuilding.name = tempName;
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
