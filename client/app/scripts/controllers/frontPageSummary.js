@@ -86,7 +86,7 @@ angular.module('clientApp')
         transitionDuration: 500,
         color: function(d, i){return colorArray[i]},
         labelType: "percent",
-        pieLabelsOutside: false,
+        pieLabelsOutside: true,
         labelThreshold: 0.01,
         tooltips: true,
         interactive: true,
