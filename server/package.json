@@ -15,5 +15,8 @@
     "debug": "~2.0.0",
 	"mysql": "~2.5.3",
 	"node-compass": "0.2.3"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.14.5"
   }
 }
