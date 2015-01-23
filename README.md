@@ -23,9 +23,9 @@ This is the senior design repository for the CPSC 002 GU Energy Dashboard.
 
 1) Install ruby (mac may already have this).  Make sure to add ruby to path when installing!
 
-2)  Restart!
+2) Restart!
 
-5) Run:
+3) Run:
 
     $ gem install compass
     
