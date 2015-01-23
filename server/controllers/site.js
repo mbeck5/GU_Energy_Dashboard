@@ -11,21 +11,6 @@ exports.getBuildings = function(req, res){
     });
 };
 
-exports.getBuildingTypes = function(req, res){
-    queryString = "SELECT DISTINCT building_type.BUILDING_TYPE " +
-                    "FROM building JOIN building_type ON building.BUILDING_TYPE_ID = building_type.BUILDING_TYPE_ID " +
-                    "WHERE building_type.BUILDING_TYPE_ID != 1;"
-
-    connection.query(queryString, function(err, rows){
-        if(err){
-            throw err;
-        }
-        else{
-            res.send(rows);
-        }
-    })
-};
-
 exports.getResources = function(req, res){
     queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
                     "FROM meters_dly_data " +
@@ -47,17 +32,17 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesByType = function(req, res){
-    queryString = "SELECT sum(CONSUMPTION) as Total, b.BUILDING_TYPE_ID " +
-                    "FROM erb_tree e, " +
+    queryString = "SELECT sum(CONSUMPTION) as total_cons, bt.BUILDING_TYPE " +
+                    "FROM erb_tree e, building b, building_type bt, " +
                         "(SELECT * " +
-                        "FROM (SELECT METER_ID, CONSUMPTION " +
+                        "FROM (SELECT METER_ID as MID, CONSUMPTION " +
                                 "FROM meters_dly_data " +
                                 "ORDER BY TREND_DATE DESC) as most_recent_entries " +
-                        "JOIN erb_tree ON most_recent_entries.METER_ID = erb_tree.METER_ID " +
+                        "JOIN erb_tree ON most_recent_entries.MID = erb_tree.METER_ID " +
                         "WHERE METER_TYPE_ID= " + req.param("meterType") + " " +
-                        "GROUP BY most_recent_entries.METER_ID) as t" +
-                    "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID " +
-                    "GROUP BY b.BUILDING_TYPE_ID"
+                        "GROUP BY most_recent_entries.MID) as t" +
+                    "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID AND bt.BUILDING_TYPE_ID = b.BUILDING_TYPE_ID AND b.BUILDING_TYPE_ID != 1" +
+                    "GROUP BY b.BUILDING_TYPE_ID";
 
     connection.query(queryString, function(err, rows){
         if(err){
