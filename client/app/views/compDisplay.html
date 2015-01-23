@@ -1,0 +1,53 @@
+<div class="row-md-12">
+  <div class="col-md-4">
+    <div class="panel panel-default" id="comp-list-panel">
+      <div class="panel-heading">Competition Select</div>
+
+      <div class="panel-body">
+        <div id="building-search" class="form-group">
+          <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                 ng-change="filterBuildings()">
+        </div>
+        <div id="comp-scroll" class="scroll">
+          <div id="comp-list" class="list-group">
+            <a ng-repeat="building in filteredBuildings" class="list-group-item"
+               href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
+              {{building[0]}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="panel panel-default" id="current-comp-panel">
+      <div class="panel-heading">Competition Info</div>
+      <div class="panel-body">
+        <div id="current-comp-scroll" class="scroll">
+          <div id="current-comp-list" class="list-group">
+            <h1>
+              {{filteredBuildings[displayedCompIndex][0]}}<br><br>
+            </h1>
+            <h3>
+              Buildings:  {{filteredBuildings[displayedCompIndex][1]}},  {{filteredBuildings[displayedCompIndex][2]}}
+            </h3>
+            <h3>
+              Contested Resource:  {{filteredBuildings[displayedCompIndex][3]}}
+            </h3>
+            <h3>
+              Start Date:  {{filteredBuildings[displayedCompIndex][4]}}
+            </h3>
+            <h3>
+              End Date:    {{filteredBuildings[displayedCompIndex][5]}}
+            </h3>
+            <div class="col-md-9" id="graph">
+              <div>
+                <nvd3 options='options' data='data' api="api"></nvd3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

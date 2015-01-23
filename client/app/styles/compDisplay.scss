@@ -1,0 +1,24 @@
+#comp-list {
+  background-color: transparent;
+  //margin-bottom: 20px;
+  //height: 100%;
+  //margin-outside: 20px;
+}
+
+#comp-list-panel{
+  margin-top: 30px;
+  height: 100%;
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
+#current-comp-panel{
+  margin-top: 30px;
+  height: 100%;
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
+#comp-scroll {
+  overflow-x: hidden !important;
+  //height: 100%;
+  overflow-y: auto;
+}
