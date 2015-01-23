@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SET \"NODE_ENV=production\" && node ./bin/www",
+    "start": "SET \"NODE_ENV=production\" && forever ./bin/www",
     "test": "SET \"NODE_ENV=development\" && nodemon ./bin/www"
   },
   "dependencies": {
@@ -15,5 +15,8 @@
     "debug": "~2.0.0",
 	"mysql": "~2.5.3",
 	"node-compass": "0.2.3"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.14.5"
   }
 }
