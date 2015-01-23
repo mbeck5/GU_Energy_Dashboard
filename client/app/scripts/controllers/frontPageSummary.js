@@ -157,7 +157,7 @@ angular.module('clientApp')
     function changeResourceDataOnBarMouseover(barName){
       if (!isPieClicked && !isBarClicked){
         if (barName == "Barc"){
-          $scope.pieApi.updateWithData(barcPie);
+          $scope.pieApi.updateWithData(barcPie);t
         }
       }
     }
