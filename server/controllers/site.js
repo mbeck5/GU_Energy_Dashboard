@@ -40,8 +40,8 @@ exports.getResourcesByType = function(req, res){
                                 "ORDER BY TREND_DATE DESC) as most_recent_entries " +
                         "JOIN erb_tree ON most_recent_entries.MID = erb_tree.METER_ID " +
                         "WHERE METER_TYPE_ID= " + req.param("meterType") + " " +
-                        "GROUP BY most_recent_entries.MID) as t" +
-                    "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID AND bt.BUILDING_TYPE_ID = b.BUILDING_TYPE_ID AND b.BUILDING_TYPE_ID != 1" +
+                        "GROUP BY most_recent_entries.MID) as t " +
+                    "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID AND bt.BUILDING_TYPE_ID = b.BUILDING_TYPE_ID AND b.BUILDING_TYPE_ID != 1 " +
                     "GROUP BY b.BUILDING_TYPE_ID";
 
     connection.query(queryString, function(err, rows){

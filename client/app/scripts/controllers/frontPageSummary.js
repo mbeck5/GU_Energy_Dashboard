@@ -13,6 +13,12 @@ angular.module('clientApp')
 
     createBarData();
 
+    console.log(barWater);
+    console.log(barElectricity);
+    console.log(barGas);
+
+    var pieDefault = [];
+
 
     var defaultBar = [{
         key: "Buildings",
@@ -103,14 +109,14 @@ angular.module('clientApp')
       }
     };
 
-    $scope.barData = defaultBar;
+    $scope.barData = barElectricity;
 
     function createBarWaterData(data){
       //reset
       barWater.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barWater.values.push({label: data[i].building_type, values: data[i].total_cons});
+        barWater.values.push({label: data[i].BUILDING_TYPE, values: data[i].total_cons});
       }
     }
     function createBarElectricityData(data){
@@ -118,7 +124,7 @@ angular.module('clientApp')
       barElectricity.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barElectricity.values.push({label: data[i].building_type, values: data[i].total_cons});
+        barElectricity.values.push({label: data[i].BUILDING_TYPE, values: data[i].total_cons});
       }
     }
     function createBarGasData(data){
@@ -130,17 +136,20 @@ angular.module('clientApp')
       }
     }
     function createBarData(){
-      buildingSvc.getResourcesByType(7).then(function (data){
+      buildingSvc.getResourceByType(7).then(function (data){
         createBarWaterData(data);
       });
-      buildingSvc.getResourcesByType(2).then(function (data){
+      buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
       });
-      buildingSvc.getResourcesByType(3).then(function (data){
+      buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
       });
     }
 
+    function createPieDefault(){
+
+    }
 
     function pieClicked(e){
       if(!isBarClicked) {
