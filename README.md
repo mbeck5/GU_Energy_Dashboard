@@ -46,11 +46,11 @@ In the server folder run:
 
     $ npm test
 
-> Make sure your browser is pointing to http://localhost:3000/#/
+> Make sure your browser is pointing to http://localhost:7457
 
 ### In production mode:
 
-In the client folder run:
+In the client folder, compile code with:
 
     $ grunt
 
