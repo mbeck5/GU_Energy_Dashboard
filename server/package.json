@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SET \"NODE_ENV=production\" && node ./bin/www",
-    "test": "SET \"NODE_ENV=development\" && nodemon ./bin/www"
+    "start": "NODE_ENV=production && forever ./bin/www",
+    "test": "NODE_ENV=development && nodemon ./bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
