@@ -24,6 +24,11 @@ angular.module('clientApp')
       return buildingData.getList({building: buildingName, meterType: meterTypeId});
     }
 
+    function getResourceSum(meterTypeId){
+      var resourceSum = Restangular.all('getResourceSum');
+      return resourceSum.getList({meterType: meterTypeId});
+    }
+
     function getSelectedBuilding() {
       return selectedBuilding;
     }
@@ -37,6 +42,7 @@ angular.module('clientApp')
       getBuildingData: getBuildingData,
       getResourceByType: getResourceByType,
       getBuildingDataFromName: getBuildingDataFromName,
+      getResourceSum: getResourceSum,
       getSelectedBuilding: getSelectedBuilding,
       setSelectedBuilding: setSelectedBuilding
     };
