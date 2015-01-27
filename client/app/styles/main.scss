@@ -1,36 +1,20 @@
-//$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-// endbower
-
-//Space out content a bit
 body {
   padding-bottom: 20px;
-  background-color: lightskyblue;
+  background-color: #DFD7CA;
 }
 
-/* Everything gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding: 10px 0 10px 0;
-  background-color: transparent;
-}
-
-/* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
+#navbar {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 #gu-icon {
-  max-height: 60px;
-  max-width: 538px;
-  height: auto;
-  width: 50%;
+  float: left;
+  height: 60px;
 }
 
 #main{
-  margin-top: 15px;
+  margin-top: 50px;
 }
 
 //for compatability warning
