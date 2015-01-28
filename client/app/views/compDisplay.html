@@ -25,22 +25,49 @@
       <div class="panel-body">
         <div id="current-comp-scroll" class="scroll">
           <div id="current-comp-list" class="list-group">
-            <h1>
-              {{filteredBuildings[displayedCompIndex][0]}}<br><br>
-            </h1>
-            <h3>
-              Buildings:  {{filteredBuildings[displayedCompIndex][1]}},  {{filteredBuildings[displayedCompIndex][2]}}
-            </h3>
-            <h3>
-              Contested Resource:  {{filteredBuildings[displayedCompIndex][3]}}
-            </h3>
-            <h3>
-              Start Date:  {{filteredBuildings[displayedCompIndex][4]}}
-            </h3>
-            <h3>
-              End Date:    {{filteredBuildings[displayedCompIndex][5]}}
-            </h3>
-            <div class="col-md-9" id="graph">
+            <div class="col-md-3">
+              <h1>
+                {{filteredBuildings[displayedCompIndex][0]}}<br><br>
+              </h1>
+
+              <h3>
+                Buildings: {{filteredBuildings[displayedCompIndex][1]}}, {{filteredBuildings[displayedCompIndex][2]}}
+              </h3>
+
+              <h3>
+                Contested Resource: {{filteredBuildings[displayedCompIndex][3]}}
+              </h3>
+
+              <h3>
+                Start Date: {{filteredBuildings[displayedCompIndex][4]}}
+              </h3>
+
+              <h3>
+                End Date: {{filteredBuildings[displayedCompIndex][5]}}
+              </h3>
+              <div ng-controller="ModalDemoCtrl">
+                <script type="text/ng-template" id="myModalContent.html">
+                  <div class="modal-header">
+                    <h3 class="modal-title">I'm a modal!</h3>
+                  </div>
+                  <div class="modal-body">
+                    <ul>
+                      <li ng-repeat="item in items">
+                        <a ng-click="selected.item = item">{{ item }}</a>
+                      </li>
+                    </ul>
+                    Selected: <b>{{ selected.item }}</b>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                  </div>
+                </script>
+
+                <button class="btn btn-default" id="create-comp-button" ng-click="open()">Open me!</button>
+              </div>
+            </div>
+            <div class="col-md-8" id="graph">
               <div>
                 <nvd3 options='options' data='data' api="api"></nvd3>
               </div>
@@ -51,3 +78,4 @@
     </div>
   </div>
 </div>
+

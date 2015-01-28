@@ -36,7 +36,7 @@ angular.module('clientApp')
     var buildingScrollHeight = $(window).height() * .70;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
 
-    var selectedResource = 3; //default resource
+    var selectedResource = 2; //default resource
     var savedData = [];  //save downloaded data to avoid downloading
 
     $scope.selectedBuilding = 'goller';
@@ -113,9 +113,9 @@ angular.module('clientApp')
 
     //called once data is retrieved
     function initGraph() {
-      //createGraphData(savedData[selectedResource]);
-      //setResourceLabel();
-      //setFocusArea();
+      createGraphData(savedData[selectedResource]);
+      setResourceLabel();
+      setFocusArea();
     }
 
     function setResourceLabel() {
@@ -151,3 +151,42 @@ angular.module('clientApp')
     }
   });
 
+angular.module('clientApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+  $scope.items = ['item1', 'item2', 'item3'];
+  $scope.open = function (size) {
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+});
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+angular.module('clientApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
