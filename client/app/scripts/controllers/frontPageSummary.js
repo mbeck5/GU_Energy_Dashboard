@@ -6,11 +6,13 @@ angular.module('clientApp')
     var isPieClicked = false;
     var resourceIndex = 0;
     var colorArray = ['#2ca02c','#ff7f0e','#1F77B4']; //Electricity, Gas, Water
+    var buildingTypes = [];
 
     var barWater = [{key: "Building Types", values: []}];
     var barElectricity = [{key: "Building Types", values: []}];
     var barGas = [{key: "Building Types", values: []}];
 
+    populateBuildingTypes();
     createBarData();
 
     var pieDefault = [
@@ -85,6 +87,14 @@ angular.module('clientApp')
 
     $scope.barData = barElectricity;
 
+    function populateBuildingTypes(){
+      buildingSvc.getBuildingTypes().then(function (data){
+        for(var i = 0; i < data.length; i++) {
+          buildingTypes.push(data[i].BUILDING_TYPE);
+        }
+      })
+    }
+
     function createBarWaterData(data){
       //reset
       barWater[0].values = [];
@@ -118,6 +128,7 @@ angular.module('clientApp')
       });
       buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
+        console.log(data);
       });
     }
 
@@ -162,7 +173,6 @@ angular.module('clientApp')
       }
     }
 
-
     function changeResourceDataOnPieMouseover(e){
       var resourceName = e.label;
       resourceIndex = e.pointIndex;
@@ -183,8 +193,9 @@ angular.module('clientApp')
     }
     function changeResourceDataOnBarMouseover(e){
       if (!isPieClicked && !isBarClicked){
-        createPieType(e.pointIndex);
-        console.log(e);
+        createPieType(buildingTypes.indexOf(e.point.label));
+        console.log(e.point.label);
+        console.log(buildingTypes.indexOf(e.point.label));
         $scope.pieApi.updateWithData(pieBuildingType);
       }
     }

@@ -11,6 +11,21 @@ exports.getBuildings = function(req, res){
     });
 };
 
+exports.getBuildingTypes = function(req, res){
+    queryString = "SELECT BUILDING_TYPE " +
+                    "FROM building_type " +
+                    "WHERE BUILDING_TYPE_ID != 1;";
+
+    connection.query(queryString, function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
 exports.getResources = function(req, res){
     queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
                     "FROM meters_dly_data " +

@@ -37,6 +37,11 @@ angular.module('clientApp')
       selectedBuilding = building;
     }
 
+    function getBuildingTypes(){
+      var buildingTypes = Restangular.all('getBuildingTypes');
+      return buildingTypes.getList();
+    }
+
     return {
       getBuildings: getBuildings,
       getBuildingData: getBuildingData,
@@ -44,6 +49,7 @@ angular.module('clientApp')
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
       getSelectedBuilding: getSelectedBuilding,
-      setSelectedBuilding: setSelectedBuilding
+      setSelectedBuilding: setSelectedBuilding,
+      getBuildingTypes: getBuildingTypes
     };
   });
