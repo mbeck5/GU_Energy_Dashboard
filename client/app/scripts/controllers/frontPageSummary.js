@@ -12,6 +12,10 @@ angular.module('clientApp')
     var barElectricity = [{key: "Building Types", values: []}];
     var barGas = [{key: "Building Types", values: []}];
 
+    var waterHash = {};
+    var electricityHash = {};
+    var gasHash = {};
+
     populateBuildingTypes();
     createBarData();
 
@@ -122,14 +126,37 @@ angular.module('clientApp')
     function createBarData(){
       buildingSvc.getResourceByType(7).then(function (data){
         createBarWaterData(data);
+        createWaterHash();
       });
       buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
+        createElectricityHash();
       });
       buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
-        console.log(data);
+        createGasHash();
       });
+    }
+    function createWaterHash() {
+      if (barWater[0].values.length > 0) {
+        for (var i = 0; i < barWater[0].values.length; i++) {
+          waterHash[barWater[0].values[i].label] = barWater[0].values[i].value;
+        }
+      }
+    }
+    function createElectricityHash() {
+      if (barElectricity[0].values.length > 0) {
+        for (var i = 0; i < barElectricity[0].values.length; i++) {
+          electricityHash[barElectricity[0].values[i].label] = barElectricity[0].values[i].value;
+        }
+      }
+    }
+    function createGasHash(){
+      if(barGas[0].values.length > 0) {
+        for (var i = 0; i < barGas[0].values.length; i++) {
+          gasHash[barGas[0].values[i].label] = barGas[0].values[i].value;
+        }
+      }
     }
 
     function createPieDefault(){
@@ -143,19 +170,19 @@ angular.module('clientApp')
         pieDefault[2].y = data[0].res_sum;
       });
     }
-    function createPieType(buildingTypeIndex){
+    function createPieType(buildingType){
       var elec = 0;
       var gas = 0;
       var water = 0;
-      if(barElectricity[0].values.length > buildingTypeIndex){
-        elec = barElectricity[0].values[buildingTypeIndex].value;
-      }
-      if(barGas[0].values.length > buildingTypeIndex){
-        gas = barGas[0].values[buildingTypeIndex].value;
-      };
-      if(barWater[0].values.length > buildingTypeIndex){
-        water = barWater[0].values[buildingTypeIndex].value;
-      };
+
+      if(elec = electricityHash[buildingType]);
+      else{elec = 0}
+
+      if(gas = gasHash[buildingType]);
+      else{gas = 0}
+
+      if(water = waterHash[buildingType]);
+      else{water = 0}
 
       pieBuildingType[0].y = elec;
       pieBuildingType[1].y = gas;
@@ -193,9 +220,7 @@ angular.module('clientApp')
     }
     function changeResourceDataOnBarMouseover(e){
       if (!isPieClicked && !isBarClicked){
-        createPieType(buildingTypes.indexOf(e.point.label));
-        console.log(e.point.label);
-        console.log(buildingTypes.indexOf(e.point.label));
+        createPieType(e.point.label);
         $scope.pieApi.updateWithData(pieBuildingType);
       }
     }
