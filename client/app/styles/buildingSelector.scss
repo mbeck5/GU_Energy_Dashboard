@@ -8,11 +8,20 @@
   margin-top: 30px;
   height: 25%;
   box-shadow: 0 0 50px #CCCCCC;
+  width:100%;
 }
 
 #building-scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
+}
+
+#graph-panel {
+  margin-top: 30px;
+  height: 80%;
+}
+#graph-alignment {
+  width:100%;
 }
 
 #tip-panel{
