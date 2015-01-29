@@ -159,6 +159,7 @@ angular.module('clientApp')
       }
     }
 
+    //This function throws 3 exceptions per building service call
     function createPieDefault(){
       buildingSvc.getResourceSum(2).then(function (data){
         pieDefault[0].y = data[0].res_sum;
