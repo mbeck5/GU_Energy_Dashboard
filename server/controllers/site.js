@@ -1,7 +1,7 @@
 var stdDev = require('../services/standardDeviation');
 
 exports.getBuildings = function(req, res){
-    connection.query("SELECT DISTINCT BUILDING_NAME AS name, BUILDING_ID as id FROM building WHERE BUILDING_NAME != 'undefined' ORDER BY BUILDING_NAME", function(err, rows){
+    connection.query("SELECT DISTINCT BUILDING_NAME AS name, BUILDING_ID as id, BUILDING_TYPE_ID as buildingTypeId FROM building WHERE BUILDING_NAME != 'undefined' ORDER BY BUILDING_NAME", function(err, rows){
         if(err){
             throw err;
         }
@@ -12,7 +12,7 @@ exports.getBuildings = function(req, res){
 };
 
 exports.getResources = function(req, res){
-    queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
+    var queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
                     "FROM meters_dly_data " +
                     "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
                     "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
@@ -32,7 +32,7 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesFromName = function(req, res) {
-    queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
+    var queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
                     "FROM meters_dly_data " +
                     "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
                     "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
@@ -51,4 +51,18 @@ exports.getResourcesFromName = function(req, res) {
             res.send(stdDev.standardDeviationFilter(rows));
         }
     });
+};
+
+exports.getBuildingTypes = function(req, res) {
+    var queryString = "SELECT building_type_id as buildingTypeId, building_type as buildingType " +
+                    "FROM building_type;";
+
+    connection.query(queryString, function(err, rows) {
+        if(err) {
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    })
 };

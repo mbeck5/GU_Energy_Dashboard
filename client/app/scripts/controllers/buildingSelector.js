@@ -4,17 +4,33 @@ angular.module('clientApp')
   .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
         var buildings = [];
         $scope.searchInput = '';
+        $scope.buildingTypes = [];
         $scope.filteredBuildings = [];
 
-        //unpack promise returned from rest call
+        //get list of buildings
         buildingSvc.getBuildings().then(function (data) {
           buildings = data;
           $scope.filteredBuildings = buildings;
         });
 
+        //get list of building types
+        buildingSvc.getBuildingTypes().then(function (data) {
+          $scope.buildingTypes = data;
+        });
+
         //filters based on search input
-        $scope.filterBuildings = function() {
-            $scope.filteredBuildings = buildings.filter(filterBuildings);
+        $scope.filterBuildingsBySearch = function() {
+            $scope.filteredBuildings = buildings.filter(function (element) {
+              return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+            });
+        };
+
+        $scope.filterBuildingsByType = function(type) {
+            $scope.searchInput = "";  //clear the search bar
+            $scope.filteredBuildings = buildings;
+            $scope.filteredBuildings = buildings.filter(function (element) {
+              return type === 1 || element.buildingTypeId === type;
+            });
         };
 
         //when clicking on building
@@ -26,16 +42,6 @@ angular.module('clientApp')
         $scope.returnCorrectName = function(index) {
             return $scope.filteredBuildings[index].name.replace("/", "--");
         };
-
-        function filterBuildings(element) {
-            return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
-        }
-
-        var buildingScrollHeight = $(window).height() * .55;
-        $('.scroll').css({'height': buildingScrollHeight + 'px'});
-
-        var tipTextWidth = $(window).width() * .25;
-        $('.tipText').css({'width': tipTextWidth  + 'px'});
 
         jQuery(document).ready(function() {
           jQuery('.tabs .tab-links a').on('click', function(e)  {
@@ -50,6 +56,4 @@ angular.module('clientApp')
             e.preventDefault();
           });
         });
-
-
   });
