@@ -1,29 +1,29 @@
 <div>
   <div class="row">
     <div class="col-md-4">
-        <div class="panel panel-default" id="building-list-panel">
+      <div class="panel panel-default" id="building-list-panel">
         <div class="panel-heading">Campus Building Select</div>
 
-      <div class="panel-body">
-        <div id="building-filter">
-          <div>
-            <div class="form-group">
-              <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
-                     ng-change="filterBuildingsBySearch()">
-            </div>
-            <div class="btn-group" dropdown>
-              <button class="btn btn-default dropdown-toggle" dropdown-toggle type="button" data-toggle="dropdown">
-                Type
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li ng-repeat="type in buildingTypes">
-                  <a ng-click="filterBuildingsByType(type.buildingTypeId)">{{type.buildingType}}</a>
-                </li>
-              </ul>
+        <div class="panel-body">
+          <div id="building-filter">
+            <div>
+              <div class="form-group">
+                <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                       ng-change="filterBuildingsBySearch()">
+              </div>
+              <div class="btn-group" dropdown>
+                <button class="btn btn-default dropdown-toggle" dropdown-toggle type="button" data-toggle="dropdown">
+                  Type
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li ng-repeat="type in buildingTypes">
+                    <a ng-click="filterBuildingsByType(type.buildingTypeId)">{{type.buildingType}}</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
 
         <div id="building-scroll" class="scroll">
           <div id="building-list" class="list-group">
@@ -34,47 +34,37 @@
           </div>
         </div>
       </div>
-      </div>
-        <div class="panel panel-default" id="tip-panel">
+    </div>
+
+      <div class="panel panel-default" id="tip-panel">
         <div class="panel-heading">Energy Saving Tips</div>
         <div class="panel-body">
-          <div class="tabs">
-            <ul class="tab-links">
-              <li class="active"><a href="#tab1">Electricity</a></li>
-              <li><a href="#tab2">Water</a></li>
-              <li><a href="#tab3">Gas</a></li>
-            </ul>
-
-            <div id="tab-text" class="tab-content">
-              <div id="tab1" class="tab active">
-                <p>1. Set refrigerators at 38 to 42 degrees Fahrenheit and freezers between 0 and 5 degrees Fahrenheit. Make
-                  sure the doors seal tightly.</p>
-
-                <p>2. Unplug chargers when they’re not charging, they draw energy whenever they’re plugged in.</p>
-
-                <p>3. Turn off lights when leaving a room for more than five minutes.</p>
-              </div>
-
-              <div id="tab2" class="tab">
-                <p>1. Limit your shower time and use hot water sparingly.</p>
-
-                <p>Water Tip #2</p>
-
-                <p>Water Tip #3</p>
-              </div>
-
-              <div id="tab3" class="tab">
-                <p>Gas Tip #1</p>
-
-                <p>Gas Tip #2</p>
-
-                <p>Gas Tip #3</p>
-              </div>
-            </div>
-          </div>
+          <tabset justified="true" type="pills">
+            <tab heading="Electricity">
+              <ol>
+                <li>Set refrigerators at 38 to 42 degrees Fahrenheit and freezers between 0 and 5 degrees Fahrenheit. Make sure the doors seal tightly.</li>
+                <li>Unplug chargers when they’re not charging, they draw energy whenever they’re plugged in.</li>
+                <li>Turn off lights when leaving a room for more than five minutes.</li>
+              </ol>
+            </tab>
+            <tab heading="Gas">
+              <ol>
+                <li>Gas tip #1</li>
+                <li>Gas tip #2</li>
+                <li>Gas tip #3</li>
+              </ol>
+            </tab>
+            <tab heading="Water">
+              <ol>
+                <li>Limit your shower time and use hot water sparingly.</li>
+                <li>Water tip #2</li>
+                <li>Water tip #3</li>
+              </ol>
+            </tab>
+          </tabset>
         </div>
       </div>
-      </div>
+    </div>
     <div class="col-md-8" id="graph-panel">
     <div ng-controller="SummaryCtrl">
       <div class="panel panel-default" id="graph-alignment">
