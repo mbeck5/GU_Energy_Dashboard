@@ -11,7 +11,7 @@ describe('controller: buildingDisplay', function () {
     mockBuildingSvc,
     data = [];
 
-  beforeEach(inject(function ($rootScope, $controller, $q, buildingSvc) {
+  beforeEach(inject(function ($rootScope, $controller, $q) {
     scope = $rootScope.$new();
     mockBuildingSvc = {
       getSelectedBuilding: function() {
