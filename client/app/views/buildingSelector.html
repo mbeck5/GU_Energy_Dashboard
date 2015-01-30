@@ -34,12 +34,8 @@
             </div>
           </div>
         </div>
-    </div>
-    </div>
-  </div>
+      </div>
 
-  <div class="row">
-    <div class="col-md-4">
       <div class="panel panel-default" id="tip-panel">
         <div class="panel-heading">Energy Saving Tips</div>
         <div class="panel-body">
@@ -69,6 +65,18 @@
         </div>
       </div>
     </div>
+    <div class="col-md-8" id="graph-panel">
+    <div ng-controller="SummaryCtrl">
+      <div class="panel panel-default" id="graph-alignment">
+        <div class="panel-heading">Where Does Our Energy Go?</div>
+        <div class="panel-body">
+          <div>
+            <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
+            <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
-</div>
 </div>
