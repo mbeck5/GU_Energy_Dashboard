@@ -4,19 +4,35 @@
         <div class="panel panel-default" id="building-list-panel">
         <div class="panel-heading">Campus Building Select</div>
 
-        <div class="panel-body">
-          <div id="building-search" class="form-group">
-            <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
-                   ng-change="filterBuildings()">
-          </div>
-          <div id="building-scroll" class="scroll">
-            <div id="building-list" class="list-group">
-              <a ng-repeat="building in filteredBuildings" class="list-group-item"
-                 href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
-                {{building.name}}
-              </a>
+      <div class="panel-body">
+        <div id="building-filter">
+          <div>
+            <div class="form-group">
+              <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                     ng-change="filterBuildingsBySearch()">
+            </div>
+            <div class="btn-group" dropdown>
+              <button class="btn btn-default dropdown-toggle" dropdown-toggle type="button" data-toggle="dropdown">
+                Type
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li ng-repeat="type in buildingTypes">
+                  <a ng-click="filterBuildingsByType(type.buildingTypeId)">{{type.buildingType}}</a>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
+
+        <div id="building-scroll" class="scroll">
+          <div id="building-list" class="list-group">
+            <a ng-repeat="building in filteredBuildings" class="list-group-item"
+               href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
+              {{building.name}}
+            </a>
+          </div>
+        </div>
       </div>
       </div>
         <div class="panel panel-default" id="tip-panel">

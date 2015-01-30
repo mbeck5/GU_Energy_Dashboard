@@ -1,7 +1,23 @@
+#building-filter {
+  div {
+    display: table-row;
+    .form-group {
+      display: table-cell;
+      width: 100%;
+    }
+    .btn-group {
+      display: table-cell;
+      width: 100%;
+    }
+  }
+  margin-bottom: 15px;
+}
+
 #building-list {
   background-color: transparent;
   margin-bottom: 20px;
   margin-outside: 20px;
+  height: 350px;
 }
 
 #building-list-panel{

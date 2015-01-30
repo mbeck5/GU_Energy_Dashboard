@@ -48,8 +48,8 @@ angular.module('clientApp')
       getResourceByType: getResourceByType,
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
+      getBuildingTypes: getBuildingTypes,
       getSelectedBuilding: getSelectedBuilding,
-      setSelectedBuilding: setSelectedBuilding,
-      getBuildingTypes: getBuildingTypes
+      setSelectedBuilding: setSelectedBuilding
     };
   });
