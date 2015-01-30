@@ -11,7 +11,7 @@ describe('controller: buildingDisplay', function () {
     mockBuildingSvc,
     data = [];
 
-  beforeEach(inject(function ($rootScope, $controller, $q) {
+  beforeEach(inject(function ($rootScope, $controller, $q, buildingSvc) {
     scope = $rootScope.$new();
     mockBuildingSvc = {
       getSelectedBuilding: function() {
@@ -23,11 +23,18 @@ describe('controller: buildingDisplay', function () {
       }
     };
 
+    spyOn(mockBuildingSvc, 'getBuildingData').and.callThrough();
     buildingDisplayCtrl = $controller('BuildingDisplayCtrl', {
       $scope: scope,
       buildingSvc: mockBuildingSvc
     });
   }));
+
+  it('should call getBuildingData upon load of controller', function () {
+    deferred.resolve(data);
+    scope.$root.$digest();
+    expect(mockBuildingSvc.getBuildingData).toHaveBeenCalled();
+  });
 
   it('should set correct axis label', function () {
     var resource = 3;
