@@ -25,16 +25,16 @@
             </div>
           </div>
 
-        <div id="building-scroll" class="scroll">
-          <div id="building-list" class="list-group">
-            <a ng-repeat="building in filteredBuildings" class="list-group-item"
-               href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
-              {{building.name}}
-            </a>
+          <div id="building-scroll" class="scroll">
+            <div id="building-list" class="list-group">
+              <a ng-repeat="building in filteredBuildings" class="list-group-item"
+                 href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
+                {{building.name}}
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
       <div class="panel panel-default" id="tip-panel">
         <div class="panel-heading">Energy Saving Tips</div>
