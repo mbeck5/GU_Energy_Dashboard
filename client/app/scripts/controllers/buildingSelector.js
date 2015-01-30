@@ -27,7 +27,6 @@ angular.module('clientApp')
 
         $scope.filterBuildingsByType = function(type) {
             $scope.searchInput = "";  //clear the search bar
-            $scope.filteredBuildings = buildings;
             $scope.filteredBuildings = buildings.filter(function (element) {
               return type === 1 || element.buildingTypeId === type;
             });
