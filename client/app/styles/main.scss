@@ -6,10 +6,18 @@ body {
 #navbar {
   padding-left: 15px;
   padding-right: 15px;
+  .navbar-brand {
+    @media (max-width: 400px) {
+      width: 10%;
+      padding-top: 10px;
+    }
+  }
+
 }
 
 #gu-icon {
-  max-width: 538px;
+  float: left;
+  height: 60px;
 }
 
 #main{

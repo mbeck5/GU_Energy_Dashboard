@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
+  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
@@ -60,6 +60,7 @@ angular.module('clientApp')
       };
 
       $scope.selectResource = function (resourceType) {
+        savedData[selectedResource] = $scope.data[0].values;
         selectedResource = resourceType;
 
         //get data for selected resource if not saved
@@ -67,7 +68,7 @@ angular.module('clientApp')
           getBuildingData();
         }
         else {
-          initGraph();
+          initGraph(null);
         }
       };
 
@@ -75,9 +76,15 @@ angular.module('clientApp')
         //reset
         $scope.data[0].values = [];
 
-        //create graph points
-        for (var i = 0; i < data.length; i++) {
-          $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
+        if (data) {
+          //create graph points
+          $scope.data[0].values = new Array(data.length);
+          for (var i = 0; i < data.length; i++) {
+            $scope.data[0].values[i] = {x: Date.parse(data[i].date), y: data[i].consumption};
+          }
+        }
+        else {
+          $scope.data[0].values = savedData[selectedResource];
         }
       }
 
@@ -90,8 +97,7 @@ angular.module('clientApp')
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            initGraph();
+            initGraph(data);
           });
         }
 
@@ -99,15 +105,14 @@ angular.module('clientApp')
         else {
           //get resource info for building
           buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            initGraph();
+            initGraph(data);
           });
         }
       }
 
       //called once data is retrieved
-      function initGraph() {
-        createGraphData(savedData[selectedResource]);
+      function initGraph(data) {
+        createGraphData(data);
         setResourceLabel();
         setFocusArea();
       }
@@ -131,16 +136,17 @@ angular.module('clientApp')
 
       //sets initial "zoom" view over specified area
       function setFocusArea() {
-        $scope.$apply();
-
         //creating focus coordinates
         var curDate = new Date();
         var prevDate = new Date();
         curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
         prevDate.setMonth(prevDate.getMonth() - 5);
 
-        var chart = $scope.api.getScope().chart;  //get chart from view
-        chart.brushExtent([prevDate, curDate]);
-        $scope.api.update();
+        //this is actually the right way to do this
+        $timeout(function() {
+          var chart = $scope.api.getScope().chart;  //get chart from view
+          chart.brushExtent([prevDate, curDate]);
+          $scope.api.update();
+        });
       }
   });
