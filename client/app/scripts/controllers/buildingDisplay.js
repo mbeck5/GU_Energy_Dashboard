@@ -118,7 +118,6 @@ angular.module('clientApp')
       }
 
       function setResourceLabel() {
-        console.log(selectedResource);
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
