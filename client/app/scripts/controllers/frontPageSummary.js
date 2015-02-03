@@ -131,7 +131,6 @@ angular.module('clientApp')
       buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
         createElectricityHash();
-        console.log(barElectricity);
       });
       buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
