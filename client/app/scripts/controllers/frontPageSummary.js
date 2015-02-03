@@ -5,7 +5,7 @@ angular.module('clientApp')
     var isBarClicked = false;
     var isPieClicked = false;
     var resourceIndex = 0;
-    var colorArray = ['#2ca02c','#ff7f0e','#1F77B4']; //Electricity, Gas, Water
+    var colorArray = ['#FFCC00','#ff7f0e','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
 
     var barWater = [{key: "Building Types", values: []}];
@@ -104,7 +104,7 @@ angular.module('clientApp')
       barWater[0].values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-          barWater[0].values.push({label: data[i].type, value: data[i].total_cons});
+          barWater[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarElectricityData(data){
@@ -112,7 +112,7 @@ angular.module('clientApp')
       barElectricity[0].values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barElectricity[0].values.push({label: data[i].type, value: data[i].total_cons});
+        barElectricity[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarGasData(data){
@@ -120,7 +120,7 @@ angular.module('clientApp')
       barGas[0].values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barGas[0].values.push({label: data[i].type, value: data[i].total_cons});
+        barGas[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarData(){
@@ -131,6 +131,7 @@ angular.module('clientApp')
       buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
         createElectricityHash();
+        console.log(barElectricity);
       });
       buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
@@ -235,6 +236,22 @@ angular.module('clientApp')
       if (!isPieClicked && !isBarClicked) {
         resourceIndex = 0;
         $scope.barApi.updateWithData(barElectricity);
+      }
+    }
+
+    //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
+    function shortenTypeName(buildingType){
+      if (buildingType.indexOf(' ') > -1){
+        return buildingType.substring(0, buildingType.indexOf(' '));
+      }
+      else if (buildingType.indexOf('/') > -1){
+        return buildingType.substring(0, buildingType.indexOf('/'));
+      }
+      else if (buildingType.indexOf('\\') > -1){
+        return buildingType.substring(0, buildingType.indexOf('\\'));
+      }
+      else{
+        return buildingType;
       }
     }
   });
