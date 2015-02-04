@@ -1,13 +1,30 @@
+#building-filter {
+  div {
+    display: table-row;
+    .form-group {
+      display: table-cell;
+      width: 100%;
+    }
+    .btn-group {
+      display: table-cell;
+      width: 100%;
+    }
+  }
+  margin-bottom: 15px;
+}
+
 #building-list {
   background-color: transparent;
   margin-bottom: 20px;
   margin-outside: 20px;
+  height: 350px;
 }
 
 #building-list-panel{
   margin-top: 30px;
   height: 25%;
   box-shadow: 0 0 50px #CCCCCC;
+  //width:100%;
 }
 
 #building-scroll {
@@ -15,70 +32,16 @@
   overflow-y: auto;
 }
 
+#graph-panel {
+  margin-top: 30px;
+  //height: 50%;
+  //width: 30%;
+}
+#graph-alignment {
+  width:100%;
+}
+
 #tip-panel{
   outline: none;
   box-shadow: 0 0 50px #CCCCCC;
-}
-
-/*----- Tabs -----*/
-.tabs {
-  display: inline-block;
-}
-
-/*----- Tab Links -----*/
-/* Clearfix */
-.tab-links:after {
-  display: block;
-  clear: both;
-  content: '';
-}
-
-.tab-links li {
-  margin: 0 5px;
-  float: left;
-  list-style: none;
-}
-
-.tab-links a {
-  padding: 9px 15px;
-  display: inline-block;
-  border-radius: 5px 5px 5px 5px;
-  background: #7FB5DA;
-  font-size: 16px;
-  font-weight: 600;
-  color: #4c4c4c;
-  transition: all linear 0.15s;
-}
-
-.tab-links a:hover {
-  background: #a7cce5;
-  text-decoration: none;
-}
-
-li.active a, li.active a:hover {
-  background: #fff;
-  color: #4c4c4c;
-}
-
-/*----- Content of Tabs -----*/
-.tab-content {
-  padding: 15px;
-  border-radius: 3px;
-  box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
-  background: #fff;
-}
-
-.tab {
-  display: none;
-}
-
-.tab.active {
-  display: block;
-}
-
-#tab-text {
-  border-radius: 10px;
-  height: 250px;
-  overflow: scroll;
-  overflow-x: auto;
 }

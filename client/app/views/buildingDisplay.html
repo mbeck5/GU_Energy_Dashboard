@@ -2,15 +2,15 @@
   <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
   <div class="panel-body">
     <div class="row">
-
-      <div class="col-md-4" id="toggles">
-        <img src="images/WATERbaby.png" ng-click="selectResource(18)">
-        <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
-        <img src="images/FIREbaby.png" ng-click="selectResource(3)">
+      <div class="col-md-2">
+        <div id="toggles">
+          <img src="images/WATERbaby.png" ng-click="selectResource(18)">
+          <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
+          <img src="images/FIREbevel.png" ng-click="selectResource(3)">
+        </div>
       </div>
-
-      <div class="col-md-9" id="graph">
-        <div>
+      <div class="col-md-10">
+        <div id="graph">
           <nvd3 options='options' data='data' api="api"></nvd3>
         </div>
       </div>

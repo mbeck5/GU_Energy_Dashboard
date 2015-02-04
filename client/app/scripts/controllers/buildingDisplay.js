@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingDisplayCtrl', function ($scope, $location, buildingSvc) {
+  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
@@ -51,15 +51,16 @@ angular.module('clientApp')
             forceY: [0]
           },
           transitionDuration: 500,
-          noData: "No Data Available for Selected Resource"
+          noData: 'No Data Available for Selected Resource'
         },
         title: {
           enable: true,
-          text: "Daily Electricity Usage"
+          text: 'Daily Electricity Usage'
         }
       };
 
       $scope.selectResource = function (resourceType) {
+        savedData[selectedResource] = $scope.data[0].values;
         selectedResource = resourceType;
 
         //get data for selected resource if not saved
@@ -67,7 +68,7 @@ angular.module('clientApp')
           getBuildingData();
         }
         else {
-          initGraph();
+          initGraph(null);
         }
       };
 
@@ -75,9 +76,15 @@ angular.module('clientApp')
         //reset
         $scope.data[0].values = [];
 
-        //create graph points
-        for (var i = 0; i < data.length; i++) {
-          $scope.data[0].values.push({x: Date.parse(data[i].date), y: data[i].consumption});
+        if (data) {
+          //create graph points
+          $scope.data[0].values = new Array(data.length);
+          for (var i = 0; i < data.length; i++) {
+            $scope.data[0].values[i] = {x: Date.parse(data[i].date), y: data[i].consumption};
+          }
+        }
+        else {
+          $scope.data[0].values = savedData[selectedResource];
         }
       }
 
@@ -90,8 +97,7 @@ angular.module('clientApp')
 
           //get resource info for building from name rather than ID
           buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            initGraph();
+            initGraph(data);
           });
         }
 
@@ -99,15 +105,14 @@ angular.module('clientApp')
         else {
           //get resource info for building
           buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
-            savedData[selectedResource] = data;
-            initGraph();
+            initGraph(data);
           });
         }
       }
 
       //called once data is retrieved
-      function initGraph() {
-        createGraphData(savedData[selectedResource]);
+      function initGraph(data) {
+        createGraphData(data);
         setResourceLabel();
         setFocusArea();
       }
@@ -117,11 +122,18 @@ angular.module('clientApp')
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
             $scope.options.title.text = 'Daily Electricity Usage';
+            $scope.data[0].color = '#FFCC00';//F3DF5D
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
             $scope.options.title.text = 'Daily Gas Usage';
+            $scope.data[0].color = '#f20000';
             break;
+          //Ask why this is 18
+          //case 7:
+            //$scope.options.chart.yAxis.axisLabel = 'Water';
+            //$scope.options.title.text = 'Daily Water Usage';
+            //$scope.options.chart.color = '#1F77B4';
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
             $scope.options.title.text = 'Daily Whatever Usage';
@@ -131,16 +143,17 @@ angular.module('clientApp')
 
       //sets initial "zoom" view over specified area
       function setFocusArea() {
-        $scope.$apply();
-
         //creating focus coordinates
         var curDate = new Date();
         var prevDate = new Date();
         curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
         prevDate.setMonth(prevDate.getMonth() - 5);
 
-        var chart = $scope.api.getScope().chart;  //get chart from view
-        chart.brushExtent([prevDate, curDate]);
-        $scope.api.update();
+        //this is actually the right way to do this
+        $timeout(function() {
+          var chart = $scope.api.getScope().chart;  //get chart from view
+          chart.brushExtent([prevDate, curDate]);
+          $scope.api.update();
+        });
       }
   });
