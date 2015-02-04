@@ -130,10 +130,11 @@ angular.module('clientApp')
             $scope.data[0].color = '#f20000';
             break;
           //Ask why this is 18
-          //case 7:
-            //$scope.options.chart.yAxis.axisLabel = 'Water';
-            //$scope.options.title.text = 'Daily Water Usage';
-            //$scope.options.chart.color = '#1F77B4';
+          case 7:
+            $scope.options.chart.yAxis.axisLabel = 'Water';
+            $scope.options.title.text = 'Daily Water Usage';
+            $scope.options.chart.color = '#1F77B4';
+            break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
             $scope.options.title.text = 'Daily Whatever Usage';
