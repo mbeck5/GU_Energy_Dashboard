@@ -1,24 +1,28 @@
 #toggles {
-  margin-bottom: 15%;
   max-width: 10%;
-  padding-top:10%;
-  margin-left: 5%;
-  padding-bottom: 10%;
+  margin: 25% auto 15% auto;
+  padding: 25px 25px 25px 25px;
   max-height: 20%;
-  display: inline;
+  display: table;
   background-color: #DFD7CA;
-  border-radius: 40%;
+  border-radius: 3px;
+
+  @media (max-width: 992px) {
+    max-width: 100%;
+    margin: 0 auto 15px auto;
+    padding: 15px 25px 15px 25px;
+  }
+
+  @media (max-width: 350px) {
+    img {
+      width: 50px;
+    }
+  }
 
   :hover {
     cursor: pointer;
     opacity: 0.7;
     filter: alpha(opacity=70);
-  }
-
-  img {
-    margin-top: 20%;
-    padding-left: 15%;
-    padding-right: 15%;
   }
 }
 
