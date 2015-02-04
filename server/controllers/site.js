@@ -132,7 +132,12 @@ exports.getBuildingTypes = function(req, res) {
 
 
 exports.getCompetitions = function(req, res){
-    connection.query("SELECT DISTINCT NAME as name, CID AS cid, START as startDate, END as endDate, RESOURCE as resource FROM competitions WHERE NAME != 'undefined' ORDER BY NAME", function(err, rows){
+    var queryString = "SELECT DISTINCT comp_name, cid, start_date, end_date, resource " +
+                        "FROM competitions " +
+                        "WHERE comp_name != 'undefined' " +
+                        "ORDER BY comp_name;";
+
+    connection.query(queryString, function(err, rows){
         if(err){
             throw err;
         }
