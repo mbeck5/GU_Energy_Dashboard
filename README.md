@@ -1,7 +1,7 @@
 # GU Energy Dashboard
 
 This is the senior design repository for the CPSC 002 GU Energy Dashboard.
-> [energy.dashboard.com:7457](http://energy.dashboard.com:7457)  Could be unstable
+> [energy.dashboard.edu:7457](http://energy.dashboard.edu:7457)  Could be unstable
 
 ## Installing
 
