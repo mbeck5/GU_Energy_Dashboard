@@ -51,11 +51,11 @@ angular.module('clientApp')
             forceY: [0]
           },
           transitionDuration: 500,
-          noData: "No Data Available for Selected Resource"
+          noData: 'No Data Available for Selected Resource'
         },
         title: {
           enable: true,
-          text: "Daily Electricity Usage"
+          text: 'Daily Electricity Usage'
         }
       };
 
@@ -122,11 +122,18 @@ angular.module('clientApp')
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
             $scope.options.title.text = 'Daily Electricity Usage';
+            $scope.data[0].color = '#FFCC00';//F3DF5D
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
             $scope.options.title.text = 'Daily Gas Usage';
+            $scope.data[0].color = '#f20000';
             break;
+          //Ask why this is 18
+          //case 7:
+            //$scope.options.chart.yAxis.axisLabel = 'Water';
+            //$scope.options.title.text = 'Daily Water Usage';
+            //$scope.options.chart.color = '#1F77B4';
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
             $scope.options.title.text = 'Daily Whatever Usage';
