@@ -6,13 +6,12 @@
       <div class="panel-body">
         <div id="building-search" class="form-group">
           <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
-                 ng-change="filterBuildings()">
+                 ng-change="filterComps()">
         </div>
         <div id="comp-scroll" class="scroll">
           <div id="comp-list" class="list-group">
-            <a ng-repeat="building in filteredBuildings" class="list-group-item"
-               href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
-              {{building[0]}}
+            <a ng-repeat="competiton in filteredComps" class="list-group-item" ng-click="selectComp($index)">
+              {{competiton[0]}}
             </a>
           </div>
         </div>
@@ -27,45 +26,52 @@
           <div id="current-comp-list" class="list-group">
             <div class="col-md-3">
               <h1>
-                {{filteredBuildings[displayedCompIndex][0]}}<br><br>
+                {{filteredComps[displayedCompIndex][0]}}<br><br>
               </h1>
 
               <h3>
-                Buildings: {{filteredBuildings[displayedCompIndex][1]}}, {{filteredBuildings[displayedCompIndex][2]}}
+                Buildings: {{filteredComps[displayedCompIndex][1]}}, {{filteredComps[displayedCompIndex][2]}}
               </h3>
 
               <h3>
-                Contested Resource: {{filteredBuildings[displayedCompIndex][3]}}
+                Contested Resource: {{filteredComps[displayedCompIndex][3]}}
               </h3>
 
               <h3>
-                Start Date: {{filteredBuildings[displayedCompIndex][4]}}
+                Start Date: {{filteredComps[displayedCompIndex][4]}}
               </h3>
 
               <h3>
-                End Date: {{filteredBuildings[displayedCompIndex][5]}}
+                End Date: {{filteredComps[displayedCompIndex][5]}}
               </h3>
-              <div ng-controller="ModalDemoCtrl">
-                <script type="text/ng-template" id="myModalContent.html">
-                  <div class="modal-header">
-                    <h3 class="modal-title">I'm a modal!</h3>
-                  </div>
-                  <div class="modal-body">
-                    <ul>
-                      <li ng-repeat="item in items">
-                        <a ng-click="selected.item = item">{{ item }}</a>
-                      </li>
-                    </ul>
-                    Selected: <b>{{ selected.item }}</b>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button>
-                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-                  </div>
+
+              <div ng-controller="CreateModalCtrl">
+                <script type="text/ng-template" id="myModalContent1.html">
+                  <div ng-include src="'views/CreateCompDisplay.html'"></div>
                 </script>
-
-                <button class="btn btn-default" id="create-comp-button" ng-click="open()">Open me!</button>
+                <div>
+                  <button class="btn btn-default comp-action-buttons" ng-click="open('lg')">Create</button>
+                </div>
               </div>
+
+              <div ng-controller="EditModalCtrl">
+                <script type="text/ng-template" id="myModalContent2.html" >
+                  <div ng-include src="'views/EditCompDisplay.html'"></div>
+                </script>
+                <div>
+                  <button class="btn btn-default comp-action-buttons" ng-click="open('lg')">Edit</button>
+                </div>
+              </div>
+
+              <div ng-controller="DeleteModalCtrl">
+                <script type="text/ng-template" id="myModalContent3.html">
+                  <div ng-include src="'views/DeleteCompDisplay.html'"></div>
+                </script>
+                <div>
+                  <button class="btn btn-default comp-action-buttons" ng-click="open()">Delete</button>
+                </div>
+              </div>
+
             </div>
             <div class="col-md-8" id="graph">
               <div>

@@ -1,0 +1,84 @@
+<div class="modal-header">
+  <h3 class="modal-title">GU Energy Competition Creation</h3>
+</div>
+<div class="modal-body" id="create-comp-body">
+  <table style="width:100%">
+    <tr valign="top">
+      <td id="create-comp-info-table-row" rowspan="2">
+        <div id="create-comp-info">
+          <div>
+            <label>Competition Name</label>
+          </div>
+          <div>
+            <input type="text" ng-model="dynamicPopover" class="form-control">
+          </div>
+          <div>
+            <label>Resource Type</label>
+          </div>
+          <div dropdown class="btn-group" ng-controller="CreateModalCtrl" >
+            <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle data-toggle="dropdown" id="resource-dropdown">
+              {{selectedResourceComp}}<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-click="resourceClick('Electricity')"><label>Electricity</label></li>
+              <li ng-click="resourceClick('Gas')"><label>Gas</label></li>
+              <li ng-click="resourceClick('Water')"><label>Water</label></li>
+            </ul>
+          </div>
+          <div>
+            <label>Start Date</label>
+          </div>
+          <div ng-controller="DatepickerDemoCtrl">
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt"
+                     is-open="opened" min-date="minDate" max-date="'2015-06-22'"
+                     datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true"
+                     close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                  class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+          <div>
+            <label>End Date</label>
+          </div>
+          <div>
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt"
+                     is-open="opened" min-date="minDate" max-date="'2015-06-22'"
+                     datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true"
+                     close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                  class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div ng-controller="BuildingSelectorCtrl" id="create-comp-building-list">
+          <div id="building-search" class="form-group">
+            <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                   ng-change="filterBuildings()">
+          </div>
+          <div id="building-scroll" class="scroll">
+            <div id="building-list" class="list-group">
+              <a ng-repeat="building in filteredBuildings" class="list-group-item">
+                <input type="checkbox" >
+                {{building.name}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default comp-modal-footer-buttons" ng-click="ok()">OK</button>
+  <button class="btn btn-default comp-modal-footer-buttons" ng-click="cancel()">Cancel</button>
+</div>
