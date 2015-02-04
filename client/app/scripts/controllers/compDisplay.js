@@ -16,8 +16,8 @@ angular.module('clientApp')
 
     //unpack promise returned from rest call
     compEditSvc.getComp().then(function (data) {
-      //comps = data;
-      //$scope.filteredComps = comps;
+      comps = data;
+      $scope.filteredComps = comps;
       //console.log("im in here");
     });
 
