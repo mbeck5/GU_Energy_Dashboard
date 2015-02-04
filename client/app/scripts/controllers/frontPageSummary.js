@@ -5,7 +5,7 @@ angular.module('clientApp')
     var isBarClicked = false;
     var isPieClicked = false;
     var resourceIndex = 0;
-    var colorArray = ['#FFCC00','#ff7f0e','#1F77B4']; //Electricity, Gas, Water
+    var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
 
     var barWater = [{key: "Building Types", values: []}];

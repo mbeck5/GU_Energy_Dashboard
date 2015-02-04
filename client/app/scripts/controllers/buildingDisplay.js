@@ -127,7 +127,7 @@ angular.module('clientApp')
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
             $scope.options.title.text = 'Daily Gas Usage';
-            $scope.data[0].color = '#ff7f0e';
+            $scope.data[0].color = '#f20000';
             break;
           //Ask why this is 18
           //case 7:
