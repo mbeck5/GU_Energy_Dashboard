@@ -1,6 +1,6 @@
 #toggles {
   max-width: 10%;
-  margin: 25% 0 15% 10%;
+  margin: 25% auto 15% auto;
   padding: 25px 25px 25px 25px;
   max-height: 20%;
   display: table;
@@ -9,8 +9,14 @@
 
   @media (max-width: 992px) {
     max-width: 100%;
-    margin: 0 0 15px 35%;
+    margin: 0 auto 15px auto;
     padding: 15px 25px 15px 25px;
+  }
+
+  @media (max-width: 350px) {
+    img {
+      width: 50px;
+    }
   }
 
   :hover {
