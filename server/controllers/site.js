@@ -52,3 +52,15 @@ exports.getResourcesFromName = function(req, res) {
         }
     });
 };
+
+
+exports.getCompetitions = function(req, res){
+    connection.query("SELECT DISTINCT NAME as name, CID AS cid, START as startDate, END as endDate, RESOURCE as resource FROM competitions WHERE NAME != 'undefined' ORDER BY NAME", function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+};

@@ -2,16 +2,24 @@
 
 angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, compEditSvc, buildingSvc) {
-    var comps;
-    var comp1 = ['Competition 1', 'Goller', 'Dillon', 'Gas', '1/15/2015', '3/12/2015'];
+    var comps = [];
+    /*var comp1 = ['Competition 1', 'Goller', 'Dillon', 'Gas', '1/15/2015', '3/12/2015'];
     var comp2 = ['Competition 2', 'BARC', 'Burch', 'Electricty', '1/17/2015', '4/15/2015'];
     var comp3 = ['Competition 3', 'Alliance', 'Campion', 'Gas', '4/12/2015', '2/15/2015'];
     var comp4 = ['Competition 4', 'Chardin', 'COG', 'Water', '2/1/2015', '5/15/2015'];
-    var comp5 = ['Competition 5', 'Cushing', 'Desmet', 'Electricity', '1/20/2015', '2/10/2015'];
+    var comp5 = ['Competition 5', 'Cushing', 'Desmet', 'Electricity', '1/20/2015', '2/10/2015'];*/
     $scope.searchInput = '';
-    $scope.filteredComps = [comp1, comp2, comp3, comp4, comp5];
+    //$scope.filteredComps = [comp1, comp2, comp3, comp4, comp5];
+    $scope.filteredComps = [];
 
     $scope.displayedCompIndex = 0;// = $scope.filterBuildings[0];
+
+    //unpack promise returned from rest call
+    compEditSvc.getComp().then(function (data) {
+      comps = data;
+      $scope.filteredComps = comps;
+      console.log("im in here");
+    });
 
     //filters based on search input
     $scope.filterComps = function () {

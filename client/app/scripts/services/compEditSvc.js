@@ -5,12 +5,12 @@ angular.module('clientApp')
     var selectedComp = 'DESELECTED';
 
     function getComp() {
-      var allComps = all('getBuildings');
+      var allComps = Restangular.all('getCompetitions');
       return allComps.getList();
     }
 
     function getCompData(buildingId, meterTypeId) {
-      var buildingData = all('getBuildingData');
+      var buildingData = Restangular.all('getBuildingData');
       return buildingData.getList({building: buildingId, meterType: meterTypeId});
     }
 
