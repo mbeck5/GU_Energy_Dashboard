@@ -4,13 +4,15 @@ angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
+      var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
       getBuildingData();  //initial call to get data of default type
 
       $scope.data = [{
         values: [{}],
-        key: $scope.selectedBuilding.name
+        key: $scope.selectedBuilding.name,
+        color: colorMap[selectedResource]
       }];
 
       $scope.options = {
@@ -118,16 +120,15 @@ angular.module('clientApp')
       }
 
       function setResourceLabel() {
+        $scope.data[0].color = colorMap[selectedResource];
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'Electricity';
             $scope.options.title.text = 'Daily Electricity Usage';
-            $scope.data[0].color = '#FFCC00';//F3DF5D
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'Gas';
             $scope.options.title.text = 'Daily Gas Usage';
-            $scope.data[0].color = '#f20000';
             break;
           //Ask why this is 18
           case 7:
