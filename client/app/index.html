@@ -39,8 +39,8 @@
         </div>
         <div class="navbar-collapse collapse" collapse="navbarCollapsed">
           <ul class="nav navbar-nav navbar-right">
-            <li ng-class="{active: isActive('/')}"><a href="#/">Home</a></li>
-            <li ng-class="{active: isActive('/test')}"><a href="#/test">Competitions</a></li>
+            <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
+            <li ng-class="{active: isActive('/test')}" ng-click="toggleCollapse()"><a href="#/test">Competitions</a></li>
           </ul>
         </div>
       </div>
