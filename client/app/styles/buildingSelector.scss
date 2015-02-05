@@ -24,7 +24,6 @@
   margin-top: 30px;
   height: 25%;
   box-shadow: 0 0 50px #CCCCCC;
-  //width:100%;
 }
 
 #building-scroll {
@@ -34,9 +33,8 @@
 
 #graph-panel {
   margin-top: 30px;
-  //height: 50%;
-  //width: 30%;
 }
+
 #graph-alignment {
   width:100%;
 }
@@ -44,4 +42,16 @@
 #tip-panel{
   outline: none;
   box-shadow: 0 0 50px #CCCCCC;
+}
+
+.checked-list-item {
+  display: table-row;
+  span {
+    display: table-cell;
+    width: 100%;
+  }
+  a {
+    display: table-cell;
+    width: 100%;
+  }
 }

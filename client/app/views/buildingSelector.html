@@ -27,10 +27,15 @@
 
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
-              <a ng-repeat="building in filteredBuildings" class="list-group-item"
-                 href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
-                {{building.name}}
-              </a>
+              <div class="checked-list-item" ng-repeat="building in filteredBuildings">
+                <span class="input-group-addon">
+                  <input type="checkbox">
+                </span>
+                <a class="list-group-item"
+                   href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
+                  {{building.name}}
+                </a>
+              </div>
             </div>
           </div>
         </div>
