@@ -2,7 +2,7 @@
 
 angular.module('clientApp')
   .factory('buildingSvc', function (Restangular) {
-    var selectedBuilding = 'DESELECTED';
+    var selectedBuildings = ['DESELECTED'];
 
     function getBuildings() {
       var allBuildings = Restangular.all('getBuildings');
@@ -29,12 +29,16 @@ angular.module('clientApp')
       return resourceSum.getList({meterType: meterTypeId});
     }
 
-    function getSelectedBuilding() {
-      return selectedBuilding;
+    function getSelectedBuildings() {
+      return selectedBuildings;
     }
 
     function setSelectedBuilding(building) {
-      selectedBuilding = building;
+      /*/if(selectedBuildings[0] === 'DESELECTED'){
+        selectedBuildings.shift();
+      }/*/
+      selectedBuildings = [];
+      selectedBuildings.push(building);
     }
 
     function getBuildingTypes(){
@@ -49,7 +53,7 @@ angular.module('clientApp')
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
       getBuildingTypes: getBuildingTypes,
-      getSelectedBuilding: getSelectedBuilding,
+      getSelectedBuildings: getSelectedBuildings,
       setSelectedBuilding: setSelectedBuilding
     };
   });
