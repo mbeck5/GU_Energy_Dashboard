@@ -45,10 +45,10 @@
 }
 
 .checked-list-item {
-  display: table-row;
+  display: table;
   span {
     display: table-cell;
-    width: 100%;
+    width: auto;
   }
   a {
     display: table-cell;
