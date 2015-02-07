@@ -6,6 +6,8 @@ angular.module('clientApp')
         $scope.searchInput = '';
         $scope.buildingTypes = [];
         $scope.filteredBuildings = [];
+        $scope.checkedBuildings = [];
+        $scope.compareEnabled = false;
 
         //get list of buildings
         buildingSvc.getBuildings().then(function (data) {
@@ -34,11 +36,27 @@ angular.module('clientApp')
 
         //when clicking on building
         $scope.selectBuilding = function (index) {
-            buildingSvc.setSelectedBuilding($scope.filteredBuildings[index]);
+            if (index) {
+              buildingSvc.setSelectedBuilding([$scope.filteredBuildings[index]]);
+            }
+            else {
+              var tempList = [];
+              //add building ids marked as true to list
+              for (var property in $scope.checkedBuildings) {
+                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                  tempList.push(property);
+                }
+              }
+              buildingSvc.setSelectedBuilding(tempList);
+            }
         };
 
         //can't have '/' in url
         $scope.returnCorrectName = function(index) {
             return $scope.filteredBuildings[index].name.replace("/", "--");
+        };
+
+        $scope.toggleCompare = function() {
+            $scope.compareEnabled = !$scope.compareEnabled;
         };
   });

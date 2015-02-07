@@ -28,16 +28,20 @@
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
               <div class="checked-list-item" ng-repeat="building in filteredBuildings">
-                <span class="input-group-addon">
-                  <input type="checkbox">
+                <span class="input-group-addon" ng-show="compareEnabled">
+                  <input type="checkbox" ng-model="checkedBuildings[building.id]"/>
                 </span>
-                <a class="list-group-item"
+                <a class="list-group-item" ng-class="{active: checkedBuildings[building.id]}"
                    href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
                   {{building.name}}
                 </a>
               </div>
             </div>
           </div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-default" ng-click="toggleCompare()">Select Multiple</button>
+          <button class="btn btn-default pull-right" ng-disabled="!compareEnabled" ng-click="selectBuilding()">Compare</button>
         </div>
       </div>
 
