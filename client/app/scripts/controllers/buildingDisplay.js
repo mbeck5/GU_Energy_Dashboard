@@ -98,7 +98,7 @@ angular.module('clientApp')
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           var name = $scope.selectedBuildings[i].name;
           //if going to building page directly or refreshing, steal name from url (basically a hack)
-          if (typeof $scope.selectedBuildings[i].id === 'undefined') {
+          if (typeof $scope.selectedBuildings[0].id === 'undefined') {
             var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
             $scope.selectedBuildings[i] = {};
             $scope.selectedBuildings[i].name = tempName;
