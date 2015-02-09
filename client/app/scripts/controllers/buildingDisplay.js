@@ -3,13 +3,12 @@
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
-      //TODO: Saving/Accessing data won't work this way when making comparisons.  Change it. 2D Array?
-      var savedData = [];  //save downloaded data to avoid downloading
+      var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
-      //console.log($scope.selectedBuildings);
 
-      //console.log('no data yet')
+      initSavedData();
+      console.log(savedData);
       getBuildingData();  //initial call to get data of default type
 
       $scope.data = [];
@@ -61,12 +60,16 @@ angular.module('clientApp')
       };
 
       $scope.selectResource = function (resourceType) {
-        for(var i =0; i < $scope.selectedBuildings.length; i++) {
-          savedData[selectedResource] = $scope.data[i].values;
+        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
+          var name = $scope.selectedBuildings[i].name;
+          //console.log($scope.selectedBuildings);
+          //savedData[selectedResource] = $scope.data[i].values;
+          savedData[name][selectedResource] = $scope.data[i].values;
           selectedResource = resourceType;
+          console.log(savedData)
 
           //get data for selected resource if not saved
-          if (!savedData[resourceType]) {
+          if (!savedData[name][resourceType]) {
             getBuildingData();
           }
           else {
@@ -90,19 +93,16 @@ angular.module('clientApp')
           }
         }
         else {
-          values = savedData[selectedResource];
-          console.log($scope.selectedBuildings);
+          values = savedData[name][selectedResource];
         }
         $scope.data.push({values: values, key: name});
-        console.log($scope.data)
       }
 
       function getBuildingData() {
-        console.log($scope.selectedBuildings)
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           var name = $scope.selectedBuildings[i].name;
           //if going to building page directly or refreshing, steal name from url (basically a hack)
-          if ($scope.selectedBuildings[i] === 'DESELECTED') {
+          if (typeof $scope.selectedBuildings[i].id === 'undefined') {
             var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
             $scope.selectedBuildings[i] = {};
             $scope.selectedBuildings[i].name = tempName;
@@ -141,7 +141,6 @@ angular.module('clientApp')
             $scope.options.chart.yAxis.axisLabel = 'Gas';
             $scope.options.title.text = 'Daily Gas Usage';
             break;
-          //Ask why this is 18
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
             $scope.options.title.text = 'Daily Water Usage';
@@ -167,5 +166,20 @@ angular.module('clientApp')
           chart.brushExtent([prevDate, curDate]);
           $scope.api.update();
         });
+      }
+
+      //initializes the savedData map
+      function initSavedData(){
+        for(var i =0; i < $scope.selectedBuildings.length; i++){
+          if (typeof $scope.selectedBuildings[i].id === 'undefined') {
+            var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
+            $scope.selectedBuildings[i] = {};
+            $scope.selectedBuildings[i].name = tempName;
+            savedData[$scope.selectedBuildings[i].name] = {};
+          }
+          else {
+            savedData[$scope.selectedBuildings[i].name] = {};
+          }
+        }
       }
   });
