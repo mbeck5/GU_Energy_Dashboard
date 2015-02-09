@@ -31,8 +31,8 @@
                 <span class="input-group-addon" ng-show="compareEnabled">
                   <input type="checkbox" ng-model="checkedBuildings[building.id]"/>
                 </span>
-                <a class="list-group-item" ng-class="{active: checkedBuildings[building.id]}"
-                   href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
+                <a class="list-group-item" ng-class="{active: checkedBuildings[building.id], clickable: !compareEnabled}"
+                   ng-click="selectBuilding($index)">
                   {{building.name}}
                 </a>
               </div>
@@ -40,9 +40,9 @@
           </div>
         </div>
         <div class="panel-footer">
-          <button class="btn btn-default" ng-click="toggleCompare()">Select Multiple</button>
-          <a class="btn btn-default pull-right" ng-disabled="!compareEnabled" ng-click="selectBuilding()"
-            href="#/comparison">Compare</a>
+          <button id="comparison-close" class="btn btn-danger" ng-show="compareEnabled" ng-click="disableComparison()"><i class="fa fa-remove"></i></button>
+          <button class="btn btn-block" ng-class="{'btn-default': !compareEnabled, 'btn-primary': compareEnabled}"
+                  ng-disabled="!comparisonSelectable()" ng-click="comparisonSelect()">{{comparisonText}}</button>
         </div>
       </div>
 
