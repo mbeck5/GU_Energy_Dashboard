@@ -8,7 +8,6 @@ angular.module('clientApp')
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
       initSavedData();
-      console.log(savedData);
       getBuildingData();  //initial call to get data of default type
 
       $scope.data = [];
@@ -62,11 +61,8 @@ angular.module('clientApp')
       $scope.selectResource = function (resourceType) {
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           var name = $scope.selectedBuildings[i].name;
-          //console.log($scope.selectedBuildings);
-          //savedData[selectedResource] = $scope.data[i].values;
           savedData[name][selectedResource] = $scope.data[i].values;
           selectedResource = resourceType;
-          console.log(savedData)
 
           //get data for selected resource if not saved
           if (!savedData[name][resourceType]) {
