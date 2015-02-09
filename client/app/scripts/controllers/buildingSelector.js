@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingSelectorCtrl', function ($scope, buildingSvc) {
+  .controller('BuildingSelectorCtrl', function ($scope, $location, buildingSvc) {
         var buildings = [];
         $scope.searchInput = '';
         $scope.buildingTypes = [];
         $scope.filteredBuildings = [];
+        $scope.checkedBuildings = [];
+        $scope.compareEnabled = false;
+        $scope.comparisonText = 'Select Multiple';    //dynamic text for compare button
 
         //get list of buildings
         buildingSvc.getBuildings().then(function (data) {
@@ -34,11 +37,63 @@ angular.module('clientApp')
 
         //when clicking on building
         $scope.selectBuilding = function (index) {
-            buildingSvc.setSelectedBuilding($scope.filteredBuildings[index]);
+          //don't allow clicks if compare is enabled
+          if (!$scope.compareEnabled) {
+            if (index) {
+              buildingSvc.setSelectedBuilding([$scope.filteredBuildings[index]]);
+            }
+            else {
+              var tempList = [];
+              //add building ids marked as true to list
+              for (var property in $scope.checkedBuildings) {
+                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                  tempList.push(property);
+                }
+              }
+              buildingSvc.setSelectedBuilding(tempList);
+            }
+            $location.path('buildings/' + returnCorrectName(index));   //change to building route
+          }
         };
 
         //can't have '/' in url
-        $scope.returnCorrectName = function(index) {
+        function returnCorrectName(index) {
             return $scope.filteredBuildings[index].name.replace("/", "--");
+        }
+
+        $scope.disableComparison = function() {
+            $scope.compareEnabled = false;
+            $scope.comparisonText = 'Select Multiple';
+            $scope.checkedBuildings = []; //reset checked buildings
+        };
+
+        $scope.comparisonSelect = function() {
+          //if 2 or more buildings selected
+          if ($scope.comparisonSelectable()) {
+            if ($scope.compareEnabled) {
+              $location.path('comparison'); //change to comparison path
+            }
+            else {
+              $scope.compareEnabled = !$scope.compareEnabled;
+              $scope.comparisonText = 'Compare';
+            }
+          }
+        };
+
+        //if 2 or more buildings selected
+        $scope.comparisonSelectable = function() {
+            //always return true of comparison isn't enabled
+            if (!$scope.compareEnabled) {
+              return true;
+            }
+            else {
+              var count = 0;
+              for (var property in $scope.checkedBuildings) {
+                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                  count++;
+                }
+              }
+              return count >= 2;
+            }
         };
   });

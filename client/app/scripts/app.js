@@ -30,6 +30,10 @@ angular
         templateUrl: 'views/buildingDisplay.html',
         controller: 'BuildingDisplayCtrl'
       })
+      .when('/comparison', {
+        templateUrl: 'views/buildingDisplay.html',
+        controller: 'BuildingDisplayCtrl'
+      })
       .when('/test', {
         templateUrl: 'views/test.html',
         controller: 'TestCtrl'
