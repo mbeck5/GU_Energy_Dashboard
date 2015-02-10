@@ -6,9 +6,10 @@ angular.module('clientApp')
       var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
+      //$scope.selectedBuildings = [{name: 'BARC', id:  65},{name: 'Burch', id: 64}];
 
       initSavedData();
-      getBuildingData();  //initial call to get data of default type
+      getBuildingData(null);  //initial call to get data of default type
 
       $scope.data = [];
 
@@ -22,7 +23,6 @@ angular.module('clientApp')
             bottom: 50,
             left: 75
           },
-          useInteractiveGuideline:true,
           xAxis: {
             axisLabel: 'Time',
             showMaxMin: false,
@@ -50,6 +50,7 @@ angular.module('clientApp')
             forceY: [0]
           },
           transitionDuration: 500,
+          useInteractiveGuideline: true,
           noData: 'No Data Available for Selected Resource'
         },
         title: {
@@ -62,11 +63,14 @@ angular.module('clientApp')
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           var name = $scope.selectedBuildings[i].name;
           savedData[name][selectedResource] = $scope.data[i].values;
-          selectedResource = resourceType;
-
+        }
+        $scope.data = [];
+        selectedResource = resourceType;
+        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
+          var name = $scope.selectedBuildings[i].name;
           //get data for selected resource if not saved
           if (!savedData[name][resourceType]) {
-            getBuildingData();
+            getBuildingData(i);
           }
           else {
             initGraph(null, $scope.selectedBuildings[i].name);
@@ -75,8 +79,6 @@ angular.module('clientApp')
       };
 
       function createGraphData(data, name){
-        $scope.data = [];
-
         //reset
         var values = [];
         //set key
@@ -91,11 +93,19 @@ angular.module('clientApp')
         else {
           values = savedData[name][selectedResource];
         }
-        $scope.data.push({values: values, key: name});
+        $scope.data.push({values: values, key: ''});
+        console.log($scope.data);
       }
 
-      function getBuildingData() {
-        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
+      function getBuildingData(index) {
+        console.log($scope.selectedBuildings);
+        var i = 0;
+        var stopCondition = $scope.selectedBuildings.length;
+        if(index != null){
+          i = index;
+          stopCondition = i + 1;
+        }
+        for(i; i < stopCondition; i++) {
           var name = $scope.selectedBuildings[i].name;
           //if going to building page directly or refreshing, steal name from url (basically a hack)
           if (typeof $scope.selectedBuildings[0].id === 'undefined') {
@@ -122,8 +132,18 @@ angular.module('clientApp')
       //called once data is retrieved
       function initGraph(data, name) {
         createGraphData(data, name);
+        setKeys();
         setResourceLabel();
         setFocusArea();
+      }
+
+      //to set the keys for the lines when making multiple lines in a graph. probably bad.
+      function setKeys(){
+        for(var i = 0; i < $scope.selectedBuildings.length; i++){
+          if($scope.data[i]) {
+            $scope.data[i].key = $scope.selectedBuildings[i].name;
+          }
+        }
       }
 
       function setResourceLabel() {

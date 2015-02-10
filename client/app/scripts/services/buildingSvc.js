@@ -30,6 +30,7 @@ angular.module('clientApp')
     }
 
     function getSelectedBuildings() {
+      console.log(selectedBuildings)
       return selectedBuildings;
     }
 
@@ -37,8 +38,8 @@ angular.module('clientApp')
       /*/if(selectedBuildings[0] === 'DESELECTED'){
         selectedBuildings.shift();
       }/*/
-      selectedBuildings = [];
-      selectedBuildings.push(building);
+      selectedBuildings = building;
+      console.log('setting');
     }
 
     function getBuildingTypes(){
