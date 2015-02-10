@@ -5,6 +5,7 @@ angular.module('clientApp')
       var selectedResource = 2; //default resource
       var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
+      var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
       //$scope.selectedBuildings = [{name: 'BARC', id:  65},{name: 'Burch', id: 64}];
 
@@ -24,7 +25,7 @@ angular.module('clientApp')
             left: 75
           },
           xAxis: {
-            axisLabel: 'Time',
+            axisLabel: 'Date',
             showMaxMin: false,
             tickFormat: function(d) {
               return d3.time.format('%m/%d/%y')(new Date(d));
@@ -37,7 +38,7 @@ angular.module('clientApp')
             }
           },
           yAxis: {
-            axisLabel: 'Electricity', //will change with resource toggle
+            axisLabel: 'kWh', //will change with resource toggle
             showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
@@ -49,6 +50,30 @@ angular.module('clientApp')
           lines: {
             forceY: [0]
           },
+          tooltipContent: function(key, x, y, e, graph){
+            return '<div>' +
+            '<style type="text/css">' +
+            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
+            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
+            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
+            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
+            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
+            '' +
+            '</style>' +
+            '<table class="tg" style="undefined;">' +
+            '<colgroup>' +
+            //'<col style="width: 134px">' +
+            '</colgroup>' +
+            '<tr>' +
+            '<th class="tg-o8k2">' + key + '<br></th>' +
+            '</tr>' +
+            '<tr>' +
+            '<td class="tg-431l">' + y + ' ' + unitMap[selectedResource] + ' on ' + x + '</td>' +
+            '</tr>' +
+            '</table>' +
+            '</div>'
+          },
+          tooltips: true,
           transitionDuration: 500,
           useInteractiveGuideline: true,
           noData: 'No Data Available for Selected Resource'
@@ -150,11 +175,11 @@ angular.module('clientApp')
         $scope.data[0].color = colorMap[selectedResource];
         switch (selectedResource) {
           case 2:
-            $scope.options.chart.yAxis.axisLabel = 'Electricity';
+            $scope.options.chart.yAxis.axisLabel = 'kWh';
             $scope.options.title.text = 'Daily Electricity Usage';
             break;
           case 3:
-            $scope.options.chart.yAxis.axisLabel = 'Gas';
+            $scope.options.chart.yAxis.axisLabel = 'kBTU';
             $scope.options.title.text = 'Daily Gas Usage';
             break;
           case 7:
