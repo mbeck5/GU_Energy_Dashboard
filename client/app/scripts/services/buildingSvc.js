@@ -49,6 +49,7 @@ angular.module('clientApp')
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
       getBuildingTypes: getBuildingTypes,
+      setSelectedBuilding: setSelectedBuilding,
       getSelectedBuildings: getSelectedBuildings
     };
   });
