@@ -6,8 +6,8 @@ angular.module('clientApp')
       var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
-      //$scope.selectedBuildings = [{name: 'BARC', id:  65},{name: 'Burch', id: 64}];
 
+      checkRefresh();
       initSavedData();
       getBuildingData(null);  //initial call to get data of default type
 
@@ -94,11 +94,9 @@ angular.module('clientApp')
           values = savedData[name][selectedResource];
         }
         $scope.data.push({values: values, key: ''});
-        console.log($scope.data);
       }
 
       function getBuildingData(index) {
-        console.log($scope.selectedBuildings);
         var i = 0;
         var stopCondition = $scope.selectedBuildings.length;
         if(index != null){
@@ -196,6 +194,13 @@ angular.module('clientApp')
           else {
             savedData[$scope.selectedBuildings[i].name] = {};
           }
+        }
+      }
+
+      function checkRefresh() {
+        //if routing directing to comparison, go back home
+        if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
+          $location.path('/');
         }
       }
   });

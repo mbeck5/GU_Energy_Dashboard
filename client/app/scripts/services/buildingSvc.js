@@ -30,16 +30,11 @@ angular.module('clientApp')
     }
 
     function getSelectedBuildings() {
-      console.log(selectedBuildings)
       return selectedBuildings;
     }
 
     function setSelectedBuilding(building) {
-      /*/if(selectedBuildings[0] === 'DESELECTED'){
-        selectedBuildings.shift();
-      }/*/
       selectedBuildings = building;
-      console.log('setting');
     }
 
     function getBuildingTypes(){
@@ -54,7 +49,6 @@ angular.module('clientApp')
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
       getBuildingTypes: getBuildingTypes,
-      getSelectedBuildings: getSelectedBuildings,
-      setSelectedBuilding: setSelectedBuilding
+      getSelectedBuildings: getSelectedBuildings
     };
   });
