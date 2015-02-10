@@ -39,19 +39,7 @@ angular.module('clientApp')
         $scope.selectBuilding = function (index) {
           //don't allow clicks if compare is enabled
           if (!$scope.compareEnabled) {
-            if (index) {
-              buildingSvc.setSelectedBuilding([$scope.filteredBuildings[index]]);
-            }
-            else {
-              var tempList = [];
-              //add building ids marked as true to list
-              for (var property in $scope.checkedBuildings) {
-                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-                  tempList.push(property);
-                }
-              }
-              buildingSvc.setSelectedBuilding(tempList);
-            }
+            buildingSvc.setSelectedBuilding([$scope.filteredBuildings[index]]);
             $location.path('buildings/' + returnCorrectName(index));   //change to building route
           }
         };
@@ -71,6 +59,15 @@ angular.module('clientApp')
           //if 2 or more buildings selected
           if ($scope.comparisonSelectable()) {
             if ($scope.compareEnabled) {
+              var tempList = [];
+
+              //add building ids marked as true to list
+              for (var property in $scope.checkedBuildings) {
+                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                  tempList.push({id: property, name: findNameById(property)});
+                }
+              }
+              buildingSvc.setSelectedBuilding(tempList);
               $location.path('comparison'); //change to comparison path
             }
             else {
@@ -96,4 +93,14 @@ angular.module('clientApp')
               return count >= 2;
             }
         };
+
+        //return name of building based on id
+        function findNameById(id) {
+          for (var i = 0; i < $scope.filteredBuildings.length; ++i) {
+            if ($scope.filteredBuildings[i].id === parseInt(id)) {
+              return $scope.filteredBuildings[i].name;
+            }
+          }
+          return "";
+        }
   });
