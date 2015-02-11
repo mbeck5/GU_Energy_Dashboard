@@ -131,18 +131,3 @@ exports.getBuildingTypes = function(req, res) {
 };
 
 
-exports.getCompetitions = function(req, res){
-    var queryString = "SELECT DISTINCT comp_name, cid, start_date, end_date, resource " +
-                        "FROM competitions " +
-                        "WHERE comp_name != 'undefined' " +
-                        "ORDER BY comp_name;";
-
-    connection.query(queryString, function(err, rows){
-        if(err){
-            throw err;
-        }
-        else {
-            res.send(rows);
-        }
-    });
-};

@@ -10,8 +10,8 @@
         </div>
         <div id="comp-scroll" class="scroll">
           <div id="comp-list" class="list-group">
-            <a ng-repeat="competiiton in filteredComps" class="list-group-item" ng-click="selectComp($index)">
-              {{competition[0]}}
+            <a ng-repeat="competition in filteredComps" class="list-group-item" ng-click="selectComp($index)">
+              {{competition.comp_name}}
             </a>
           </div>
         </div>
@@ -26,23 +26,19 @@
           <div id="current-comp-list" class="list-group">
             <div class="col-md-3">
               <h1>
-                {{filteredComps[displayedCompIndex][0]}}<br><br>
+                {{filteredComps[displayedCompIndex].comp_name}}<br><br>
               </h1>
 
               <h3>
-                Buildings: {{filteredComps[displayedCompIndex][1]}}, {{filteredComps[displayedCompIndex][2]}}
+                Contested Resource: {{filteredComps[displayedCompIndex].resource}}
               </h3>
 
               <h3>
-                Contested Resource: {{filteredComps[displayedCompIndex][3]}}
+                Start Date: {{filteredComps[displayedCompIndex].start_date}}
               </h3>
 
               <h3>
-                Start Date: {{filteredComps[displayedCompIndex][4]}}
-              </h3>
-
-              <h3>
-                End Date: {{filteredComps[displayedCompIndex][5]}}
+                End Date: {{filteredComps[displayedCompIndex].end_date}}
               </h3>
 
               <div ng-controller="CreateModalCtrl">

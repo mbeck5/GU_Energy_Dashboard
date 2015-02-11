@@ -3,13 +3,7 @@
 angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, compEditSvc, buildingSvc) {
     var comps = [];
-    /*var comp1 = ['Competition 1', 'Goller', 'Dillon', 'Gas', '1/15/2015', '3/12/2015'];
-    var comp2 = ['Competition 2', 'BARC', 'Burch', 'Electricty', '1/17/2015', '4/15/2015'];
-    var comp3 = ['Competition 3', 'Alliance', 'Campion', 'Gas', '4/12/2015', '2/15/2015'];
-    var comp4 = ['Competition 4', 'Chardin', 'COG', 'Water', '2/1/2015', '5/15/2015'];
-    var comp5 = ['Competition 5', 'Cushing', 'Desmet', 'Electricity', '1/20/2015', '2/10/2015'];*/
     $scope.searchInput = '';
-    //$scope.filteredComps = [comp1, comp2, comp3, comp4, comp5];
     $scope.filteredComps = [];
 
     $scope.displayedCompIndex = 0;// = $scope.filterBuildings[0];
@@ -17,6 +11,8 @@ angular.module('clientApp')
     //unpack promise returned from rest call
     compEditSvc.getComp().then(function (data) {
       $scope.filteredComps = data;
+      compEditSvc.setSelectedComp($scope.filteredComps[0]);
+      $scope.displayedCompIndex = index;
       console.log(data);
     });
 
@@ -160,19 +156,43 @@ angular.module('clientApp')
   });
 
 
-angular.module('clientApp').controller('CreateModalCtrl', function ($scope, $modal, $log) {
+angular.module('clientApp').controller('CreateModalCtrl', function ($scope, $modal, $log, compEditSvc) {
   $scope.items = ['item1', 'item2', 'item3'];
+  var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
   $scope.checked = false;
   $scope.selectedResourceComp = 'Select Resource';
+  $scope.name = '';
+  var today = new Date();
+  var weekLater = new Date();
+  var dd = today.getDate();
+  var mm = monthNames[today.getMonth()];
+  var yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  $scope.startDate = yyyy + '-' + mm + '-' + dd;
+  today.setDate(today.getDate() + 14);
+  dd = today.getDate();
+  mm = monthNames[today.getMonth()];
+  yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  $scope.endDate = yyyy + '-' + mm + '-' + dd;
 
   $scope.open = function (size) {
     var modalInstance = $modal.open({
       templateUrl: 'myModalContent1.html',
-      controller: 'ModalInstanceCtrl',
+      controller: 'createModalInstanceCtrl',
       size: size,
       resolve: {
         items: function () {
           return $scope.items;
+        },
+        compName: function () {
+          return $scope.name;
         }
       }
     });
@@ -204,26 +224,113 @@ angular.module('clientApp').controller('CreateModalCtrl', function ($scope, $mod
     $scope.selectedResourceComp = resource;
   };
 
+  $scope.okButton = function () {
+    //if($scope.selectedResourceComp == 'Select Resource')
+    //{
+    //  alert("Please select a resource");
+    //}
+    if ($scope.name == '') {
+      alert("Please specify a competition name");
+    }
+    else {
+      //{
+      var resourceId = 1;
+      if ($scope.selectedResourceComp == 'Electricity') {
+        resourceId = 2;
+      }
+      if ($scope.selectedResourceComp == 'Gas') {
+        resourceId = 3;
+      }
+      if ($scope.selectedResourceComp == 'Water') {
+        resourceId = 7;
+      }
+      var maxCid = 0;
+      compEditSvc.getComp().then(function (data) {
+        var arrayLength = data.length;
+        for (var i = 0; i < arrayLength; i++) {
+          //alert(data[i].cid);
+          if (data[i].cid > maxCid) {
+            maxCid = data[i].cid;
+          }
+        }
+        maxCid = maxCid + 1;
+        compEditSvc.saveNewComp(maxCid, $scope.startDate, $scope.endDate, $scope.name, resourceId);
+        $modal.close($scope.selected.item);
+      });
+    }
+
+  };
+
+  $scope.cancelButton = function () {
+    $scope.dismiss('cancel');
+  };
+
+});
+
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, items, compName, compEditSvc) {
+  $scope.items = items;
+  $scope.name = compName;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
 
   $scope.ok = function () {
+    //if($scope.selectedResourceComp == 'Select Resource')
+    //{
+    //  alert("Please select a resource");
+    //}
+    if ($scope.name == '') {
+      alert("Please specify a competition name");
+    }
+    else {
+      //{
+      var resourceId = 1;
+      if ($scope.selectedResourceComp == 'Electricity') {
+        resourceId = 2;
+      }
+      if ($scope.selectedResourceComp == 'Gas') {
+        resourceId = 3;
+      }
+      if ($scope.selectedResourceComp == 'Water') {
+        resourceId = 7;
+      }
+      var maxCid = 0;
+      compEditSvc.getComp().then(function (data) {
+        var arrayLength = data.length;
+        for (var i = 0; i < arrayLength; i++) {
+          //alert(data[i].cid);
+          if (data[i].cid > maxCid) {
+            maxCid = data[i].cid;
+          }
+        }
+        maxCid = maxCid + 1;
+        compEditSvc.saveNewComp(maxCid, $scope.startDate, $scope.endDate, $scope.name, resourceId);
+        $modal.close($scope.selected.item);
+      });
+    }
 
   };
 
   $scope.cancel = function () {
-
+    $modalInstance.dismiss('cancel');
   };
-
 });
 
 angular.module('clientApp').controller('EditModalCtrl', function ($scope, $modal, $log, compEditSvc) {
   $scope.items = ['item1', 'item2', 'item3'];
-  $scope.selectedComp = 111;
+  $scope.selectedResourceComp = 'Select Resource';
+  $scope.selectedComp = compEditSvc.getSelectedComp();
+  $scope.name = $scope.selectedComp.comp_name;
+  $scope.startDate = $scope.selectedComp.start_date;
+  $scope.endDate = $scope.selectedComp.end_date;
+  $scope.cid = $scope.selectedComp.cid;
 
   $scope.open = function (size) {
-    $scope.selectedComp = 222;
+
+
     var modalInstance = $modal.open({
       templateUrl: 'myModalContent2.html',
-      controller: 'EditModalCtrl',
+      controller: 'editModalInstanceCtrl',
 
       size: size,
       resolve: {
@@ -243,21 +350,53 @@ angular.module('clientApp').controller('EditModalCtrl', function ($scope, $modal
     });
   };
 
-  $scope.ok = function () {
+  $scope.okButton = function () {
+    if ($scope.name.trim() == '') {
+      alert("Please specify a competition name");
+    }
+    else {
+      var resourceId = 1;
+      if ($scope.selectedResourceComp == 'Electricity') {
+        resourceId = 2;
+      }
+      if ($scope.selectedResourceComp == 'Gas') {
+        resourceId = 3;
+      }
+      if ($scope.selectedResourceComp == 'Water') {
+        resourceId = 7;
+      }
+      compEditSvc.editNewComp(8, $scope.startDate, $scope.endDate, $scope.name, resourceId);
+      $modal.close($scope.selected.item);
+    }
 
   };
 
-  $scope.cancel = function () {
+  $scope.cancelButton = function () {
 
   };
 });
 
-angular.module('clientApp').controller('DeleteModalCtrl', function ($scope, $modal, $log) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, items) {
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
+
+angular.module('clientApp').controller('DeleteModalCtrl', function ($scope, $modal, $log, compEditSvc) {
   $scope.items = ['item1', 'item2', 'item3'];
   $scope.open = function (size) {
     var modalInstance = $modal.open({
       templateUrl: 'myModalContent3.html',
-      controller: 'ModalInstanceCtrl',
+      controller: 'deleteModalInstanceCtrl',
       size: size,
       resolve: {
         items: function () {
@@ -273,16 +412,18 @@ angular.module('clientApp').controller('DeleteModalCtrl', function ($scope, $mod
     });
   };
 
-  $scope.ok = function () {
-
+  $scope.okButton = function () {
+    var currentCid = compEditSvc.getSelectedCompCid();
+    compEditSvc.deleteComp(currentCid);
+    $modal.dismiss('cancel');
   };
 
-  $scope.cancel = function () {
-
+  $scope.cancelButton = function () {
+    //$modalInstance.dismiss('cancel');
   };
 });
 
-angular.module('clientApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, items) {
   $scope.items = items;
   $scope.selected = {
     item: $scope.items[0]
@@ -298,7 +439,21 @@ angular.module('clientApp').controller('ModalInstanceCtrl', function ($scope, $m
 });
 
 angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope) {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1; //January is 0!
+  var yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+  today = mm + '/' + dd + '/' + yyyy;
+  $scope.minDate = mm + '/' + dd + '/' + yyyy;
+  $scope.minDate = mm + '/' + dd + '/' + (yyyy + 2);
   $scope.today = function () {
+
     $scope.dt = new Date();
   };
   $scope.today();
@@ -313,7 +468,7 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope) {
   };
 
   $scope.toggleMin = function () {
-    $scope.minDate = $scope.minDate ? null : new Date();
+    //$scope.minDate = $scope.minDate ? null : new Date();
   };
   $scope.toggleMin();
 

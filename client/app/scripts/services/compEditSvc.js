@@ -9,18 +9,27 @@ angular.module('clientApp')
       return allComps.getList();
     }
 
-    function getCompData(buildingId, meterTypeId) {
-      var buildingData = Restangular.all('getBuildingData');
-      return buildingData.getList({building: buildingId, meterType: meterTypeId});
+    function saveNewComp(cid, startDate, endDate, compName, resourceId) {
+      var newComp = Restangular.all('saveNewComp');
+      return newComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName, resourceId: resourceId});
     }
 
-    function getCompDataFromName(buildingName, meterTypeId) {
-      var buildingData = all('getBuildingDataFromName');
-      return buildingData.getList({building: buildingName, meterType: meterTypeId});
+    function editNewComp(cid, startDate, endDate, compName, resourceId) {
+      var editedComp = Restangular.all('editNewComp');
+      return editedComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName, resourceId: resourceId});
+    }
+
+    function deleteComp(cid) {
+      var deletedComp = Restangular.all('deleteComp');
+      return deletedComp.getList({cid: cid});
     }
 
     function getSelectedComp() {
-      return 1;
+      return selectedComp;
+    }
+
+    function getSelectedCompCid() {
+      return selectedComp.cid;
     }
 
     function setSelectedComp(comp) {
@@ -29,9 +38,11 @@ angular.module('clientApp')
 
     return {
       getComp: getComp,
-      getCompData: getCompData,
-      getCompDataFromName: getCompDataFromName,
+      saveNewComp: saveNewComp,
+      editNewComp: editNewComp,
+      deleteComp: deleteComp,
       getSelectedComp: getSelectedComp,
+      getSelectedCompCid: getSelectedCompCid,
       setSelectedComp: setSelectedComp
     };
   });
