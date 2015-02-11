@@ -48,7 +48,7 @@ angular.module('clientApp')
             showMaxMin: false
           },
           lines: {
-            forceY: [0]
+            forceY:[0]
           },
           tooltipContent: function(key, x, y, e, graph){
             return '<div>' +
@@ -158,6 +158,7 @@ angular.module('clientApp')
         setKeys();
         setResourceLabel();
         setFocusArea();
+        $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.
@@ -227,5 +228,23 @@ angular.module('clientApp')
         if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
           $location.path('/');
         }
+      }
+
+      //Returns the max y value of all datasets in $scope.data
+      function getMaxPlusPadding(denom){
+        var max = 0;
+        for(var i = 0; i < $scope.selectedBuildings.length; i++){
+          if($scope.data[i]) {
+            var data = $scope.data[i].values;
+            for (var j = 0; j < data.length; j++) {
+              if (data[j].y > max) {
+                max = data[j].y;
+              }
+            }
+          }
+        }
+        var padding = max / denom;
+        console.log(max + padding);
+        return max + padding;
       }
   });
