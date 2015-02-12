@@ -27,9 +27,16 @@ exports.getBuildingTypes = function(req, res){
 }
 
 exports.getResources = function(req, res){
-    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
-                    "FROM meters_dly_data " +
-                    "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
+    var isDetailed = req.param("isDetailed");
+    if(isDetailed === 'true'){
+        var tableName = "meters_dly_data";
+    }
+    else{
+        var tableName = "meters_mly_data";
+    }
+    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+                    "FROM " + tableName + " " +
+                    "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
                     "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
                                                 "FROM erb_tree " +
                                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
@@ -47,9 +54,16 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesFromName = function(req, res) {
-    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
-                        "FROM meters_dly_data " +
-                        "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
+    var isDetailed = req.param("isDetailed");
+    if(isDetailed === 'true'){
+        var tableName = "meters_dly_data";
+    }
+    else{
+        var tableName = "meters_mly_data";
+    }
+    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+                        "FROM " + tableName + " " +
+                        "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
                         "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN " +
                             "(SELECT METER_ID " +
                                 "FROM erb_tree " +
