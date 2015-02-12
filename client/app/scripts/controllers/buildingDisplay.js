@@ -6,7 +6,7 @@ angular.module('clientApp')
       var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
-      var isDetailed = false;
+      var isDetailed = true;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
       checkRefresh();
@@ -180,19 +180,39 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            $scope.options.title.text = 'Daily Electricity Usage';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Electricity Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Electricity Usage';
+            }
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            $scope.options.title.text = 'Daily Gas Usage';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Gas Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Gas Usage';
+            }
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            $scope.options.title.text = 'Daily Water Usage';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Water Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Water Usage';
+            }
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            $scope.options.title.text = 'Daily Whatever Usage';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Whatever Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Whatever Usage';
+            }
             break;
         }
       }
