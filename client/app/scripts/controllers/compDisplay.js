@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, compEditSvc, buildingSvc) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, buildingSvc) {
     var comps = [];
     $scope.searchInput = '';
     $scope.filteredComps = [];
@@ -25,6 +25,41 @@ angular.module('clientApp')
     $scope.selectComp = function (index) {
       compEditSvc.setSelectedComp($scope.filteredComps[index]);
       $scope.displayedCompIndex = index;
+    };
+
+    $scope.openCreateModal = function (size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'myModalContent1.html',
+        controller: 'createModalInstanceCtrl',
+        size: size
+      });
+    };
+
+    $scope.openEditModal = function (size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'myModalContent2.html',
+        controller: 'editModalInstanceCtrl',
+        size: size
+      });
+    };
+
+    $scope.openDeleteModal = function (size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'myModalContent3.html',
+        controller: 'deleteModalInstanceCtrl',
+        size: size
+      });
+      modalInstance.result.then(function (result) {
+        if(result != 'cancel')
+        {
+          compEditSvc.getComp().then(function (data) {
+            $scope.filteredComps = data;
+            compEditSvc.setSelectedComp($scope.filteredComps[0]);
+            $scope.displayedCompIndex = index;
+            console.log(data);
+          });
+        }
+      });
     };
 
     //can't have '/' in url
@@ -155,7 +190,7 @@ angular.module('clientApp')
 
   });
 
-
+/*
 angular.module('clientApp').controller('CreateModalCtrl', function ($scope, $modal, $log, compEditSvc) {
   $scope.items = ['item1', 'item2', 'item3'];
   var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -266,20 +301,57 @@ angular.module('clientApp').controller('CreateModalCtrl', function ($scope, $mod
   };
 
 });
+*/
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
+  var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
 
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, items, compName, compEditSvc) {
-  $scope.items = items;
-  $scope.name = compName;
-  $scope.selected = {
-    item: $scope.items[0]
+  $scope.checked = false;
+  $scope.selectedResourceComp = 'Select Resource';
+  $scope.name = '';
+  var today = new Date();
+  var weekLater = new Date();
+  var dd = today.getDate();
+  var mm = monthNames[today.getMonth()];
+  var yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  $scope.startDate = yyyy + '-' + mm + '-' + dd;
+  today.setDate(today.getDate() + 14);
+  dd = today.getDate();
+  mm = monthNames[today.getMonth()];
+  yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  $scope.endDate = yyyy + '-' + mm + '-' + dd;
+
+  $scope.status = {
+    isopen: false
   };
 
-  $scope.ok = function () {
+  $scope.toggled = function (open) {
+    $log.log('Dropdown is now: ', open);
+  };
+
+  $scope.toggleDropdown = function ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.status.isopen = !$scope.status.isopen;
+  };
+
+
+  $scope.resourceClick = function (resource) {
+    $scope.selectedResourceComp = resource;
+  };
+
+  $scope.ok = function (newName, newStartDate, newEndDate) {
     //if($scope.selectedResourceComp == 'Select Resource')
     //{
     //  alert("Please select a resource");
     //}
-    if ($scope.name == '') {
+    if (newName == '') {
       alert("Please specify a competition name");
     }
     else {
@@ -304,8 +376,8 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           }
         }
         maxCid = maxCid + 1;
-        compEditSvc.saveNewComp(maxCid, $scope.startDate, $scope.endDate, $scope.name, resourceId);
-        $modal.close($scope.selected.item);
+        compEditSvc.saveNewComp(maxCid, newStartDate, newEndDate, newName, resourceId);
+        $modalInstance.close();
       });
     }
 
@@ -314,10 +386,12 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
+
 });
 
-angular.module('clientApp').controller('EditModalCtrl', function ($scope, $modal, $log, compEditSvc) {
-  $scope.items = ['item1', 'item2', 'item3'];
+//rootscope broadcast
+
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
   $scope.selectedResourceComp = 'Select Resource';
   $scope.selectedComp = compEditSvc.getSelectedComp();
   $scope.name = $scope.selectedComp.comp_name;
@@ -325,32 +399,7 @@ angular.module('clientApp').controller('EditModalCtrl', function ($scope, $modal
   $scope.endDate = $scope.selectedComp.end_date;
   $scope.cid = $scope.selectedComp.cid;
 
-  $scope.open = function (size) {
-
-
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent2.html',
-      controller: 'editModalInstanceCtrl',
-
-      size: size,
-      resolve: {
-
-        items: function () {
-
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-
-  $scope.okButton = function () {
+  $scope.ok = function (newName, newStartDate, newEndDate) {
     if ($scope.name.trim() == '') {
       alert("Please specify a competition name");
     }
@@ -365,77 +414,29 @@ angular.module('clientApp').controller('EditModalCtrl', function ($scope, $modal
       if ($scope.selectedResourceComp == 'Water') {
         resourceId = 7;
       }
-      compEditSvc.editNewComp(8, $scope.startDate, $scope.endDate, $scope.name, resourceId);
-      $modal.close($scope.selected.item);
+      compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), newStartDate, newEndDate, newName, resourceId);
+      $modalInstance.close();
     }
 
   };
 
-  $scope.cancelButton = function () {
-
-  };
-});
-
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, items) {
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
 });
 
-angular.module('clientApp').controller('DeleteModalCtrl', function ($scope, $modal, $log, compEditSvc) {
-  $scope.items = ['item1', 'item2', 'item3'];
-  $scope.open = function (size) {
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent3.html',
-      controller: 'deleteModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
+angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-
-  $scope.okButton = function () {
+  $scope.ok = function () {
     var currentCid = compEditSvc.getSelectedCompCid();
     compEditSvc.deleteComp(currentCid);
-    $modal.dismiss('cancel');
-  };
-
-  $scope.cancelButton = function () {
-    //$modalInstance.dismiss('cancel');
-  };
-});
-
-angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, items) {
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
+    $modalInstance.dismiss('ok');
   };
 
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
+
 });
 
 angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope) {

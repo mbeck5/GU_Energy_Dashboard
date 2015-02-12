@@ -1,4 +1,4 @@
-<div ng-controller="CreateModalCtrl">
+<div>
   <div class="modal-header">
     <h3 class="modal-title">GU Energy Competition Creation</h3>
   </div>
@@ -16,7 +16,7 @@
             <div>
               <label>Resource Type</label>
             </div>
-            <div dropdown class="btn-group" ng-controller="CreateModalCtrl">
+            <div dropdown class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle data-toggle="dropdown"
                       id="resource-dropdown">
                 {{selectedResourceComp}}<span class="caret"></span>
@@ -81,7 +81,7 @@
 
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default comp-modal-footer-buttons" ng-click="okButton()">OK</button>
-    <button class="btn btn-default comp-modal-footer-buttons" ng-click="cancelButton()">Cancel</button>
+    <button class="btn btn-default comp-modal-footer-buttons" ng-click="ok(name, startDate, endDate)">OK</button>
+    <button class="btn btn-default comp-modal-footer-buttons" ng-click="cancel()">Cancel</button>
   </div>
 </div>

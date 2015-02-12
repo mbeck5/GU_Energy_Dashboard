@@ -41,30 +41,30 @@
                 End Date: {{filteredComps[displayedCompIndex].end_date}}
               </h3>
 
-              <div ng-controller="CreateModalCtrl">
+              <div>
                 <script type="text/ng-template" id="myModalContent1.html">
                   <div ng-include src="'views/CreateCompDisplay.html'"></div>
                 </script>
                 <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="open('lg')">Create</button>
+                  <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
                 </div>
               </div>
 
-              <div ng-controller="EditModalCtrl">
+              <div>
                 <script type="text/ng-template" id="myModalContent2.html" >
                   <div ng-include src="'views/EditCompDisplay.html'"></div>
                 </script>
                 <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="open('lg')">Edit</button>
+                  <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
                 </div>
               </div>
 
-              <div ng-controller="DeleteModalCtrl">
+              <div>
                 <script type="text/ng-template" id="myModalContent3.html">
                   <div ng-include src="'views/DeleteCompDisplay.html'"></div>
                 </script>
                 <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="open()">Delete</button>
+                  <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
                 </div>
               </div>
 
