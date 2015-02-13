@@ -3,20 +3,22 @@
 angular.module('clientApp')
   .factory('compEditSvc', function (Restangular) {
     var selectedComp = 'DESELECTED';
+    var startDate = '';
+    var endDate = '';
 
     function getComp() {
       var allComps = Restangular.all('getCompetitions');
       return allComps.getList();
     }
 
-    function saveNewComp(cid, startDate, endDate, compName, resourceId) {
+    function saveNewComp(cid, startDate, endDate, compName) {
       var newComp = Restangular.all('saveNewComp');
-      return newComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName, resourceId: resourceId});
+      return newComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
     }
 
-    function editNewComp(cid, startDate, endDate, compName, resourceId) {
+    function editNewComp(cid, startDate, endDate, compName) {
       var editedComp = Restangular.all('editNewComp');
-      return editedComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName, resourceId: resourceId});
+      return editedComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
     }
 
     function deleteComp(cid) {
@@ -36,6 +38,22 @@ angular.module('clientApp')
       selectedComp = comp;
     }
 
+    function saveStartDate(newStartDate) {
+      startDate = newStartDate;
+    }
+
+    function saveEndDate(newEndDate) {
+      endDate = newEndDate;
+    }
+
+    function getStartDate() {
+      return startDate;
+    }
+
+    function getEndDate() {
+      return endDate;
+    }
+
     return {
       getComp: getComp,
       saveNewComp: saveNewComp,
@@ -43,6 +61,10 @@ angular.module('clientApp')
       deleteComp: deleteComp,
       getSelectedComp: getSelectedComp,
       getSelectedCompCid: getSelectedCompCid,
-      setSelectedComp: setSelectedComp
+      setSelectedComp: setSelectedComp,
+      saveStartDate: saveStartDate,
+      saveEndDate: saveEndDate,
+      getStartDate: getStartDate,
+      getEndDate: getEndDate
     };
   });

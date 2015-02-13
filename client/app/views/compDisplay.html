@@ -14,6 +14,39 @@
               {{competition.comp_name}}
             </a>
           </div>
+
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div id="action-footer">
+          <div class="col-md-4">
+            <script type="text/ng-template" id="myModalContent1.html">
+              <div ng-include src="'views/CreateCompDisplay.html'"></div>
+            </script>
+            <div>
+              <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <script type="text/ng-template" id="myModalContent2.html">
+              <div ng-include src="'views/EditCompDisplay.html'"></div>
+            </script>
+            <div>
+              <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <script type="text/ng-template" id="myModalContent3.html">
+              <div ng-include src="'views/DeleteCompDisplay.html'"></div>
+            </script>
+            <div>
+              <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -30,43 +63,13 @@
               </h1>
 
               <h3>
-                Contested Resource: {{filteredComps[displayedCompIndex].resource}}
+                Start Date: {{filteredComps[displayedCompIndex].start_date.replace("T08:00:00.000Z","")}}
               </h3>
 
               <h3>
-                Start Date: {{filteredComps[displayedCompIndex].start_date}}
+                End Date: {{filteredComps[displayedCompIndex].end_date.replace("T08:00:00.000Z","")}}
               </h3>
 
-              <h3>
-                End Date: {{filteredComps[displayedCompIndex].end_date}}
-              </h3>
-
-              <div>
-                <script type="text/ng-template" id="myModalContent1.html">
-                  <div ng-include src="'views/CreateCompDisplay.html'"></div>
-                </script>
-                <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
-                </div>
-              </div>
-
-              <div>
-                <script type="text/ng-template" id="myModalContent2.html" >
-                  <div ng-include src="'views/EditCompDisplay.html'"></div>
-                </script>
-                <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
-                </div>
-              </div>
-
-              <div>
-                <script type="text/ng-template" id="myModalContent3.html">
-                  <div ng-include src="'views/DeleteCompDisplay.html'"></div>
-                </script>
-                <div>
-                  <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
-                </div>
-              </div>
 
             </div>
             <div class="col-md-8" id="graph">
