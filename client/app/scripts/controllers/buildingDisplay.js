@@ -6,10 +6,10 @@ angular.module('clientApp')
       var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
-      var isDetailed = true;
+      $scope.isDetailed = true; //for switching between monthly and daily data
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
-      checkRefresh();
+    checkRefresh();
       initSavedData();
       getBuildingData(null);  //initial call to get data of default type
 
@@ -104,6 +104,11 @@ angular.module('clientApp')
         }
       };
 
+      //toggles daily and monthly data
+      $scope.toggleDetailed = function() {
+        getBuildingData();
+      };
+
       function createGraphData(data, name){
         //reset
         var values = [];
@@ -138,7 +143,7 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed).then(function (data) {
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed).then(function (data) {
               initGraph(data, tempName);
             });
           }
@@ -146,7 +151,7 @@ angular.module('clientApp')
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed).then(function (data) {
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed).then(function (data) {
               initGraph(data, name);
             });
           }
@@ -155,15 +160,11 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph(data, name) {
-        console.time('render');
         createGraphData(data, name);
         setKeys();
         setResourceLabel();
         setFocusArea();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
-        $timeout(function(){
-          console.timeEnd('render')
-        });
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.
@@ -180,7 +181,7 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Electricity Usage';
             }
             else{
@@ -189,7 +190,7 @@ angular.module('clientApp')
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Gas Usage';
             }
             else{
@@ -198,7 +199,7 @@ angular.module('clientApp')
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Water Usage';
             }
             else{
@@ -207,7 +208,7 @@ angular.module('clientApp')
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Whatever Usage';
             }
             else{
