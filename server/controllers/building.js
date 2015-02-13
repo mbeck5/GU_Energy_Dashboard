@@ -110,7 +110,25 @@ exports.getResourcesFromName = function(req, res) {
         }
         startDate = last_year + '-' + mm + '-' + dd;
         endDate = this_year + '-' + mm + '-' + dd;
-        console.log('start: ' + startDate + ' end: ' + endDate);
+    }
+    if(isDetailed !== 'true') {
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        startDate = last_year + '-' + mm + '-' + dd;
+    }
+    else{
+        if(mm < 6){
+            var new_month = (mm - 6) + 11;
+            if(new_month < 10){
+                new_month = '0' + new_month;
+            }
+            startDate = last_year + '-' + new_month + '-' + dd;
+        }
+        else if(mm > 6 && mm < 10){
+            mm = '0' + mm;
+            startDate = this_year + '-' + mm + '-' + dd;
+        }
     }
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                         "FROM " + tableName + " " +
