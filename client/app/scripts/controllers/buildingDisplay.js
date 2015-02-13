@@ -3,14 +3,12 @@
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
-      var savedData = {};  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
-      var isDetailed = true;
+      $scope.isDetailed = true; //for switching between monthly and daily data
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
       checkRefresh();
-      initSavedData();
       getBuildingData(null);  //initial call to get data of default type
 
       $scope.data = [];
@@ -86,25 +84,19 @@ angular.module('clientApp')
       };
 
       $scope.selectResource = function (resourceType) {
-        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
-          var name = $scope.selectedBuildings[i].name;
-          savedData[name][selectedResource] = $scope.data[i].values;
-        }
         $scope.data = [];
         selectedResource = resourceType;
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
-          var name = $scope.selectedBuildings[i].name;
-          //get data for selected resource if not saved
-          if (!savedData[name][resourceType]) {
-            getBuildingData(i);
-          }
-          else {
-            initGraph(null, $scope.selectedBuildings[i].name);
-          }
+          getBuildingData(i);
         }
       };
 
-      function createGraphData(data, name){
+      //toggles daily and monthly data
+      $scope.toggleDetailed = function() {
+        getBuildingData();
+      };
+
+      function createGraphData(data){
         //reset
         var values = [];
         //set key
@@ -115,9 +107,6 @@ angular.module('clientApp')
           for (var j = 0; j < data.length; j++) {
             values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
           }
-        }
-        else {
-          values = savedData[name][selectedResource];
         }
         $scope.data.push({values: values, key: ''});
       }
@@ -130,7 +119,6 @@ angular.module('clientApp')
           stopCondition = i + 1;
         }
         for(i; i < stopCondition; i++) {
-          var name = $scope.selectedBuildings[i].name;
           //if going to building page directly or refreshing, steal name from url (basically a hack)
           if (typeof $scope.selectedBuildings[0].id === 'undefined') {
             var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
@@ -138,32 +126,28 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed).then(function (data) {
-              initGraph(data, tempName);
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed).then(function (data) {
+              initGraph(data);
             });
           }
 
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed).then(function (data) {
-              initGraph(data, name);
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed).then(function (data) {
+              initGraph(data);
             });
           }
         }
       }
 
       //called once data is retrieved
-      function initGraph(data, name) {
-        console.time('render');
-        createGraphData(data, name);
+      function initGraph(data) {
+        createGraphData(data);
         setKeys();
         setResourceLabel();
         setFocusArea();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
-        $timeout(function(){
-          console.timeEnd('render')
-        });
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.
@@ -180,7 +164,7 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Electricity Usage';
             }
             else{
@@ -189,7 +173,7 @@ angular.module('clientApp')
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Gas Usage';
             }
             else{
@@ -198,7 +182,7 @@ angular.module('clientApp')
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Water Usage';
             }
             else{
@@ -207,7 +191,7 @@ angular.module('clientApp')
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Whatever Usage';
             }
             else{
@@ -231,21 +215,6 @@ angular.module('clientApp')
           chart.brushExtent([prevDate, curDate]);
           $scope.api.update();
         });
-      }
-
-      //initializes the savedData map
-      function initSavedData(){
-        for(var i =0; i < $scope.selectedBuildings.length; i++){
-          if (typeof $scope.selectedBuildings[i].id === 'undefined') {
-            var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
-            $scope.selectedBuildings[i] = {};
-            $scope.selectedBuildings[i].name = tempName;
-            savedData[$scope.selectedBuildings[i].name] = {};
-          }
-          else {
-            savedData[$scope.selectedBuildings[i].name] = {};
-          }
-        }
       }
 
       function checkRefresh() {
