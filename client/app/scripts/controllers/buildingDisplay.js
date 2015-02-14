@@ -5,6 +5,7 @@ angular.module('clientApp')
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
+      var tempData = [];
       $scope.isDetailed = true; //for switching between monthly and daily data
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
@@ -85,6 +86,7 @@ angular.module('clientApp')
 
       $scope.selectResource = function (resourceType) {
         $scope.data = [];
+        tempData = [];
         selectedResource = resourceType;
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           getBuildingData(i);
@@ -93,9 +95,12 @@ angular.module('clientApp')
 
       //toggles daily and monthly data
       $scope.toggleDetailed = function() {
+        $scope.data = [];
+        tempData = [];
         getBuildingData();
       };
 
+      //Changed this to just push to temporary data variable.
       function createGraphData(data){
         //reset
         var values = [];
@@ -108,7 +113,11 @@ angular.module('clientApp')
             values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
           }
         }
-        $scope.data.push({values: values, key: ''});
+        tempData.push({values: values, key: ''});
+        if(tempData.length == $scope.selectedBuildings.length){
+          console.log(tempData.length + ' ' + $scope.selectedBuildings.length);
+          initGraph();
+        }
       }
 
       function getBuildingData(index) {
@@ -127,7 +136,8 @@ angular.module('clientApp')
 
             //get resource info for building from name rather than ID
             buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed).then(function (data) {
-              initGraph(data);
+              //initGraph(data);
+              createGraphData(data);
             });
           }
 
@@ -135,19 +145,25 @@ angular.module('clientApp')
           else {
             //get resource info for building
             buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed).then(function (data) {
-              initGraph(data);
+              //initGraph(data);
+              createGraphData(data);
             });
           }
         }
       }
 
       //called once data is retrieved
-      function initGraph(data) {
-        createGraphData(data);
+      function initGraph() {
+        //createGraphData(data);
+        console.time('make graph');
+        $scope.data = tempData;
         setKeys();
         setResourceLabel();
         setFocusArea();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+        $timeout(function(){
+          console.timeEnd('make graph');
+        });
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.

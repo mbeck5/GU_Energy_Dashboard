@@ -64,6 +64,7 @@ exports.getResources = function(req, res){
                 startDate = this_year + '-' + mm + '-' + dd;
             }
         }
+        startDate = last_year + '-' + mm + '-' + dd;
         endDate = this_year + '-' + mm + '-' + dd;
     }
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
