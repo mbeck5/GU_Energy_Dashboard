@@ -1,51 +1,51 @@
 <!doctype html>
 <html class="no-js">
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <!-- build:css(.) styles/vendor.css -->
-  <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css"/>
-  <!-- endbower -->
-  <!-- endbuild -->
-  <!-- build:css(.tmp) styles/main.css -->
-  <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/test.css">
-  <link rel="stylesheet" href="styles/buildingSelector.css">
-  <link rel="stylesheet" href="styles/buildingDisplay.css">
-  <link rel="stylesheet" href="styles/compDisplay.css">
-  <!-- endbuild -->
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-</head>
-<body ng-app="clientApp">
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-  your browser</a> to improve your experience.</p>
-<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css"/>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/test.css">
+    <link rel="stylesheet" href="styles/buildingSelector.css">
+    <link rel="stylesheet" href="styles/buildingDisplay.css">
+    <link rel="stylesheet" href="styles/compDisplay.css">
+    <!-- endbuild -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  </head>
+  <body ng-app="clientApp">
+    <!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+      your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-<!-- Add your site or application content here-->
-<div ng-controller="HeaderCtrl">
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="navbarCollapsed = !navbarCollapsed">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <img id="gu-icon" src="images/energy-dashboard-title-icon.png"/>
-    </div>
-    <div class="navbar-collapse collapse" collapse="navbarCollapsed">
-      <ul class="nav navbar-nav navbar-right">
-        <li ng-class="{active: isActive('/')}"><a ng-href="#">Home</a></li>
-        <li ng-class="{active: isActive('/Competitions')}"><a ng-href="#/Competitions">Competitions</a></li>
-        <li ng-class="{active: isActive('/test')}"><a ng-href="#/test">Tips</a></li>
-      </ul>
-    </div>
-  </div>
+    <!-- Add your site or application content here-->
+    <div ng-controller="HeaderCtrl">
+      <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="toggleCollapse()">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img id="gu-icon" src="images/energy-dashboard-title-icon.png"/>
+        </div>
+        <div class="navbar-collapse collapse" collapse="navbarCollapsed">
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
+            <li ng-class="{active: isActive('/Competitions')}" ng-click="toggleCollapse()"><a href="#/Competitions">Competitions</a></li>
+            <li ng-class="{active: isActive('/test')}" ng-click="toggleCollapse()"><a href="#/test">Tips</a></li>
+          </ul>
+        </div>
+      </div>
 
       <div id="main" class="container-fluid" ng-view=""></div>
 
@@ -53,7 +53,7 @@
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
+    <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -88,16 +88,16 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/scripts.js -->
-<script src="scripts/app.js"></script>
-<script src="scripts/controllers/header.js"></script>
-<script src="scripts/controllers/test.js"></script>
-<script src="scripts/controllers/buildingSelector.js"></script>
-<script src="scripts/controllers/buildingDisplay.js"></script>
-<script src="scripts/controllers/compDisplay.js"></script>
-<script src="scripts/controllers/frontPageSummary.js"></script>
-<script src="scripts/services/buildingSvc.js"></script>
-<script src="scripts/services/compEditSvc.js"></script>
-<!-- endbuild -->
-</body>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/header.js"></script>
+    <script src="scripts/controllers/test.js"></script>
+    <script src="scripts/controllers/buildingSelector.js"></script>
+    <script src="scripts/controllers/buildingDisplay.js"></script>
+    <script src="scripts/controllers/compDisplay.js"></script>
+    <script src="scripts/controllers/frontPageSummary.js"></script>
+    <script src="scripts/services/buildingSvc.js"></script>
+    <script src="scripts/services/compEditSvc.js"></script>
+    <!-- endbuild -->
+  </body>
 </html>

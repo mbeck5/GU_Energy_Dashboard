@@ -7,4 +7,8 @@ angular.module('clientApp')
         $scope.isActive = function (location) {
           return location === $location.path();
         };
+
+        $scope.toggleCollapse = function() {
+          $scope.navbarCollapsed = !$scope.navbarCollapsed;
+        };
   });
