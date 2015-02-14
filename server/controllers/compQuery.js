@@ -52,3 +52,14 @@ exports.deleteComp = function (req, res) {
     });
 };
 
+exports.addCompBuilding = function (req, res) {
+    var addCompBuildingQueryString = "INSERT INTO competition_buildings (cid, bid) VALUES ("+ req.param("cid") + "," + req.param("bid") + ");";
+    connection.query(addCompBuildingQueryString, function (err, rows) {
+        if (err) {
+            throw err;
+        }
+        else {
+            return;
+        }
+    });
+};

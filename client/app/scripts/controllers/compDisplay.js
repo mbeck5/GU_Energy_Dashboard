@@ -17,6 +17,14 @@ angular.module('clientApp')
       compEditSvc.setSelectedComp($scope.filteredComps[0]);
     });
 
+    $scope.$on('updateCompList', function (event, mass) {
+      compEditSvc.getComp().then(function (data) {
+        comps = data;
+        $scope.filteredComps = data;
+        compEditSvc.setSelectedComp($scope.filteredComps[0]);
+      });
+    });
+
     //filters based on search input
     $scope.filterComps = function () {
       $scope.filteredComps = comps.filter(filterComps);
@@ -189,7 +197,7 @@ angular.module('clientApp')
 
   });
 
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 
@@ -244,6 +252,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           }
           maxCid = maxCid + 1;
           compEditSvc.saveNewComp(maxCid, newStartDateStr, newEndDateStr, newName.replace("'", "''"));
+          $rootScope.$broadcast('updateCompList');
           $modalInstance.close();
         });
       }
@@ -259,7 +268,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 
 //rootscope broadcast
 
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope,$rootScope, $modalInstance, compEditSvc) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
   $scope.selectedResourceComp = 'Select Resource';
@@ -281,6 +290,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       var newEndDateStr = endDateStr[2] + '-' + (monthNames.indexOf(endDateStr[1]) + 1) + '-' + endDateStr[0];
 
       compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), newStartDateStr, newEndDateStr, newName.replace("'", "''"));
+      $rootScope.$broadcast('updateCompList');
       $modalInstance.close();
     }
 
@@ -291,11 +301,12 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   };
 });
 
-angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope,$rootScope, $modalInstance, compEditSvc) {
 
   $scope.ok = function () {
     var currentCid = compEditSvc.getSelectedCompCid();
     compEditSvc.deleteComp(currentCid);
+    $rootScope.$broadcast('updateCompList');
     $modalInstance.dismiss('ok');
   };
 
