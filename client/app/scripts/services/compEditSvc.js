@@ -3,35 +3,68 @@
 angular.module('clientApp')
   .factory('compEditSvc', function (Restangular) {
     var selectedComp = 'DESELECTED';
+    var startDate = '';
+    var endDate = '';
 
     function getComp() {
       var allComps = Restangular.all('getCompetitions');
       return allComps.getList();
     }
 
-    function getCompData(buildingId, meterTypeId) {
-      var buildingData = Restangular.all('getBuildingData');
-      return buildingData.getList({building: buildingId, meterType: meterTypeId});
+    function saveNewComp(cid, startDate, endDate, compName) {
+      var newComp = Restangular.all('saveNewComp');
+      return newComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
     }
 
-    function getCompDataFromName(buildingName, meterTypeId) {
-      var buildingData = all('getBuildingDataFromName');
-      return buildingData.getList({building: buildingName, meterType: meterTypeId});
+    function editNewComp(cid, startDate, endDate, compName) {
+      var editedComp = Restangular.all('editNewComp');
+      return editedComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
+    }
+
+    function deleteComp(cid) {
+      var deletedComp = Restangular.all('deleteComp');
+      return deletedComp.getList({cid: cid});
     }
 
     function getSelectedComp() {
-      return 1;
+      return selectedComp;
+    }
+
+    function getSelectedCompCid() {
+      return selectedComp.cid;
     }
 
     function setSelectedComp(comp) {
       selectedComp = comp;
     }
 
+    function saveStartDate(newStartDate) {
+      startDate = newStartDate;
+    }
+
+    function saveEndDate(newEndDate) {
+      endDate = newEndDate;
+    }
+
+    function getStartDate() {
+      return startDate;
+    }
+
+    function getEndDate() {
+      return endDate;
+    }
+
     return {
       getComp: getComp,
-      getCompData: getCompData,
-      getCompDataFromName: getCompDataFromName,
+      saveNewComp: saveNewComp,
+      editNewComp: editNewComp,
+      deleteComp: deleteComp,
       getSelectedComp: getSelectedComp,
-      setSelectedComp: setSelectedComp
+      getSelectedCompCid: getSelectedCompCid,
+      setSelectedComp: setSelectedComp,
+      saveStartDate: saveStartDate,
+      saveEndDate: saveEndDate,
+      getStartDate: getStartDate,
+      getEndDate: getEndDate
     };
   });

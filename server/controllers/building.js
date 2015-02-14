@@ -27,14 +27,37 @@ exports.getBuildingTypes = function(req, res){
 }
 
 exports.getResources = function(req, res){
-    var queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
+    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
                     "FROM meters_dly_data " +
                     "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
                     "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
                                                 "FROM erb_tree " +
                                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
                                                                             "FROM erb_tree " +
-                                                                            "WHERE BUILDING_ID = " + req.param("building") + ")) ORDER BY date;";
+                                                                            "WHERE BUILDING_ID = " + req.param("building") + ")) GROUP BY date;";
+
+    connection.query(queryString, function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(stdDev.standardDeviationFilter(rows));
+        }
+    });
+};
+
+exports.getResourcesFromName = function(req, res) {
+    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
+                        "FROM meters_dly_data " +
+                        "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
+                        "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN " +
+                            "(SELECT METER_ID " +
+                                "FROM erb_tree " +
+                                "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
+                                                            "FROM erb_tree " +
+                                                            "WHERE BUILDING_ID IN (SELECT building_id " +
+                                                                                    "FROM building " +
+                                                                                    "WHERE building_name = '" + req.param("building") + "'))) GROUP BY date;";
 
     connection.query(queryString, function(err, rows){
         if(err){
@@ -47,7 +70,7 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesByType = function(req, res){
-    queryString = "SELECT bt.BUILDING_TYPE as type, sum(CONSUMPTION) as total_cons " +
+    queryString = "SELECT bt.BUILDING_TYPE as type, SUM(CONSUMPTION) as total_cons " +
                     "FROM erb_tree e, building b, building_type bt, " +
                         "(SELECT * " +
                         "FROM (SELECT METER_ID as MID, CONSUMPTION " +
@@ -72,7 +95,7 @@ exports.getResourcesByType = function(req, res){
 exports.getResourceSum = function(req, res){
     queryString = "SELECT sum(total_cons) as res_sum " +
                     "FROM " +
-                        "(SELECT bt.BUILDING_TYPE as type, sum(CONSUMPTION) as total_cons " +
+                        "(SELECT bt.BUILDING_TYPE as type, SUM(CONSUMPTION) as total_cons " +
                         "FROM erb_tree e, building b, building_type bt, " +
                             "(SELECT * " +
                             "FROM (SELECT METER_ID as MID, CONSUMPTION " +
@@ -94,28 +117,6 @@ exports.getResourceSum = function(req, res){
     });
 }
 
-exports.getResourcesFromName = function(req, res) {
-    var queryString = "SELECT meters_dly_data.trend_date as date, meters_dly_data.consumption " +
-                    "FROM meters_dly_data " +
-                    "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
-                    "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
-                                                "FROM erb_tree " +
-                                                "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
-                                                                            "FROM erb_tree " +
-                                                                            "WHERE BUILDING_ID IN (SELECT building_id " +
-                                                                                                    "FROM building " +
-                                                                                                    "WHERE building_name = '" + req.param("building") + "'))) ORDER BY date;";
-
-    connection.query(queryString, function(err, rows){
-        if(err){
-            throw err;
-        }
-        else {
-            res.send(stdDev.standardDeviationFilter(rows));
-        }
-    });
-};
-
 exports.getBuildingTypes = function(req, res) {
     var queryString = "SELECT building_type_id as buildingTypeId, building_type as buildingType " +
                     "FROM building_type;";
@@ -131,18 +132,3 @@ exports.getBuildingTypes = function(req, res) {
 };
 
 
-exports.getCompetitions = function(req, res){
-    var queryString = "SELECT DISTINCT comp_name, cid, start_date, end_date, resource " +
-                        "FROM competitions " +
-                        "WHERE comp_name != 'undefined' " +
-                        "ORDER BY comp_name;";
-
-    connection.query(queryString, function(err, rows){
-        if(err){
-            throw err;
-        }
-        else {
-            res.send(rows);
-        }
-    });
-};
