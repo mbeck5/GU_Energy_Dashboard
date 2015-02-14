@@ -14,7 +14,6 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/test.css">
     <link rel="stylesheet" href="styles/buildingSelector.css">
     <link rel="stylesheet" href="styles/buildingDisplay.css">
     <link rel="stylesheet" href="styles/compDisplay.css">
@@ -36,13 +35,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img id="gu-icon" src="images/energy-dashboard-title-icon.png"/>
+          <img id="gu-icon" src="images/energy-dashboard-icon.png"/>
         </div>
         <div class="navbar-collapse collapse" collapse="navbarCollapsed">
           <ul class="nav navbar-nav navbar-right">
             <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
             <li ng-class="{active: isActive('/Competitions')}" ng-click="toggleCollapse()"><a href="#/Competitions">Competitions</a></li>
-            <li ng-class="{active: isActive('/test')}" ng-click="toggleCollapse()"><a href="#/test">Tips</a></li>
           </ul>
         </div>
       </div>
@@ -91,7 +89,6 @@
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/header.js"></script>
-    <script src="scripts/controllers/test.js"></script>
     <script src="scripts/controllers/buildingSelector.js"></script>
     <script src="scripts/controllers/buildingDisplay.js"></script>
     <script src="scripts/controllers/compDisplay.js"></script>
