@@ -12,27 +12,14 @@ angular.module('clientApp')
 
     //unpack promise returned from rest call
     compEditSvc.getComp().then(function (data) {
+      comps = data;
       $scope.filteredComps = data;
       compEditSvc.setSelectedComp($scope.filteredComps[0]);
-
-      for(var i = 0; i < $scope.filteredComps.length; i++)
-      {
-        var tempDate = $scope.filteredComps[i].startDate;//.split("-");
-        //tempDate = toString(tempDate).split("-");
-        $scope.filteredComps[i].startDate = tempDate[2] + "/" + monthNames[tempDate[1]] + "/" + tempDate[0];
-
-        tempDate = $scope.filteredComps[i].endDate;//.split("-");
-        //tempDate = toString(tempDate).split("-");
-        $scope.filteredComps[i].endDate = tempDate[2] + "/" + monthNames[tempDate[1]] + "/" + tempDate[0];
-      }
-
-      $scope.displayedCompIndex = index;
-      console.log(data);
     });
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps = buildings.filter(filterBuildings);
+      $scope.filteredComps = comps.filter(filterComps);
     };
 
     //when clicking on competition
@@ -42,7 +29,7 @@ angular.module('clientApp')
     };
 
     $scope.openCreateModal = function (size) {
-      var modalInstance = $modal.open({
+      $modal.open({
         templateUrl: 'myModalContent1.html',
         controller: 'createModalInstanceCtrl',
         size: size
@@ -50,7 +37,7 @@ angular.module('clientApp')
     };
 
     $scope.openEditModal = function (size) {
-      var modalInstance = $modal.open({
+      $modal.open({
         templateUrl: 'myModalContent2.html',
         controller: 'editModalInstanceCtrl',
         size: size
@@ -69,7 +56,6 @@ angular.module('clientApp')
             $scope.filteredComps = data;
             compEditSvc.setSelectedComp($scope.filteredComps[0]);
             $scope.displayedCompIndex = index;
-            console.log(data);
           });
         }
       });
