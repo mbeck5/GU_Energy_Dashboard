@@ -10,12 +10,38 @@
         </div>
       </div>
       <div class="col-md-10">
-        <div id="graph">
-          <label>
-            <toggle-switch on-change="toggleDetailed()"></toggle-switch>
-            Detailed View
-          </label>
-          <nvd3 options='options' data='data' api="api"></nvd3>
+        <div class="row">
+          <div class="col-sm-2">
+            <label>
+              <toggle-switch model="toggleVal" on-change="toggleDetailed()"></toggle-switch>
+              Detailed View
+            </label>
+          </div>
+          <div class="col-sm-5">
+            <div class="input-group">
+              <input type="text" class="form-control" ng-model="date1" is-open="dateOpen1"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-5">
+            <div class="input-group">
+              <input type="text" class="form-control" ng-model="date2" is-open="dateOpen2"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div id="graph">
+            <nvd3 options='options' data='data' api="api"></nvd3>
+          </div>
         </div>
       </div>
 

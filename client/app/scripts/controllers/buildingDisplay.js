@@ -7,6 +7,11 @@ angular.module('clientApp')
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
       var tempData = [];
       var isDetailed = true; //for switching between monthly and daily data
+      $scope.toggleVal = true;  //only used for gui
+      $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
+      $scope.date2 = moment().format('DD-MMMM-YYYY');
+      $scope.dateOpen1 = false;
+      $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
 
       checkRefresh();
@@ -71,7 +76,7 @@ angular.module('clientApp')
             '<td class="tg-431l">' + y + ' ' + unitMap[selectedResource] + ' on ' + x + '</td>' +
             '</tr>' +
             '</table>' +
-            '</div>'
+            '</div>';
           },
           tooltips: true,
           transitionDuration: 500,
@@ -115,7 +120,7 @@ angular.module('clientApp')
           }
         }
         tempData.push({values: values, key: ''});
-        if(tempData.length == $scope.selectedBuildings.length){
+        if(tempData.length === $scope.selectedBuildings.length){
           initGraph();
         }
       }
@@ -252,4 +257,15 @@ angular.module('clientApp')
         var padding = max / denom;
         return max + padding;
       }
+
+      $scope.openDate = function($event, val) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        if (val === 1) {
+          $scope.dateOpen1 = true;
+        }
+        else {
+          $scope.dateOpen2 = true;
+        }
+      };
   });
