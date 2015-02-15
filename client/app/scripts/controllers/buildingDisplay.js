@@ -124,7 +124,6 @@ angular.module('clientApp')
 
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
-        //reset
         var values = [];
 
         if (data) {
@@ -135,6 +134,8 @@ angular.module('clientApp')
           }
         }
         tempData.push({values: values, key: ''});
+
+        //postpone graph initialization until all points have been created
         if(tempData.length === $scope.selectedBuildings.length){
           initGraph();
         }
@@ -155,8 +156,7 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed).then(function (data) {
-              //initGraph(data);
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -164,8 +164,7 @@ angular.module('clientApp')
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed).then(function (data) {
-              //initGraph(data);
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
