@@ -19,7 +19,7 @@
           </div>
           <div class="col-sm-5">
             <div class="input-group">
-              <input type="text" class="form-control" ng-model="date1" is-open="dateOpen1"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date1" is-open="dateOpen1" ng-change="dateChange()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -29,7 +29,7 @@
           </div>
           <div class="col-sm-5">
             <div class="input-group">
-              <input type="text" class="form-control" ng-model="date2" is-open="dateOpen2"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date2" is-open="dateOpen2" ng-change="dateChange()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>

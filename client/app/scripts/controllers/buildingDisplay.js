@@ -90,8 +90,7 @@ angular.module('clientApp')
       };
 
       $scope.selectResource = function (resourceType) {
-        $scope.data = [];
-        tempData = [];
+        resetData();
         selectedResource = resourceType;
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           getBuildingData(i);
@@ -101,16 +100,32 @@ angular.module('clientApp')
       //toggles daily and monthly data
       $scope.toggleDetailed = function() {
         isDetailed = !isDetailed;
-        $scope.data = [];
-        tempData = [];
+        resetData();
         getBuildingData();
+      };
+
+      //when new date is selected
+      $scope.dateChange = function() {
+        resetData();
+        getBuildingData();
+      };
+
+      //toggles date picker visibility
+      $scope.openDate = function($event, val) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        if (val === 1) {
+          $scope.dateOpen1 = true;
+        }
+        else {
+          $scope.dateOpen2 = true;
+        }
       };
 
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
         //reset
         var values = [];
-        //set key
 
         if (data) {
           //create graph points
@@ -258,14 +273,9 @@ angular.module('clientApp')
         return max + padding;
       }
 
-      $scope.openDate = function($event, val) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        if (val === 1) {
-          $scope.dateOpen1 = true;
-        }
-        else {
-          $scope.dateOpen2 = true;
-        }
-      };
+      //clears all data
+      function resetData() {
+        $scope.data = [];
+        tempData = [];
+      }
   });
