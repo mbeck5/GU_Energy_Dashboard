@@ -44,7 +44,8 @@ exports.getResources = function(req, res){
         startDate = moment().subtract(1, 'years');
     }
     else {
-
+        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
+        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
     }
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                     "FROM " + tableName + " " +
