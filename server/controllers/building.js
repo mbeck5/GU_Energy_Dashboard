@@ -25,47 +25,26 @@ exports.getBuildingTypes = function(req, res){
             res.send(rows);
         }
     });
-}
+};
 
 exports.getResources = function(req, res){
     var isDetailed = req.param("isDetailed");
     var startDate = req.param("startDate");
     var endDate = req.param("endDate");
+    var tableName;
     if(isDetailed === 'true'){
-        var tableName = "meters_dly_data";
+        tableName = "meters_dly_data";
     }
     else{
-        var tableName = "meters_mly_data";
+        tableName = "meters_mly_data";
     }
+    //if no dates entered, provide defaults
     if(!startDate || !endDate){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var this_year = today.getFullYear();
-        var last_year = today.getFullYear() - 1;
-        if(dd < 10){
-            dd = '0' + dd;
-        }
-        if(isDetailed !== 'true') {
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-            startDate = last_year + '-' + mm + '-' + dd;
-        }
-        else{
-            if(mm < 6){
-                var new_month = (mm - 6) + 11;
-                if(new_month < 10){
-                    new_month = '0' + new_month;
-                }
-                startDate = last_year + '-' + new_month + '-' + dd;
-            }
-            else if(mm > 6 && mm < 10){
-                mm = '0' + mm;
-                startDate = this_year + '-' + mm + '-' + dd;
-            }
-        }
-        endDate = this_year + '-' + mm + '-' + dd;
+        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+        startDate = moment().subtract(1, 'years');
+    }
+    else {
+
     }
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                     "FROM " + tableName + " " +
@@ -90,37 +69,21 @@ exports.getResourcesFromName = function(req, res) {
     var isDetailed = req.param("isDetailed");
     var startDate = req.param("startDate");
     var endDate = req.param("endDate");
+    var tableName;
     if(isDetailed === 'true'){
-        var tableName = "meters_dly_data";
+        tableName = "meters_dly_data";
     }
     else{
-        var tableName = "meters_mly_data";
+        tableName = "meters_mly_data";
     }
-
+    //if no dates entered, provide defaults
     if(!startDate || !endDate){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var this_year = today.getFullYear();
-        var last_year = today.getFullYear() - 1;
-        if(dd < 10){
-            dd = '0' + dd;
-        }
-        if(mm < 10){
-            mm = '0' + mm;
-        }
-        startDate = last_year + '-' + mm + '-' + dd;
-        endDate = this_year + '-' + mm + '-' + dd;
-    }
-    if(isDetailed !== 'true') {
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        startDate = last_year + '-' + mm + '-' + dd;
+        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+        startDate = moment().subtract(1, 'years');
     }
     else{
         startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
-        endDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
+        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
     }
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                         "FROM " + tableName + " " +
