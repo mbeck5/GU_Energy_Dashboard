@@ -197,12 +197,24 @@ angular.module('clientApp')
 
   });
 
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc, buildingSvc) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 
   $scope.checked = false;
   $scope.name = '';
+  $scope.checkedBuildings = [];
+  var buildings = [];
+  $scope.searchInput = '';
+  $scope.buildingTypes = [];
+  $scope.filteredBuildings = [];
+
+  //get list of buildings
+  buildingSvc.getBuildings().then(function (data) {
+    buildings = data;
+    $scope.filteredBuildings = buildings;
+  });
+
   var today = new Date();
   var weekLater = new Date();
   var dd = today.getDate();
@@ -229,6 +241,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.ok = function (newName) {
     if (newName == '') {
       alert("Please specify a competition name");
+      var count = 0;
     }
     else {
       if (Date.parse(compEditSvc.getStartDate()) == NaN || Date.parse(compEditSvc.getEndDate()) == NaN) {
@@ -252,8 +265,14 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           }
           maxCid = maxCid + 1;
           compEditSvc.saveNewComp(maxCid, newStartDateStr, newEndDateStr, newName.replace("'", "''"));
+          for (var property in $scope.checkedBuildings) {
+            if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+              compEditSvc.addCompBuilding(maxCid, property);
+            }
+          }
           $rootScope.$broadcast('updateCompList');
           $modalInstance.close();
+          $rootScope.$broadcast('updateCompList');
         });
       }
     }
@@ -266,9 +285,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 
 });
 
-//rootscope broadcast
-
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope,$rootScope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope,$rootScope, $modalInstance, compEditSvc, buildingSvc) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
   $scope.selectedResourceComp = 'Select Resource';
@@ -277,6 +294,19 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   $scope.startDate = $scope.selectedComp.start_date;
   $scope.endDate = $scope.selectedComp.end_date;
   $scope.cid = $scope.selectedComp.cid;
+  $scope.checkedBuildings = [];
+  $scope.checkedBuildingsSaved;
+  var buildings = [];
+  $scope.searchInput = '';
+  $scope.buildingTypes = [];
+  $scope.filteredBuildings = [];
+
+  //get list of buildings
+  buildingSvc.getBuildings().then(function (data) {
+    buildings = data;
+    $scope.filteredBuildings = buildings;
+    $scope.checkedBuildingsSaved = compEditSvc.getCompBuildingList($scope.cid);
+  });
 
   $scope.ok = function (newName) {
     if ($scope.name.trim() == '') {
@@ -292,6 +322,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), newStartDateStr, newEndDateStr, newName.replace("'", "''"));
       $rootScope.$broadcast('updateCompList');
       $modalInstance.close();
+      $rootScope.$broadcast('updateCompList');
     }
 
   };
@@ -308,6 +339,7 @@ angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($sco
     compEditSvc.deleteComp(currentCid);
     $rootScope.$broadcast('updateCompList');
     $modalInstance.dismiss('ok');
+    $rootScope.$broadcast('updateCompList');
   };
 
   $scope.cancel = function () {

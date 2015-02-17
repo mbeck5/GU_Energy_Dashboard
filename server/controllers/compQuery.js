@@ -41,12 +41,22 @@ exports.editNewComp = function (req, res) {
 };
 
 exports.deleteComp = function (req, res) {
-    var deleteCompQueryString = "DELETE FROM energy_report.competitions WHERE cid=" + req.param("cid") + ";";
-    connection.query(deleteCompQueryString, function (err, rows) {
+    var deleteCompBuildingsQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid=" + req.param("cid") + ";";
+    connection.query(deleteCompBuildingsQueryString, function (err, rows) {
         if (err) {
             throw err;
         }
         else {
+            var deleteCompQueryString = "DELETE FROM energy_report.competitions WHERE cid=" + req.param("cid") + ";";
+            connection.query(deleteCompQueryString, function (err, rows) {
+                if (err) {
+                    throw err;
+                }
+                else {
+
+                    return;
+                }
+            });
             return;
         }
     });
@@ -60,6 +70,18 @@ exports.addCompBuilding = function (req, res) {
         }
         else {
             return;
+        }
+    });
+};
+
+exports.getCompBuildingList = function (req, res) {
+    var queryString = "SELECT DISTINCT bid FROM competition_buildings WHERE cid =" + req.param("cid") + ";";
+    connection.query(queryString, function (err, rows) {
+        if (err) {
+            throw err;
+        }
+        else {
+            res.send(rows);
         }
     });
 };

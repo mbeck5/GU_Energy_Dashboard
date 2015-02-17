@@ -77,3 +77,15 @@
   overflow-y: auto;
 }
 
+.checked-list-item {
+  display: table;
+  width: 100%;
+  span {
+    display: table-cell;
+    width: auto;
+  }
+  a {
+    display: table-cell;
+    width: 100%;
+  }
+}

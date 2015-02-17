@@ -18,7 +18,7 @@
             </div>
             <div ng-controller="DatepickerDemoCtrl">
               <p class="input-group">
-                <input  class="form-control" datepicker-popup="{{format}}" ng-model="startDate"
+                <input class="form-control" datepicker-popup="{{format}}" ng-model="startDate"
                        is-open="opened" min-date="minDate" max-date="'2060-06-22'"
                        datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true"
                        close-text="Close" ng-change="saveDate(startDate, true)"/>
@@ -39,14 +39,28 @@
                        close-text="Close" ng-change="saveDate(endDate, false)"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
-                  class="glyphicon glyphicon-calendar"></i></button>
+                  class="glyphicon-glyphicon-calendar"></i></button>
               </span>
               </p>
             </div>
           </div>
         </td>
         <td>
-          <div ng-controller="BuildingSelectorCtrl" id="create-comp-building-list">
+          <div id="building-scroll" class="scroll">
+            <div id="building-list" class="list-group">
+              <div class="checked-list-item" ng-repeat="building in filteredBuildings">
+                <span class="input-group-addon" ng-show="true">
+                  <input type="checkbox" ng-model="checkedBuildings[building.id]"/>
+                </span>
+                <a class="list-group-item"
+                   ng-class="{active: checkedBuildings[building.id], clickable: false}"
+                   ng-click="selectBuilding($index)">
+                  {{building.name}}
+                </a>
+              </div>
+            </div>
+          </div>
+          <!--<div ng-controller="BuildingSelectorCtrl" id="create-comp-building-list">
             <div id="building-search" class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
                      ng-change="filterBuildings()">
@@ -59,7 +73,7 @@
                 </a>
               </div>
             </div>
-          </div>
+          </div>-->
         </td>
       </tr>
     </table>

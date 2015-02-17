@@ -26,6 +26,16 @@ angular.module('clientApp')
       return deletedComp.getList({cid: cid});
     }
 
+    function addCompBuilding(cid, bid) {
+      var newBuilding = Restangular.all('addCompBuilding');
+      return newBuilding.getList({cid: cid, bid: bid});
+    }
+
+    function getCompBuildingList(cid) {
+      var newBuildingList = Restangular.all('getCompBuildingList');
+      return newBuildingList.getList({cid: cid});
+    }
+
     function getSelectedComp() {
       return selectedComp;
     }
@@ -59,6 +69,8 @@ angular.module('clientApp')
       saveNewComp: saveNewComp,
       editNewComp: editNewComp,
       deleteComp: deleteComp,
+      addCompBuilding: addCompBuilding,
+      getCompBuildingList: getCompBuildingList,
       getSelectedComp: getSelectedComp,
       getSelectedCompCid: getSelectedCompCid,
       setSelectedComp: setSelectedComp,
