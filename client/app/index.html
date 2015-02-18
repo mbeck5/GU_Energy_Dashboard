@@ -2,13 +2,14 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>GU Energy Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css"/>
+    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-toggle-switch/style/bootstrap3/angular-toggle-switch-bootstrap-3.css"/>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -18,24 +19,23 @@
     <link rel="stylesheet" href="styles/buildingDisplay.css">
     <link rel="stylesheet" href="styles/compDisplay.css">
     <!-- endbuild -->
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body ng-app="clientApp">
     <!--[if lt IE 7]>
-    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-      your browser</a> to improve your experience.</p>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here-->
     <div ng-controller="HeaderCtrl">
       <div id="navbar" class="navbar navbar-default navbar-fixed-top">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="toggleCollapse()">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="navbarCollapsed = !navbarCollapsed">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img id="gu-icon" src="images/energy-dashboard-icon.png"/>
+          <a href="#/"><img id="gu-icon" src="images/energy-dashboard-icon.png"></a>
+          <a class="navbar-brand" href="#/">Energy Dashboard</a>
         </div>
         <div class="navbar-collapse collapse" collapse="navbarCollapsed">
           <ul class="nav navbar-nav navbar-right">
@@ -82,7 +82,9 @@
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
-    <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+    <script src="bower_components/angular-bootstrap-toggle-switch/angular-toggle-switch.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

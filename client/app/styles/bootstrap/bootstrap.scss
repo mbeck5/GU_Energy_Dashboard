@@ -51,5 +51,21 @@ $bootstrap-sass-asset-helper: (twbs-font-path("") != unquote('twbs-font-path("")
 // Utility classes
 @import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/utilities";
 @import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
-// endbower
+
+// theme
 @import "bootswatch";
+
+//font-awesome
+$fa-font-path: "../../../bower_components/font-awesome/fonts";
+@import "../../../bower_components/font-awesome/scss/font-awesome";
+
+// look away!
+.glyphicon {
+  @extend .fa;
+  &.glyphicon-chevron-right {
+    @extend .fa-chevron-right;
+  }
+  &.glyphicon-chevron-left {
+    @extend .fa-chevron-left;
+  }
+}

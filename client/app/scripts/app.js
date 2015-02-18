@@ -17,7 +17,8 @@ angular
     'ngTouch',
     'restangular',
     'ui.bootstrap',
-    'nvd3'
+    'nvd3',
+    'toggle-switch'
   ])
   .config(function ($routeProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl('/api/');
@@ -27,6 +28,10 @@ angular
         controller: 'BuildingSelectorCtrl'
       })
       .when('/buildings/:building', {
+        templateUrl: 'views/buildingDisplay.html',
+        controller: 'BuildingDisplayCtrl'
+      })
+      .when('/comparison', {
         templateUrl: 'views/buildingDisplay.html',
         controller: 'BuildingDisplayCtrl'
       })
