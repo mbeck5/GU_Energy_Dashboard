@@ -10,30 +10,30 @@ angular.module('clientApp')
         $scope.compareEnabled = false;
         $scope.comparisonText = 'Select Multiple';    //dynamic text for compare button
 
-        //get list of buildings
-        buildingSvc.getBuildings().then(function (data) {
-          buildings = data;
-          $scope.filteredBuildings = buildings;
-        });
+    //get list of buildings
+    buildingSvc.getBuildings().then(function (data) {
+      buildings = data;
+      $scope.filteredBuildings = buildings;
+    });
 
-        //get list of building types
-        buildingSvc.getBuildingTypes().then(function (data) {
-          $scope.buildingTypes = data;
-        });
+    //get list of building types
+    buildingSvc.getBuildingTypes().then(function (data) {
+      $scope.buildingTypes = data;
+    });
 
-        //filters based on search input
-        $scope.filterBuildingsBySearch = function() {
-            $scope.filteredBuildings = buildings.filter(function (element) {
-              return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
-            });
-        };
+    //filters based on search input
+    $scope.filterBuildingsBySearch = function () {
+      $scope.filteredBuildings = buildings.filter(function (element) {
+        return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+      });
+    };
 
-        $scope.filterBuildingsByType = function(type) {
-            $scope.searchInput = "";  //clear the search bar
-            $scope.filteredBuildings = buildings.filter(function (element) {
-              return type === 1 || element.buildingTypeId === type;
-            });
-        };
+    $scope.filterBuildingsByType = function (type) {
+      $scope.searchInput = "";  //clear the search bar
+      $scope.filteredBuildings = buildings.filter(function (element) {
+        return type === 1 || element.buildingTypeId === type;
+      });
+    };
 
         //when clicking on building
         $scope.selectBuilding = function (index) {

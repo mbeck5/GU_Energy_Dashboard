@@ -169,3 +169,5 @@ exports.getBuildingTypes = function(req, res) {
         }
     })
 };
+
+

@@ -1,0 +1,75 @@
+#comp-list {
+  background-color: transparent;
+}
+
+#comp-list-panel{
+  margin-top: 30px;
+  height: 100%;
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
+#current-comp-panel{
+  margin-top: 30px;
+  height: 100%;
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
+#comp-scroll {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+}
+
+.comp-action-buttons{
+  width: 100%;
+}
+
+#action-footer{
+  height: 50px;
+}
+
+.comp-modal-footer-buttons{
+  margin-left: 5%;
+  width: 15%;
+}
+
+#create-comp-info-table-row{
+   width: 50%;
+ }
+
+#create-comp-building-list{
+  margin-top: 23px;
+}
+
+#create-comp-info{
+  margin-right: 3%;
+}
+
+#create-comp-body {
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+#building-list-comp{
+  float: right;
+}
+
+#resource-dropdown{
+  width: 150px;
+}
+
+#building-list {
+  background-color: transparent;
+  margin-bottom: 20px;
+  margin-outside: 20px;
+}
+
+#building-list-panel{
+  margin-top: 30px;
+  height: 25%;
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
+#building-scroll {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+}
