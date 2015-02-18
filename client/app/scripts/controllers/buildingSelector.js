@@ -96,9 +96,9 @@ angular.module('clientApp')
 
         //return name of building based on id
         function findNameById(id) {
-          for (var i = 0; i < $scope.filteredBuildings.length; ++i) {
-            if ($scope.filteredBuildings[i].id === parseInt(id)) {
-              return $scope.filteredBuildings[i].name;
+          for (var i = 0; i < buildings.length; ++i) {
+            if (buildings[i].id === parseInt(id)) {
+              return buildings[i].name;
             }
           }
           return "";
