@@ -208,6 +208,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.searchInput = '';
   $scope.buildingTypes = [];
   $scope.filteredBuildings = [];
+  $scope.title = "Create Competition";
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
@@ -300,6 +301,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   $scope.searchInput = '';
   $scope.buildingTypes = [];
   $scope.filteredBuildings = [];
+  $scope.title = "Edit Competition";
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
