@@ -15,6 +15,7 @@ angular.module('clientApp')
       comps = data;
       $scope.filteredComps = data;
       compEditSvc.setSelectedComp($scope.filteredComps[0]);
+      $scope.setDates(0);
     });
 
     $scope.$on('updateCompList', function (event, mass) {
@@ -22,6 +23,7 @@ angular.module('clientApp')
         comps = data;
         $scope.filteredComps = data;
         compEditSvc.setSelectedComp($scope.filteredComps[0]);
+        $scope.setDates(0);
       });
     });
 
@@ -34,7 +36,13 @@ angular.module('clientApp')
     $scope.selectComp = function (index) {
       compEditSvc.setSelectedComp($scope.filteredComps[index]);
       $scope.displayedCompIndex = index;
+$scope.setDates(index);
     };
+
+    $scope.setDates = function(index){
+      $scope.filteredComps[index].start_date = moment($scope.filteredComps[index].start_date).format('DD/MMMM/YYYY');
+      $scope.filteredComps[index].end_date = moment($scope.filteredComps[index].end_date).format('DD/MMMM/YYYY');
+    }
 
     $scope.openCreateModal = function (size) {
       $modal.open({
