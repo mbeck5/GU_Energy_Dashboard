@@ -13,14 +13,13 @@
         <div class="row">
           <div class="col-sm-2">
             <label>
-              <toggle-switch model="toggleVal" on-change="toggleDetailed()"></toggle-switch>
+              <toggle-switch model="isDetailed"></toggle-switch>
               Detailed View
             </label>
           </div>
-          <div class="col-sm-5">
-            <span>From</span>
+          <div class="col-sm-4">
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date1" is-open="dateOpen1" ng-change="dateChange()"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date1" is-open="dateOpen1"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -28,16 +27,20 @@
               </span>
             </div>
           </div>
-          <div class="col-sm-5">
-            <span>To</span>
+          <div class="col-sm-4">
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date2" is-open="dateOpen2" ng-change="dateChange()"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date2" is-open="dateOpen2"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>
                 </button>
               </span>
             </div>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-primary" ng-click="applyGraphOptions()">
+              Apply
+            </button>
           </div>
         </div>
         <div class="row">

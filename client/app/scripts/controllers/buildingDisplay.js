@@ -6,8 +6,7 @@ angular.module('clientApp')
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
       var tempData = [];
-      var isDetailed = true; //for switching between monthly and daily data
-      $scope.toggleVal = true;  //only used for gui
+      $scope.isDetailed = true; //detailed toggle value
       $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
       $scope.date2 = moment().format('DD-MMMM-YYYY');
       $scope.dateOpen1 = false;
@@ -97,15 +96,8 @@ angular.module('clientApp')
         }
       };
 
-      //toggles daily and monthly data
-      $scope.toggleDetailed = function() {
-        isDetailed = !isDetailed;
-        resetData();
-        getBuildingData();
-      };
-
-      //when new date is selected
-      $scope.dateChange = function() {
+      //applies toggle and date filter options and retrieves new data
+      $scope.applyGraphOptions = function() {
         resetData();
         getBuildingData();
       };
@@ -156,7 +148,7 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -164,7 +156,7 @@ angular.module('clientApp')
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -173,7 +165,6 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph() {
-        //createGraphData(data);
         $scope.data = tempData;
         setKeys();
         setResourceLabel();
@@ -195,7 +186,7 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Electricity Usage';
             }
             else{
@@ -204,7 +195,7 @@ angular.module('clientApp')
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Gas Usage';
             }
             else{
@@ -213,7 +204,7 @@ angular.module('clientApp')
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Water Usage';
             }
             else{
@@ -222,7 +213,7 @@ angular.module('clientApp')
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Whatever Usage';
             }
             else{
@@ -248,8 +239,8 @@ angular.module('clientApp')
         });
       }
 
+      //if routing directing to comparison, go back home
       function checkRefresh() {
-        //if routing directing to comparison, go back home
         if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
           $location.path('/');
         }
