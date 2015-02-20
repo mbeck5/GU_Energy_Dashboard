@@ -37,12 +37,21 @@ angular.module('clientApp')
 
     //when clicking on building
     $scope.selectBuilding = function (index) {
-      //don't allow clicks if compare is enabled
+      //don't go to building page if comparison enabled
       if (!$scope.compareEnabled) {
         buildingSvc.setSelectedBuilding([$scope.filteredBuildings[index]]);
         $location.path('buildings/' + returnCorrectName(index));   //change to building route
       }
-
+      //toggle check if comparison enabled
+      else {
+        var id = $scope.filteredBuildings[index].id;
+        if ($scope.checkedBuildings[id]) {
+          $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+        }
+        else {
+          $scope.checkedBuildings[id] = true;
+        }
+      }
     };
 
     //can't have '/' in url
