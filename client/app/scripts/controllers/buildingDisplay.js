@@ -21,7 +21,7 @@ angular.module('clientApp')
 
       $scope.options = {
         chart: {
-          type: 'lineWithFocusChart',
+          type: 'lineChart',
           height: 600,
           margin: {
             top: 30,
@@ -36,21 +36,11 @@ angular.module('clientApp')
               return d3.time.format('%m/%d/%y')(new Date(d));
             }
           },
-          x2Axis: {
-            showMaxMin: false,
-            tickFormat: function(d) {
-              return d3.time.format('%m/%y')(new Date(d));
-            }
-          },
           yAxis: {
             axisLabel: 'kWh', //will change with resource toggle
             showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
-          },
-          y2Axis: {
-            tickValues: 0,
-            showMaxMin: false
           },
           lines: {
             forceY:[0]
