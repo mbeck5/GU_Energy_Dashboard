@@ -37,7 +37,7 @@ angular
       })
       .otherwise({
         redirectTo: '/'
-      })
+      });
   })
   .config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
     usSpinnerConfigProvider.setDefaults({
