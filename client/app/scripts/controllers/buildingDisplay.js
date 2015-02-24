@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('clientApp')
+angular.module('clientApp', ['angularSpinner'])
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
+      var spinnerset = false;
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
       getBuildingData();  //initial call to get data of default type
@@ -92,6 +93,7 @@ angular.module('clientApp')
 
       function getBuildingData() {
         //if going to building page directly or refreshing, steal name from url (basically a hack)
+        spinnerset = true;
         if ($scope.selectedBuilding === 'DESELECTED') {
           var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
           $scope.selectedBuilding = {};
@@ -110,6 +112,7 @@ angular.module('clientApp')
             initGraph(data);
           });
         }
+
       }
 
       //called once data is retrieved
@@ -157,4 +160,10 @@ angular.module('clientApp')
           $scope.api.update();
         });
       }
+      $scope.startSpin = function(){
+        usSpinnerService.spin('spinner-graph');
+      };
+      $scope.stopSpin = function(){
+        usSpinnerService.stop('spinner-graph');
+      };
   });

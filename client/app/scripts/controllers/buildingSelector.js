@@ -41,4 +41,6 @@ angular.module('clientApp')
         $scope.returnCorrectName = function(index) {
             return $scope.filteredBuildings[index].name.replace("/", "--");
         };
+
   });
+
