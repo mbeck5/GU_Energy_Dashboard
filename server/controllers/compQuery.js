@@ -35,7 +35,7 @@ exports.editNewComp = function (req, res) {
             console.log(err);
         }
         else {
-            return;
+            res.send([]);
         }
     });
 };
@@ -69,7 +69,19 @@ exports.addCompBuilding = function (req, res) {
             throw err;
         }
         else {
-            return;
+            res.send([]);
+        }
+    });
+};
+
+exports.deleteCompBuildings = function (req, res) {
+    var addCompBuildingQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid="+ req.param("cid") + ";";
+    connection.query(addCompBuildingQueryString, function (err, rows) {
+        if (err) {
+            throw err;
+        }
+        else {
+            res.send([]);
         }
     });
 };
