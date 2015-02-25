@@ -4,7 +4,6 @@ angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
-      var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
       var tempData = [];
       $scope.isDetailed = true; //detailed toggle value
       $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
@@ -20,25 +19,13 @@ angular.module('clientApp')
 
       $scope.options = {
         chart: {
-          type: 'lineWithFocusChart',
+          type: 'lineChart',
           height: 600,
-          margin: {
-            top: 30,
-            right: 75,
-            bottom: 50,
-            left: 75
-          },
           xAxis: {
             axisLabel: 'Date',
             showMaxMin: false,
             tickFormat: function(d) {
               return d3.time.format('%m/%d/%y')(new Date(d));
-            }
-          },
-          x2Axis: {
-            showMaxMin: false,
-            tickFormat: function(d) {
-              return d3.time.format('%m/%y')(new Date(d));
             }
           },
           yAxis: {
@@ -47,35 +34,8 @@ angular.module('clientApp')
             axisLabelDistance: 25,
             tickPadding: [10]
           },
-          y2Axis: {
-            tickValues: 0,
-            showMaxMin: false
-          },
           lines: {
             forceY:[0]
-          },
-          tooltipContent: function(key, x, y, e, graph){
-            return '<div>' +
-            '<style type="text/css">' +
-            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
-            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
-            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
-            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
-            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
-            '' +
-            '</style>' +
-            '<table class="tg" style="undefined;">' +
-            '<colgroup>' +
-            //'<col style="width: 134px">' +
-            '</colgroup>' +
-            '<tr>' +
-            '<th class="tg-o8k2">' + key + '<br></th>' +
-            '</tr>' +
-            '<tr>' +
-            '<td class="tg-431l">' + y + ' ' + unitMap[selectedResource] + ' on ' + x + '</td>' +
-            '</tr>' +
-            '</table>' +
-            '</div>';
           },
           tooltips: true,
           transitionDuration: 500,
