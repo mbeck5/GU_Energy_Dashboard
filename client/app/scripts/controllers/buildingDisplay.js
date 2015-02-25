@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
-  //.controller('BuildingDisplayCtrl', ['$scope', 'usSpinnerService', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
+  //.controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
+  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
       var selectedResource = 2; //default resource
       var savedData = [];  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
-      $scope.spinnerset = true;
+      $scope.spinnerstart = false;
+      $scope.spinnerstop = true;
       $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
       getBuildingData();  //initial call to get data of default type
@@ -94,7 +95,9 @@ angular.module('clientApp')
 
       function getBuildingData() {
         //if going to building page directly or refreshing, steal name from url (basically a hack)
-        $scope.spinnerset = true;
+        usSpinnerService.spin('spinner-1');
+        //$scope.spinnerstart = true;
+        //$scope.spinnerstop = false;
         //usSpinnerService.spin();
         if ($scope.selectedBuilding === 'DESELECTED') {
           var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
@@ -124,7 +127,9 @@ angular.module('clientApp')
         createGraphData(data);
         setResourceLabel();
         setFocusArea();
-        $scope.spinnerset = false;
+        usSpinnerService.stop('spinner-1');
+        //$scope.spinnerstart = false;
+        //$scope.spinnerstop = true;
       }
 
       function setResourceLabel() {
@@ -165,12 +170,7 @@ angular.module('clientApp')
           $scope.api.update();
         });
       }
-  })
-  .controller('SpinController', ['$scope', 'usSpinnerService', function($scope, usSpinnerService){
-    $scope.startSpin = function(){
-      usSpinnerService.spin('spinner-1');
-    };
-    $scope.stopSpin = function(){
-      usSpinnerService.stop('spinner-1');
-    }
-  }]);
+  });
+
+
+
