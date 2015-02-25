@@ -4,19 +4,23 @@ angular.module('clientApp')
   //.controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
       var selectedResource = 2; //default resource
-      var savedData = [];  //save downloaded data to avoid downloading
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
+      var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
+      var tempData = [];
+      var isDetailed = true; //for switching between monthly and daily data
+      $scope.toggleVal = true;  //only used for gui
+      $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
+      $scope.date2 = moment().format('DD-MMMM-YYYY');
+      $scope.dateOpen1 = false;
+      $scope.dateOpen2 = false;
+      $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
       $scope.spinnerstart = false;
       $scope.spinnerstop = true;
-      $scope.selectedBuilding = buildingSvc.getSelectedBuilding();
 
-      getBuildingData();  //initial call to get data of default type
+      checkRefresh();
+      getBuildingData(null);  //initial call to get data of default type
 
-      $scope.data = [{
-        values: [{}],
-        key: $scope.selectedBuilding.name,
-        color: colorMap[selectedResource]
-      }];
+      $scope.data = [];
 
       $scope.options = {
         chart: {
@@ -28,9 +32,8 @@ angular.module('clientApp')
             bottom: 50,
             left: 75
           },
-          useInteractiveGuideline:true,
           xAxis: {
-            axisLabel: 'Time',
+            axisLabel: 'Date',
             showMaxMin: false,
             tickFormat: function(d) {
               return d3.time.format('%m/%d/%y')(new Date(d));
@@ -43,7 +46,7 @@ angular.module('clientApp')
             }
           },
           yAxis: {
-            axisLabel: 'Electricity', //will change with resource toggle
+            axisLabel: 'kWh', //will change with resource toggle
             showMaxMin: false,
             axisLabelDistance: 25,
             tickPadding: [10]
@@ -53,9 +56,34 @@ angular.module('clientApp')
             showMaxMin: false
           },
           lines: {
-            forceY: [0]
+            forceY:[0]
           },
+          tooltipContent: function(key, x, y, e, graph){
+            return '<div>' +
+            '<style type="text/css">' +
+            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
+            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
+            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
+            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
+            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
+            '' +
+            '</style>' +
+            '<table class="tg" style="undefined;">' +
+            '<colgroup>' +
+            //'<col style="width: 134px">' +
+            '</colgroup>' +
+            '<tr>' +
+            '<th class="tg-o8k2">' + key + '<br></th>' +
+            '</tr>' +
+            '<tr>' +
+            '<td class="tg-431l">' + y + ' ' + unitMap[selectedResource] + ' on ' + x + '</td>' +
+            '</tr>' +
+            '</table>' +
+            '</div>';
+          },
+          tooltips: true,
           transitionDuration: 500,
+          useInteractiveGuideline: true,
           noData: 'No Data Available for Selected Resource'
         },
         title: {
@@ -65,57 +93,85 @@ angular.module('clientApp')
       };
 
       $scope.selectResource = function (resourceType) {
-        savedData[selectedResource] = $scope.data[0].values;
+        resetData();
         selectedResource = resourceType;
-
-        //get data for selected resource if not saved
-        if (!savedData[resourceType]) {
-          getBuildingData();
-        }
-        else {
-          initGraph(null);
+        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
+          getBuildingData(i);
         }
       };
 
+      //toggles daily and monthly data
+      $scope.toggleDetailed = function() {
+        isDetailed = !isDetailed;
+        resetData();
+        getBuildingData();
+      };
+
+      //when new date is selected
+      $scope.dateChange = function() {
+        resetData();
+        getBuildingData();
+      };
+
+      //toggles date picker visibility
+      $scope.openDate = function($event, val) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        if (val === 1) {
+          $scope.dateOpen1 = true;
+        }
+        else {
+          $scope.dateOpen2 = true;
+        }
+      };
+
+      //Changed this to just push to temporary data variable.
       function createGraphData(data){
-        //reset
-        $scope.data[0].values = [];
+        var values = [];
 
         if (data) {
           //create graph points
-          $scope.data[0].values = new Array(data.length);
-          for (var i = 0; i < data.length; i++) {
-            $scope.data[0].values[i] = {x: Date.parse(data[i].date), y: data[i].consumption};
+          values = new Array(data.length);
+          for (var j = 0; j < data.length; j++) {
+            values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
           }
         }
-        else {
-          $scope.data[0].values = savedData[selectedResource];
+        tempData.push({values: values, key: ''});
+
+        //postpone graph initialization until all points have been created
+        if(tempData.length === $scope.selectedBuildings.length){
+          initGraph();
         }
       }
 
-      function getBuildingData() {
-        //if going to building page directly or refreshing, steal name from url (basically a hack)
+      function getBuildingData(index) {
         usSpinnerService.spin('spinner-1');
-        //$scope.spinnerstart = true;
-        //$scope.spinnerstop = false;
-        //usSpinnerService.spin();
-        if ($scope.selectedBuilding === 'DESELECTED') {
-          var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
-          $scope.selectedBuilding = {};
-          $scope.selectedBuilding.name = tempName;
-
-          //get resource info for building from name rather than ID
-          buildingSvc.getBuildingDataFromName(tempName, selectedResource).then(function (data) {
-            initGraph(data);
-          });
+        var i = 0;
+        var stopCondition = $scope.selectedBuildings.length;
+        if(index != null){
+          i = index;
+          stopCondition = i + 1;
         }
+        for(i; i < stopCondition; i++) {
+          //if going to building page directly or refreshing, steal name from url (basically a hack)
+          if (typeof $scope.selectedBuildings[0].id === 'undefined') {
+            var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
+            $scope.selectedBuildings[i] = {};
+            $scope.selectedBuildings[i].name = tempName;
 
-        //if coming from the building select page
-        else {
-          //get resource info for building
-          buildingSvc.getBuildingData($scope.selectedBuilding.id, selectedResource).then(function (data) {
-            initGraph(data);
-          });
+            //get resource info for building from name rather than ID
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+              createGraphData(data);
+            });
+          }
+
+          //if coming from the building select page
+          else {
+            //get resource info for building
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+              createGraphData(data);
+            });
+          }
         }
         //usSpinnerService.stop();
         //$scope.spinnerset = false;
@@ -123,34 +179,65 @@ angular.module('clientApp')
       }
 
       //called once data is retrieved
-      function initGraph(data) {
-        createGraphData(data);
+      function initGraph() {
+        //createGraphData(data);
+        $scope.data = tempData;
+        setKeys();
         setResourceLabel();
         setFocusArea();
         usSpinnerService.stop('spinner-1');
         //$scope.spinnerstart = false;
         //$scope.spinnerstop = true;
+        $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+      }
+
+      //to set the keys for the lines when making multiple lines in a graph. probably bad.
+      function setKeys(){
+        for(var i = 0; i < $scope.selectedBuildings.length; i++){
+          if($scope.data[i]) {
+            $scope.data[i].key = $scope.selectedBuildings[i].name;
+          }
+        }
       }
 
       function setResourceLabel() {
         $scope.data[0].color = colorMap[selectedResource];
         switch (selectedResource) {
           case 2:
-            $scope.options.chart.yAxis.axisLabel = 'Electricity';
-            $scope.options.title.text = 'Daily Electricity Usage';
+            $scope.options.chart.yAxis.axisLabel = 'kWh';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Electricity Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Electricity Usage';
+            }
             break;
           case 3:
-            $scope.options.chart.yAxis.axisLabel = 'Gas';
-            $scope.options.title.text = 'Daily Gas Usage';
+            $scope.options.chart.yAxis.axisLabel = 'kBTU';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Gas Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Gas Usage';
+            }
             break;
-          //Ask why this is 18
-          //case 7:
-            //$scope.options.chart.yAxis.axisLabel = 'Water';
-            //$scope.options.title.text = 'Daily Water Usage';
-            //$scope.options.chart.color = '#1F77B4';
+          case 7:
+            $scope.options.chart.yAxis.axisLabel = 'Water';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Water Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Water Usage';
+            }
+            break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            $scope.options.title.text = 'Daily Whatever Usage';
+            if(isDetailed) {
+              $scope.options.title.text = 'Daily Whatever Usage';
+            }
+            else{
+              $scope.options.title.text = 'Monthly Whatever Usage';
+            }
             break;
         }
       }
@@ -170,7 +257,34 @@ angular.module('clientApp')
           $scope.api.update();
         });
       }
+
+      function checkRefresh() {
+        //if routing directing to comparison, go back home
+        if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
+          $location.path('/');
+        }
+      }
+
+      //Returns the max y value of all datasets in $scope.data
+      function getMaxPlusPadding(denom){
+        var max = 0;
+        for(var i = 0; i < $scope.selectedBuildings.length; i++){
+          if($scope.data[i]) {
+            var data = $scope.data[i].values;
+            for (var j = 0; j < data.length; j++) {
+              if (data[j].y > max) {
+                max = data[j].y;
+              }
+            }
+          }
+        }
+        var padding = max / denom;
+        return max + padding;
+      }
+
+      //clears all data
+      function resetData() {
+        $scope.data = [];
+        tempData = [];
+      }
   });
-
-
-

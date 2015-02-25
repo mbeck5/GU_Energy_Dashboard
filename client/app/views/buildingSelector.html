@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="panel panel-default" id="building-list-panel">
         <div class="panel-heading">Campus Building Select</div>
 
@@ -27,12 +27,22 @@
 
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
-              <a ng-repeat="building in filteredBuildings" class="list-group-item"
-                 href="{{'#/buildings/' + returnCorrectName($index)}}" ng-click="selectBuilding($index)">
-                {{building.name}}
-              </a>
+              <div class="checked-list-item" ng-repeat="building in filteredBuildings">
+                <span class="input-group-addon" ng-show="compareEnabled">
+                  <input type="checkbox" ng-model="checkedBuildings[building.id]"/>
+                </span>
+                <a class="list-group-item" ng-class="{active: checkedBuildings[building.id], clickable: !compareEnabled}"
+                   ng-click="selectBuilding($index)">
+                  {{building.name}}
+                </a>
+              </div>
             </div>
           </div>
+        </div>
+        <div class="panel-footer">
+          <button id="comparison-close" class="btn btn-danger" ng-show="compareEnabled" ng-click="disableComparison()"><i class="fa fa-remove"></i></button>
+          <button class="btn btn-block" ng-class="{'btn-default': !compareEnabled, 'btn-primary': compareEnabled}"
+                  ng-disabled="!comparisonSelectable()" ng-click="comparisonSelect()">{{comparisonText}}</button>
         </div>
       </div>
 
@@ -65,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8" id="graph-panel">
+    <div class="col-md-9" id="graph-panel">
     <div ng-controller="SummaryCtrl">
       <div class="panel panel-default" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>

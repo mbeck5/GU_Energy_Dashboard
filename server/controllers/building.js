@@ -1,3 +1,4 @@
+var moment = require('moment');
 var stdDev = require('../services/standardDeviation');
 
 exports.getBuildings = function(req, res){
@@ -24,13 +25,32 @@ exports.getBuildingTypes = function(req, res){
             res.send(rows);
         }
     });
-}
+};
 
 exports.getResources = function(req, res){
-    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
-                    "FROM meters_dly_data " +
-                    "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
-                    "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN (SELECT METER_ID " +
+    var isDetailed = req.param("isDetailed");
+    var startDate = req.param("startDate");
+    var endDate = req.param("endDate");
+    var tableName;
+    if(isDetailed === 'true'){
+        tableName = "meters_dly_data";
+    }
+    else{
+        tableName = "meters_mly_data";
+    }
+    //if no dates entered, provide defaults
+    if(!startDate || !endDate){
+        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+        startDate = moment().subtract(1, 'years');
+    }
+    else {
+        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
+        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
+    }
+    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+                    "FROM " + tableName + " " +
+                    "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
+                    "WHERE meter_type_id = " + req.param("meterType") + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN (SELECT METER_ID " +
                                                 "FROM erb_tree " +
                                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
                                                                             "FROM erb_tree " +
@@ -47,10 +67,29 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesFromName = function(req, res) {
-    var queryString = "SELECT meters_dly_data.trend_date as date, SUM(meters_dly_data.consumption) as consumption " +
-                        "FROM meters_dly_data " +
-                        "JOIN meters ON meters_dly_data.METER_ID=meters.METER_ID " +
-                        "WHERE meter_type_id = " + req.param("meterType") + " AND meters.meter_id IN " +
+    var isDetailed = req.param("isDetailed");
+    var startDate = req.param("startDate");
+    var endDate = req.param("endDate");
+    var tableName;
+    if(isDetailed === 'true'){
+        tableName = "meters_dly_data";
+    }
+    else{
+        tableName = "meters_mly_data";
+    }
+    //if no dates entered, provide defaults
+    if(!startDate || !endDate){
+        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+        startDate = moment().subtract(1, 'years');
+    }
+    else{
+        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
+        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
+    }
+    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+                        "FROM " + tableName + " " +
+                        "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
+                        "WHERE meter_type_id = " + req.param("meterType") + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN " +
                             "(SELECT METER_ID " +
                                 "FROM erb_tree " +
                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
@@ -130,3 +169,5 @@ exports.getBuildingTypes = function(req, res) {
         }
     })
 };
+
+

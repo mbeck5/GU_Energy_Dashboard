@@ -2,16 +2,16 @@
 
 angular.module('clientApp')
   .factory('buildingSvc', function (Restangular) {
-    var selectedBuilding = 'DESELECTED';
+    var selectedBuildings = ['DESELECTED'];
 
     function getBuildings() {
       var allBuildings = Restangular.all('getBuildings');
       return allBuildings.getList();
     }
 
-    function getBuildingData(buildingId, meterTypeId) {
+    function getBuildingData(buildingId, meterTypeId, isDetailed, startDate, endDate) {
       var buildingData = Restangular.all('getBuildingData');
-      return buildingData.getList({building: buildingId, meterType: meterTypeId});
+      return buildingData.getList({building: buildingId, meterType: meterTypeId, isDetailed: isDetailed, startDate: startDate, endDate: endDate});
     }
 
     function getResourceByType(meterTypeId){
@@ -19,9 +19,9 @@ angular.module('clientApp')
       return resourceData.getList({meterType: meterTypeId});
     }
 
-    function getBuildingDataFromName(buildingName, meterTypeId) {
+    function getBuildingDataFromName(buildingName, meterTypeId, isDetailed, startDate, endDate) {
       var buildingData = Restangular.all('getBuildingDataFromName');
-      return buildingData.getList({building: buildingName, meterType: meterTypeId});
+      return buildingData.getList({building: buildingName, meterType: meterTypeId, isDetailed: isDetailed, startDate: startDate, endDate: endDate});
     }
 
     function getResourceSum(meterTypeId){
@@ -29,12 +29,12 @@ angular.module('clientApp')
       return resourceSum.getList({meterType: meterTypeId});
     }
 
-    function getSelectedBuilding() {
-      return selectedBuilding;
+    function getSelectedBuildings() {
+      return selectedBuildings;
     }
 
     function setSelectedBuilding(building) {
-      selectedBuilding = building;
+      selectedBuildings = building;
     }
 
     function getBuildingTypes(){
@@ -49,7 +49,7 @@ angular.module('clientApp')
       getBuildingDataFromName: getBuildingDataFromName,
       getResourceSum: getResourceSum,
       getBuildingTypes: getBuildingTypes,
-      getSelectedBuilding: getSelectedBuilding,
-      setSelectedBuilding: setSelectedBuilding
+      setSelectedBuilding: setSelectedBuilding,
+      getSelectedBuildings: getSelectedBuildings
     };
   });

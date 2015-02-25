@@ -18,6 +18,7 @@ angular
     'restangular',
     'ui.bootstrap',
     'nvd3',
+    'toggle-switch',
     'angularSpinner'
   ])
   .config(function ($routeProvider, RestangularProvider) {
@@ -31,10 +32,14 @@ angular
         templateUrl: 'views/buildingDisplay.html',
         controller: 'BuildingDisplayCtrl'
       })
-      .when('/test', {
-        templateUrl: 'views/test.html',
-        controller: 'TestCtrl'
+      .when('/comparison', {
+        templateUrl: 'views/buildingDisplay.html',
+        controller: 'BuildingDisplayCtrl'
       })
+      .when('/Competitions', {
+        templateUrl: 'views/compDisplay.html',
+        controller: 'CompDisplayCtrl'
+        })
       .otherwise({
         redirectTo: '/'
       });
