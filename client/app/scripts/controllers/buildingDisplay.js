@@ -128,7 +128,6 @@ angular.module('clientApp')
         $scope.data = tempData;
         setKeys();
         setResourceLabel();
-        setFocusArea();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
       }
 
@@ -181,22 +180,6 @@ angular.module('clientApp')
             }
             break;
         }
-      }
-
-      //sets initial "zoom" view over specified area
-      function setFocusArea() {
-        //creating focus coordinates
-        var curDate = new Date();
-        var prevDate = new Date();
-        curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
-        prevDate.setMonth(prevDate.getMonth() - 5);
-
-        //this is actually the right way to do this
-        $timeout(function() {
-          var chart = $scope.api.getScope().chart;  //get chart from view
-          chart.brushExtent([prevDate, curDate]);
-          $scope.api.update();
-        });
       }
 
       //if routing directing to comparison, go back home
