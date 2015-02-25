@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('clientApp')
-  //.controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
@@ -14,8 +13,7 @@ angular.module('clientApp')
       $scope.dateOpen1 = false;
       $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
-      $scope.spinnerstart = false;
-      $scope.spinnerstop = true;
+      $scope.spinnerActive = true;
 
       checkRefresh();
       getBuildingData(null);  //initial call to get data of default type
@@ -145,6 +143,7 @@ angular.module('clientApp')
       }
 
       function getBuildingData(index) {
+        $scope.spinnerActive = true;
         usSpinnerService.spin('spinner-1');
         var i = 0;
         var stopCondition = $scope.selectedBuildings.length;
@@ -173,22 +172,19 @@ angular.module('clientApp')
             });
           }
         }
-        //usSpinnerService.stop();
-        //$scope.spinnerset = false;
-
       }
 
       //called once data is retrieved
       function initGraph() {
+
         //createGraphData(data);
         $scope.data = tempData;
         setKeys();
         setResourceLabel();
         setFocusArea();
-        usSpinnerService.stop('spinner-1');
-        //$scope.spinnerstart = false;
-        //$scope.spinnerstop = true;
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+        $scope.spinnerActive = false;
+        usSpinnerService.stop('spinner-1');
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.
