@@ -4,10 +4,8 @@ angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
-      var unitMap = {2: 'kWh', 3: 'kBTU', 7: 'water units'}; //TODO figure out the water units
       var tempData = [];
-      var isDetailed = true; //for switching between monthly and daily data
-      $scope.toggleVal = true;  //only used for gui
+      $scope.isDetailed = true; //detailed toggle value
       $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
       $scope.date2 = moment().format('DD-MMMM-YYYY');
       $scope.dateOpen1 = false;
@@ -21,25 +19,13 @@ angular.module('clientApp')
 
       $scope.options = {
         chart: {
-          type: 'lineWithFocusChart',
+          type: 'lineChart',
           height: 600,
-          margin: {
-            top: 30,
-            right: 75,
-            bottom: 50,
-            left: 75
-          },
           xAxis: {
             axisLabel: 'Date',
             showMaxMin: false,
             tickFormat: function(d) {
               return d3.time.format('%m/%d/%y')(new Date(d));
-            }
-          },
-          x2Axis: {
-            showMaxMin: false,
-            tickFormat: function(d) {
-              return d3.time.format('%m/%y')(new Date(d));
             }
           },
           yAxis: {
@@ -48,35 +34,8 @@ angular.module('clientApp')
             axisLabelDistance: 25,
             tickPadding: [10]
           },
-          y2Axis: {
-            tickValues: 0,
-            showMaxMin: false
-          },
           lines: {
             forceY:[0]
-          },
-          tooltipContent: function(key, x, y, e, graph){
-            return '<div>' +
-            '<style type="text/css">' +
-            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
-            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
-            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
-            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
-            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
-            '' +
-            '</style>' +
-            '<table class="tg" style="undefined;">' +
-            '<colgroup>' +
-            //'<col style="width: 134px">' +
-            '</colgroup>' +
-            '<tr>' +
-            '<th class="tg-o8k2">' + key + '<br></th>' +
-            '</tr>' +
-            '<tr>' +
-            '<td class="tg-431l">' + y + ' ' + unitMap[selectedResource] + ' on ' + x + '</td>' +
-            '</tr>' +
-            '</table>' +
-            '</div>';
           },
           tooltips: true,
           transitionDuration: 500,
@@ -97,15 +56,8 @@ angular.module('clientApp')
         }
       };
 
-      //toggles daily and monthly data
-      $scope.toggleDetailed = function() {
-        isDetailed = !isDetailed;
-        resetData();
-        getBuildingData();
-      };
-
-      //when new date is selected
-      $scope.dateChange = function() {
+      //applies toggle and date filter options and retrieves new data
+      $scope.applyGraphOptions = function() {
         resetData();
         getBuildingData();
       };
@@ -156,7 +108,7 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -164,7 +116,7 @@ angular.module('clientApp')
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -173,11 +125,9 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph() {
-        //createGraphData(data);
         $scope.data = tempData;
         setKeys();
         setResourceLabel();
-        setFocusArea();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
       }
 
@@ -195,7 +145,7 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Electricity Usage';
             }
             else{
@@ -204,7 +154,7 @@ angular.module('clientApp')
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Gas Usage';
             }
             else{
@@ -213,7 +163,7 @@ angular.module('clientApp')
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Water Usage';
             }
             else{
@@ -222,7 +172,7 @@ angular.module('clientApp')
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if(isDetailed) {
+            if($scope.isDetailed) {
               $scope.options.title.text = 'Daily Whatever Usage';
             }
             else{
@@ -232,24 +182,8 @@ angular.module('clientApp')
         }
       }
 
-      //sets initial "zoom" view over specified area
-      function setFocusArea() {
-        //creating focus coordinates
-        var curDate = new Date();
-        var prevDate = new Date();
-        curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
-        prevDate.setMonth(prevDate.getMonth() - 5);
-
-        //this is actually the right way to do this
-        $timeout(function() {
-          var chart = $scope.api.getScope().chart;  //get chart from view
-          chart.brushExtent([prevDate, curDate]);
-          $scope.api.update();
-        });
-      }
-
+      //if routing directing to comparison, go back home
       function checkRefresh() {
-        //if routing directing to comparison, go back home
         if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
           $location.path('/');
         }
