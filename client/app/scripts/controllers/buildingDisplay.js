@@ -96,7 +96,7 @@ angular.module('clientApp')
 
       function getBuildingData(index) {
         $scope.spinnerActive = true;
-        usSpinnerService.spin('spinner-1');
+        usSpinnerService.spin('spinner');
         var i = 0;
         var stopCondition = $scope.selectedBuildings.length;
         if(index != null){
@@ -133,7 +133,7 @@ angular.module('clientApp')
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
         $scope.spinnerActive = false;
-        usSpinnerService.stop('spinner-1');
+        usSpinnerService.stop('spinner');
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.

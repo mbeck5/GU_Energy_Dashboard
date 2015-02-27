@@ -57,7 +57,7 @@ angular
       trail: 60,
       shadow: false,
       className: 'spinner',
-      top: '50%',
+      top: '40%',
       left: '50%'
     });
   });

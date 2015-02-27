@@ -2,7 +2,6 @@
   <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
   <div class="panel-body">
     <div class="row">
-      <span us-spinner spinner-key="spinner-1"></span>
       <div class="col-md-2">
         <div id="toggles">
           <img src="images/WATERbaby.png" ng-click="selectResource(7)">
@@ -12,6 +11,7 @@
       </div>
       <div class="col-md-10">
         <div class="row">
+          <span us-spinner spinner-key="spinner"></span>
           <div class="col-sm-2">
             <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter" popover-placement="bottom">
               <toggle-switch model="isDetailed" ></toggle-switch>
@@ -48,10 +48,11 @@
         </div>
         <div class="row">
           <div id="graph">
-            <nvd3 options='options' data='data' api="api" ng-hide="spinnerActive"></nvd3>
+            <nvd3 options='options' data='data' api="api"></nvd3>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
