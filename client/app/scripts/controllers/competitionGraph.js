@@ -2,15 +2,17 @@
 
 angular.module('clientApp')
   .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
-    $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
+    $scope.buildingList = [];
     $scope.selectedComp = {};
     $scope.compService = compEditSvc;
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
-      console.log("watch");
       if(newVal != oldVal){
         $scope.selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
-        console.log($scope.selectedComp.comp_name);
+        console.log($scope.selectedComp);
+        compEditSvc.getCompBuildingList($scope.selectedComp.cid).then(function(data){
+          createBuildingList(data);
+        });
       }
     });
 
@@ -169,5 +171,18 @@ angular.module('clientApp')
         }
       }
     };
+
+    function createBuildingList(data){
+      if(data) {
+        for (var i = 0; i < data.length; i++) {
+          $scope.buildingList[i] = data[i].bid;
+        }
+      }
+    }
+
+    function calcPercentChange(oldVal, newVal){
+      var change = newVal - oldVal;
+      return -(change / oldVal);
+    }
 
   });
