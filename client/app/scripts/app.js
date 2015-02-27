@@ -18,7 +18,8 @@ angular
     'restangular',
     'ui.bootstrap',
     'nvd3',
-    'toggle-switch'
+    'toggle-switch',
+    'angularSpinner'
   ])
   .config(function ($routeProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl('/api/');
@@ -42,5 +43,22 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .config(function (usSpinnerConfigProvider) {
+    usSpinnerConfigProvider.setDefaults({
+      color: '#DFD7CA',
+      lines: 11,
+      length: 0,
+      width: 7,
+      radius: 18,
+      corners: 1,
+      direction: 1,
+      speed: 1.1,
+      trail: 60,
+      shadow: false,
+      className: 'spinner',
+      top: '40%',
+      left: '50%'
+    });
   });
 
