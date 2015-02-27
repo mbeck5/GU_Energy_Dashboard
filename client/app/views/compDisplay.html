@@ -57,24 +57,10 @@
       <div class="panel-body">
         <div id="current-comp-scroll" class="scroll">
           <div id="current-comp-list" class="list-group">
-            <div class="col-md-3">
-              <h1>
-                {{filteredComps[displayedCompIndex].comp_name}}<br><br>
-              </h1>
-
-              <h3>
-                Start Date: <br> {{filteredComps[displayedCompIndex].start_date.replace("T08:00:00.000Z","")}}
-              </h3>
-
-              <h3>
-                End Date:<br> {{filteredComps[displayedCompIndex].end_date.replace("T07:00:00.000Z","")}}
-              </h3>
-
-
             </div>
             <div class="col-md-8" id="graph">
-              <div>
-                <nvd3 options='options' data='data' api="api"></nvd3>
+              <div ng-controller="CompetitionGraphCtrl">
+                <nvd3 options='options' data='data' api='api'></nvd3>
               </div>
             </div>
           </div>
