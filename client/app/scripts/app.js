@@ -44,7 +44,7 @@ angular
         redirectTo: '/'
       });
   })
-  .config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
+  .config(function (usSpinnerConfigProvider) {
     usSpinnerConfigProvider.setDefaults({
       color: '#DFD7CA',
       lines: 11,
@@ -55,10 +55,10 @@ angular
       direction: 1,
       speed: 1.1,
       trail: 60,
-      shadow: true,
-      className: 'spinner-1',
+      shadow: false,
+      className: 'spinner',
       top: '50%',
       left: '50%'
     });
-  }]);
+  });
 
