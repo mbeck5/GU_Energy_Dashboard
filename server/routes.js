@@ -14,4 +14,5 @@ app.get('/api/saveNewComp', compQController.saveNewComp);
 app.get('/api/editNewComp', compQController.editNewComp);
 app.get('/api/deleteComp', compQController.deleteComp);
 app.get('/api/addCompBuilding', compQController.addCompBuilding);
+app.get('/api/deleteCompBuildings', compQController.deleteCompBuildings);
 app.get('/api/getCompBuildingList', compQController.getCompBuildingList);
