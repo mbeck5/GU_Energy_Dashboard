@@ -31,7 +31,9 @@ angular.module('clientApp')
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps = comps.filter(filterComps);
+      $scope.filteredComps = comps.filter(function(element) {
+        return element.comp_name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+      });
     };
 
     //when clicking on competition
@@ -74,10 +76,6 @@ angular.module('clientApp')
     $scope.returnCorrectName = function (index) {
       return $scope.filteredComps[index].name.replace("/", "--");
     };
-
-    function filterComps(element) {
-      return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
-    }
 
     var buildingScrollHeight = $(window).height() * .70;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
