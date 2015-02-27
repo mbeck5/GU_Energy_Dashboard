@@ -11,7 +11,7 @@ angular.module('clientApp')
       $scope.dateOpen1 = false;
       $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
-      $scope.spinnerActive = true;
+      $scope.spinnerActive = false;
 
       checkRefresh();
       getBuildingData(null);  //initial call to get data of default type
