@@ -56,7 +56,7 @@ angular
       speed: 1.1,
       trail: 60,
       shadow: true,
-      className: 'spinner',
+      className: 'spinner-1',
       top: '50%',
       left: '50%'
     });
