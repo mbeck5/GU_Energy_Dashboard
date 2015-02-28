@@ -170,40 +170,6 @@ exports.getBuildingTypes = function(req, res) {
     });
 };
 
-exports.getBuildingTotals = function(req, res){
-    var startDate = req.param("startDate");
-    var endDate = req.param("endDate");
-    var tableName = "meters_dly_data";
 
-    //if no dates entered, provide defaults
-    if(!startDate || !endDate){
-        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
-        startDate = moment().subtract(1, 'years');
-    }
-    else{
-        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
-        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
-    }
-    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
-        "FROM " + tableName + " " +
-        "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
-        "WHERE meter_type_id = " + req.param("meterType") + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN " +
-        "(SELECT METER_ID " +
-        "FROM erb_tree " +
-        "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
-        "FROM erb_tree " +
-        "WHERE BUILDING_ID IN (SELECT building_id " +
-        "FROM building " +
-        "WHERE building_name = '" + req.param("building") + "'))) GROUP BY date;";
-
-    connection.query(queryString, function(err, rows){
-        if(err){
-            throw err;
-        }
-        else {
-            res.send(stdDev.standardDeviationFilter(rows));
-        }
-    });
-};
 
 

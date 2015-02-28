@@ -97,3 +97,35 @@ exports.getCompBuildingList = function (req, res) {
         }
     });
 };
+
+exports.getBuildingTotals = function(req, res){
+    var startDate = req.param("startDate");
+    var endDate = req.param("endDate");
+    var tableName = "meters_dly_data";
+
+    //if no dates entered, provide defaults
+    if(!startDate || !endDate){
+        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+        startDate = moment().subtract(1, 'years');
+    }
+    else {
+        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
+        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
+    }
+
+    var queryString = "SELECT building_name, sum(consumption) as consumption" +
+                        "FROM competition_buildings, building_meters, meters, meters_dly_data" +
+                        "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date >= '" + startDate + "' AND trend_date <= '" + endDate + "' AND bid IN " +
+                            "(SELECT bid FROM competition_buildings WHERE cid = " + req.param("competitionId") + ")" +
+                        " AND bid = building_meters.building_id AND meter_type_id = 2 AND building.building_id = building_meters.building_id GROUP BY bid";
+
+
+    connection.query(queryString, function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(stdDev.standardDeviationFilter(rows));
+        }
+    });
+};

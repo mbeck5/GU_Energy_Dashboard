@@ -2,7 +2,9 @@
 
 angular.module('clientApp')
   .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
-    $scope.buildingList = [];
+    $scope.compareList = [];
+    $scope.currentList = [];
+    $scope.changeList = [];
     $scope.selectedComp = {};
     $scope.compService = compEditSvc;
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -10,13 +12,23 @@ angular.module('clientApp')
         $scope.selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         console.log($scope.selectedComp);
-        compEditSvc.getCompBuildingList($scope.selectedComp.cid).then(function(data){
-          createBuildingList(data);
+        var compareStart;
+        var compareEnd;
+        var currentStart = $scope.selectedComp.start_date;
+        var currentEnd = $scope.selectedComp.end_date;
+        compEditSvc.getBuildingTotals(compareStart, compareEnd, $scope.selectedComp.cid).then(function(data1){
+          compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data){
+            createCompareList(data1);
+            createCurrentList(data);
+            calcAllChanges();
+            createData();
+          });
         });
       }
     });
 
     var colorArray = ["#FFD700", "#C0C0C0", "#A5682A", "#0000FF"];
+    var tempData = [];
 
     $scope.data = [
       {
@@ -172,10 +184,18 @@ angular.module('clientApp')
       }
     };
 
-    function createBuildingList(data){
+    function createCompareList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
-          $scope.buildingList[i] = data[i].bid;
+          $scope.compareList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
+        }
+      }
+    }
+
+    function createCurrentList(data){
+      if(data) {
+        for (var i = 0; i < data.length; i++) {
+          $scope.currentList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
         }
       }
     }
@@ -183,6 +203,23 @@ angular.module('clientApp')
     function calcPercentChange(oldVal, newVal){
       var change = newVal - oldVal;
       return -(change / oldVal);
+    }
+
+    function calcAllChanges(){
+      if($scope.compareList.length == $scope.currentList.length) {
+        for (var i = 0; i < $scope.compareList.length; i++){
+          var percentChange = calcPercentChange($scope.compareList[i].total_cons, $scope.currentList[i].total_cons);
+          $scope.changeList.push({building: $scope.compareList[i], change: percentChange});
+        }
+      }
+    }
+
+    function createData(){
+      for(var i = 0; i < $scope.changeList.length; i++){
+        var key = $scope.changeList.building;
+        var values = [];
+      }
+
     }
 
   });

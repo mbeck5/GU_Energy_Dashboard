@@ -50,6 +50,11 @@ angular.module('clientApp')
       }
     }
 
+    function getBuildingTotals(startDate, endDate, competitionId){
+      var buildingTotalList = Restangular.all('getBuildingTotals');
+      return buildingTotalList.getList({startDate: startDate, endDate: endDate, competitionId: competitionId});
+    }
+
     function getSelectedComp() {
       return selectedComp;
     }
@@ -87,6 +92,7 @@ angular.module('clientApp')
       deleteCompBuildings: deleteCompBuildings,
       getCompBuildingList: getCompBuildingList,
       saveListOfBuildings: saveListOfBuildings,
+      getBuildingTotals: getBuildingTotals,
       getSelectedComp: getSelectedComp,
       getSelectedCompCid: getSelectedCompCid,
       setSelectedComp: setSelectedComp,
