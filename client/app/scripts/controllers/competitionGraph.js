@@ -22,6 +22,7 @@ angular.module('clientApp')
             createCurrentList(data);
             calcAllChanges();
             createData();
+            $scope.data = tempData;
           });
         });
       }
@@ -29,8 +30,9 @@ angular.module('clientApp')
 
     var colorArray = ["#FFD700", "#C0C0C0", "#A5682A", "#0000FF"];
     var tempData = [];
+    $scope.data = [];
 
-    $scope.data = [
+    /*$scope.data = [
       {
         "key": "DeSmet",
         "values": [
@@ -115,7 +117,7 @@ angular.module('clientApp')
           }
         ]
       }
-    ];
+    ];*/
 
     $scope.options = {
       chart: {
@@ -218,6 +220,16 @@ angular.module('clientApp')
       for(var i = 0; i < $scope.changeList.length; i++){
         var key = $scope.changeList.building;
         var values = [];
+        for(var j = 0; j < $scope.changeList.length; j++){
+          var building = $scope.changeList[i].building;
+          if(building === key) {
+            values.push({label: building, value: $scope.changeList[i].change})
+          }
+          else{
+            values.push({label: building, value: 0})
+          }
+        }
+        tempData.push({key: key, values: values});
       }
 
     }
