@@ -11,113 +11,32 @@ angular.module('clientApp')
       if(newVal != oldVal){
         $scope.selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
-        console.log($scope.selectedComp);
-        var compareStart;
-        var compareEnd;
+        //Compare to the values from two weeks ago
+        var compareStart = moment($scope.selectedComp.start_date).subtract(15, 'days').format();
+        var compareEnd = moment($scope.selectedComp.end_date).subtract(15, 'days').format();
         var currentStart = $scope.selectedComp.start_date;
         var currentEnd = $scope.selectedComp.end_date;
+        $scope.data = [];
+        $scope.tempData = [];
+        $scope.compareList = [];
+        $scope.currentList = [];
+        $scope.changeList = [];
+
         compEditSvc.getBuildingTotals(compareStart, compareEnd, $scope.selectedComp.cid).then(function(data1){
-          compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data){
+          compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data2){
             createCompareList(data1);
-            createCurrentList(data);
+            createCurrentList(data2);
             calcAllChanges();
+            sortChanges();
             createData();
-            $scope.data = tempData;
           });
         });
       }
     });
 
     var colorArray = ["#FFD700", "#C0C0C0", "#A5682A", "#0000FF"];
-    var tempData = [];
+    $scope.tempData = [];
     $scope.data = [];
-
-    /*$scope.data = [
-      {
-        "key": "DeSmet",
-        "values": [
-          {
-            "label" : "DeSmet",
-            "value" : .20
-          },
-          {
-            "label": "Welch",
-            "value": 0
-          },
-          {
-            "label": "Alliance",
-            "value": 0
-          },
-          {
-            "label" : "Campion",
-            "value" : 0
-          }
-        ]
-      },
-      {
-        "key": "Welch",
-        "values": [
-          {
-            "label" : "DeSmet",
-            "value" : 0
-          },
-          {
-            "label": "Welch",
-            "value": .16
-          },
-          {
-            "label": "Alliance",
-            "value": 0
-          },
-          {
-            "label" : "Campion",
-            "value" : 0
-          }
-        ]
-      },
-      {
-        "key": "Alliance",
-        "values": [
-          {
-            "label" : "DeSmet",
-            "value" : 0
-          },
-          {
-            "label": "Welch",
-            "value": 0
-          },
-          {
-            "label": "Alliance",
-            "value": .14
-          },
-          {
-            "label" : "Campion",
-            "value" : 0
-          }
-        ]
-      },
-      {
-        "key": "Campion",
-        "values": [
-          {
-            "label" : "DeSmet",
-            "value" : .0
-          },
-          {
-            "label": "Welch",
-            "value": 0
-          },
-          {
-            "label": "Alliance",
-            "value": 0
-          },
-          {
-            "label" : "Campion",
-            "value" : .05
-          }
-        ]
-      }
-    ];*/
 
     $scope.options = {
       chart: {
@@ -216,12 +135,25 @@ angular.module('clientApp')
       }
     }
 
+    //Insertion Sort since we aren't sorting a lot buildings (max 30ish?)
+    function sortChanges(){
+      for(var i = 0; i < $scope.changeList.length; i++){
+        var j = i;
+        while(j > 0 && $scope.changeList[j-1].change < $scope.changeList[j].change){
+          var temp = $scope.changeList[j-1];
+          $scope.changeList[j-1] = $scope.changeList[j];
+          $scope.changeList[j] = temp;
+          j--;
+        }
+      }
+    }
+
     function createData(){
       for(var i = 0; i < $scope.changeList.length; i++){
-        var key = $scope.changeList.building;
+        var key = $scope.changeList[i].building.building;
         var values = [];
         for(var j = 0; j < $scope.changeList.length; j++){
-          var building = $scope.changeList[i].building;
+          var building = $scope.changeList[j].building.building;
           if(building === key) {
             values.push({label: building, value: $scope.changeList[i].change})
           }
@@ -229,8 +161,10 @@ angular.module('clientApp')
             values.push({label: building, value: 0})
           }
         }
-        tempData.push({key: key, values: values});
+        $scope.tempData.push({key: key, values: values});
       }
+
+      $scope.data = $scope.tempData;
 
     }
 
