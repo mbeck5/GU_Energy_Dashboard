@@ -22,7 +22,13 @@
 }
 
 #action-footer{
-  height: 50px;
+  div {
+    width: 32%;
+    display: inline-block;
+  }
+  > :nth-child(2) {
+    padding: 0 10px 0 10px;
+  }
 }
 
 .comp-modal-footer-buttons{

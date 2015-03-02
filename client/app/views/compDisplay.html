@@ -20,32 +20,25 @@
 
       <div class="panel-footer">
         <div id="action-footer">
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent1.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
-            </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
           </div>
 
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent2.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
-            </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
           </div>
 
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent3.html">
               <div ng-include src="'views/DeleteCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
-            </div>
-          </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
           </div>
         </div>
       </div>
