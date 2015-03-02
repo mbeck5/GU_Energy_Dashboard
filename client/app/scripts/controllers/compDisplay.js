@@ -88,7 +88,7 @@ angular.module('clientApp')
 
     $scope.options = {
       chart: {
-        type: 'lineWithFocusChart',
+        type: 'lineChart',
         height: 600,
         margin: {
           top: 30,
@@ -104,21 +104,11 @@ angular.module('clientApp')
             return d3.time.format('%m/%d/%y')(new Date(d));
           }
         },
-        x2Axis: {
-          showMaxMin: false,
-          tickFormat: function (d) {
-            return d3.time.format('%m/%y')(new Date(d));
-          }
-        },
         yAxis: {
           axisLabel: 'Electricity', //will change with resource toggle
           showMaxMin: false,
           axisLabelDistance: 25,
           tickPadding: [10]
-        },
-        y2Axis: {
-          tickValues: 0,
-          showMaxMin: false
         },
         lines: {
           forceY: [0]
@@ -154,7 +144,6 @@ angular.module('clientApp')
     function initGraph() {
       createGraphData(savedData[selectedResource]);
       setResourceLabel();
-      setFocusArea();
     }
 
     function setResourceLabel() {
@@ -172,21 +161,6 @@ angular.module('clientApp')
           $scope.options.title.text = 'Daily Whatever Usage';
           break;
       }
-    }
-
-    //sets initial "zoom" view over specified area
-    function setFocusArea() {
-      $scope.$apply();
-
-      //creating focus coordinates
-      var curDate = new Date();
-      var prevDate = new Date();
-      curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
-      prevDate.setMonth(prevDate.getMonth() - 5);
-
-      var chart = $scope.api.getScope().chart;  //get chart from view
-      chart.brushExtent([prevDate, curDate]);
-      $scope.api.update();
     }
 
   });
