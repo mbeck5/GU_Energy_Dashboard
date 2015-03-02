@@ -2,19 +2,10 @@
   background-color: transparent;
 }
 
-#comp-list-panel{
-  height: 100%;
-  box-shadow: 0 0 50px #CCCCCC;
-}
-
-#current-comp-panel{
-  height: 100%;
-  box-shadow: 0 0 50px #CCCCCC;
-}
-
 #comp-scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
+  height: 400px;
 }
 
 .comp-action-buttons{
@@ -26,6 +17,7 @@
     width: 32%;
     display: inline-block;
   }
+  //only immediate child
   > :nth-child(2) {
     padding: 0 10px 0 10px;
   }
@@ -69,10 +61,4 @@
 
 #building-list-panel{
   height: 25%;
-  box-shadow: 0 0 50px #CCCCCC;
-}
-
-#building-scroll {
-  overflow-x: hidden !important;
-  overflow-y: auto;
 }

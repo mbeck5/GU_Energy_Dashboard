@@ -91,8 +91,7 @@ angular.module('clientApp')
       $scope.filteredComps = comps; //reset view
     }
 
-    var buildingScrollHeight = $(window).height() * .70;
-    $('.scroll').css({'height': buildingScrollHeight + 'px'});
+    //PLACEHOLDER GRAPH CODE BELOW
 
     var selectedResource = 2; //default resource
     var savedData = [];  //save downloaded data to avoid downloading

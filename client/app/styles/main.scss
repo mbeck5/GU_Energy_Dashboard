@@ -27,6 +27,10 @@ body {
   cursor: pointer;
 }
 
+.panel-shadow {
+  box-shadow: 0 0 50px #CCCCCC;
+}
+
 //change color of toggle switch
 .switch-left {
   background: #325D88 !important;
