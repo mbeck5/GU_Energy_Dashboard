@@ -206,10 +206,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 
   //get todays date and set date variables
   //save them initially to service if they dont change them
-  var today = new Date();
-  $scope.startDate = moment(today).format('DD/MMMM/YYYY');
+  $scope.startDate = moment().format('DD/MMMM/YYYY');
   compEditSvc.saveStartDate($scope.startDate);
-  $scope.endDate = moment(today).add(2, 'weeks').format('DD/MMMM/YYYY');
+  $scope.endDate = moment().add(2, 'weeks').format('DD/MMMM/YYYY');
   compEditSvc.saveEndDate($scope.endDate);
 
   $scope.status = {
@@ -341,18 +340,9 @@ angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($sco
 });
 
 //controller for the datepicker
-angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, compEditSvc) {
-  var today = new Date();
+angular.module('clientApp').controller('DatepickerCtrl', function ($scope, compEditSvc) {
   //set the min date to be today
-  $scope.minDate = moment(today).format('DD/MMMM/YYYY');
-  $scope.today = function () {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
+  $scope.minDate = moment().format('DD/MMMM/YYYY');
 
   $scope.close = function (date, isStart) {
     if (isStart) {
@@ -363,22 +353,10 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, c
     }
   };
 
-  // Disable weekend selection
-  $scope.disabled = function (date, mode) {
-    //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function () {
-    //$scope.minDate = mm + '/' + dd + '/' + yyyy;
-  };
-  $scope.toggleMin();
-
   $scope.open = function ($event) {
     $event.preventDefault();
     $event.stopPropagation();
-    //$scope.close-on-date-selection = false;
     $scope.opened = true;
-
   };
 
   $scope.dateOptions = {
@@ -398,8 +376,5 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, c
       compEditSvc.saveEndDate(moment(date).format('DD/MMMM/YYYY'));
     }
   };
-
-  $scope.formats = ['dd/MMMM/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
 });
 
