@@ -7,8 +7,10 @@ angular.module('clientApp')
     $scope.changeList = [];
     $scope.selectedComp = {};
     $scope.compService = compEditSvc;
+    $scope.longestLabel = 0;
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
       if(newVal != oldVal){
+        $scope.longestLabel = 0;
         $scope.selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         //Compare to the values from two weeks ago
@@ -26,6 +28,7 @@ angular.module('clientApp')
           compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
+            $scope.options.chart.margin.left = $scope.longestLabel * 7;
             calcAllChanges();
             sortChanges();
             createData();
@@ -34,7 +37,8 @@ angular.module('clientApp')
       }
     });
 
-    var colorArray = ["#FFD700", "#C0C0C0", "#A5682A", "#0000FF"];
+    //Gold, Silver, Bronze, Other
+    var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
     $scope.tempData = [];
     $scope.data = [];
 
@@ -42,6 +46,12 @@ angular.module('clientApp')
       chart: {
         type: 'multiBarHorizontalChart',
         height: 600,
+        margin: {
+          top: 20,
+          right: 20,
+          bottom: 60,
+          left: 55
+        },
         x: function(d){ return d.label; },
         y: function(d){ return d.value; },
         showControls: false,
@@ -108,6 +118,12 @@ angular.module('clientApp')
     function createCompareList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
+          var nameLength = data[i].building_name.length;
+          console.log(nameLength);
+          if(nameLength > $scope.longestLabel){
+            $scope.longestLabel = nameLength;
+          }
+
           $scope.compareList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
         }
       }
@@ -150,10 +166,10 @@ angular.module('clientApp')
 
     function createData(){
       for(var i = 0; i < $scope.changeList.length; i++){
-        var key = $scope.changeList[i].building.building;
+        var key = shortenBuildingName($scope.changeList[i].building.building);
         var values = [];
         for(var j = 0; j < $scope.changeList.length; j++){
-          var building = $scope.changeList[j].building.building;
+          var building = shortenBuildingName($scope.changeList[j].building.building);
           if(building === key) {
             values.push({label: building, value: $scope.changeList[i].change})
           }
@@ -166,6 +182,15 @@ angular.module('clientApp')
 
       $scope.data = $scope.tempData;
 
+    }
+
+    function shortenBuildingName(buildingName){
+      if (buildingName.indexOf('(') > -1){
+        return buildingName.substring(0, buildingName.indexOf(' '));
+      }
+      else{
+        return buildingName;
+      }
     }
 
   });

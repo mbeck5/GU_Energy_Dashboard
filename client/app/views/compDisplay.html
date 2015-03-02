@@ -56,16 +56,12 @@
       <div class="panel-heading">Competition Info</div>
       <div class="panel-body">
         <div id="current-comp-scroll" class="scroll">
-          <div id="current-comp-list" class="list-group">
-            </div>
-            <div class="col-md-8" id="graph">
-              <div ng-controller="CompetitionGraphCtrl">
-                <nvd3 options='options' data='data' api='api'></nvd3>
-              </div>
-            </div>
+          <div ng-controller="CompetitionGraphCtrl">
+            <nvd3 options='options' data='data' api='api'></nvd3>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </div>
