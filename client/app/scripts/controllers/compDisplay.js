@@ -8,26 +8,8 @@ angular.module('clientApp')
     $scope.displayedCompIndex = 0;
     //$scope.selectedComp;
 
-    //unpack promise returned from rest call
-    compEditSvc.getComp().then(function (data) {
-      comps = data;
-      $scope.filteredComps = data;
-      $scope.displayedCompIndex = 0;
-      compEditSvc.setSelectedComp($scope.filteredComps[0]);
-      $scope.selectedComp = $scope.filteredComps[0];
-      setDates(0);
-    });
-
-    $scope.$on('updateCompList', function (event, mass) {
-      compEditSvc.getComp().then(function (data) {
-        comps = data;
-        $scope.filteredComps = data;
-        $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp($scope.filteredComps[0]);
-        $scope.selectedComp = $scope.filteredComps[0];
-        setDates(0);
-      });
-    });
+    //retrieve initial data
+    refreshCompList();
 
     //filters based on search input
     $scope.filterComps = function () {
@@ -49,28 +31,65 @@ angular.module('clientApp')
     }
 
     $scope.openCreateModal = function (size) {
-      $modal.open({
+      var createModal = $modal.open({
         templateUrl: 'myModalContent1.html',
         controller: 'createModalInstanceCtrl',
         size: size
       });
+
+      createModal.result.then(function(created) {
+        if (created)  //only refresh if user added new
+          refreshCompList();
+      });
     };
 
     $scope.openEditModal = function (size) {
-      $modal.open({
+      var editModal = $modal.open({
         templateUrl: 'myModalContent2.html',
         controller: 'editModalInstanceCtrl',
         size: size
       });
+
+      editModal.result.then(function(edited) {
+        if (edited)  //only refresh if user edited
+          refreshCompList();
+      });
     };
 
     $scope.openDeleteModal = function (size) {
-      $modal.open({
+      var deleteModal = $modal.open({
         templateUrl: 'myModalContent3.html',
         controller: 'deleteModalInstanceCtrl',
         size: size
       });
+
+      deleteModal.result.then(function(deleted) {
+        if (deleted) {  //only refresh if user deleted
+          deleteCurrentItem();
+        }
+      });
     };
+
+    //retrieves all competition info
+    function refreshCompList() {
+      compEditSvc.getComp().then(function (data) {
+        comps = data;
+        $scope.searchInput = '';  //reset search
+        $scope.filteredComps = data;
+        $scope.displayedCompIndex = 0;
+        compEditSvc.setSelectedComp($scope.filteredComps[0]);
+        $scope.selectedComp = $scope.filteredComps[0];
+        setDates(0);
+      });
+    }
+
+    //removes current item from front-end ui
+    function deleteCurrentItem() {
+      var index = comps.indexOf($scope.filteredComps[$scope.displayedCompIndex]); //find index
+      comps.splice(index, 1); //remove item
+      $scope.searchInput = '';  //reset search
+      $scope.filteredComps = comps; //reset view
+    }
 
     var buildingScrollHeight = $(window).height() * .70;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
@@ -166,7 +185,7 @@ angular.module('clientApp')
   });
 
 //controller for creating competition
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
   //view variables
   $scope.name = '';
   $scope.checkedBuildings = [];
@@ -215,9 +234,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
             compEditSvc.addCompBuilding(maxCid, property);
           }
         }
-        $rootScope.$broadcast('updateCompList');
-        $modalInstance.close();
-        $rootScope.$broadcast('updateCompList');
+        $modalInstance.close(true);
       });
       // }
     }
@@ -236,7 +253,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 });
 
 //controller for edit modal
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
   //variables
   $scope.selectedResourceComp = 'Select Resource';
   $scope.selectedComp = compEditSvc.getSelectedComp();
@@ -279,9 +296,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
           //save new building selections
           compEditSvc.saveListOfBuildings($scope.checkedBuildings, $scope.cid);
         });
-        $rootScope.$broadcast('updateCompList');
-        $modalInstance.close();
-        $rootScope.$broadcast('updateCompList');
+        $modalInstance.close(true);
       });
     }
 
@@ -294,7 +309,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
 });
 
 //controller for delete modal
-angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
 
   //on ok
   $scope.ok = function () {
@@ -302,9 +317,7 @@ angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($sco
     var currentCid = compEditSvc.getSelectedCompCid();
     //delete
     compEditSvc.deleteComp(currentCid);
-    $rootScope.$broadcast('updateCompList');
-    $modalInstance.dismiss('ok');
-    $rootScope.$broadcast('updateCompList');
+    $modalInstance.close(true);
   };
 
   //on cancel
