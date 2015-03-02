@@ -1,10 +1,10 @@
 <div class="row-md-12">
   <div class="col-md-4">
-    <div class="panel panel-default" id="comp-list-panel">
+    <div class="panel panel-default panel-shadow">
       <div class="panel-heading">Competition Select</div>
 
       <div class="panel-body">
-        <div id="building-search" class="form-group">
+        <div class="form-group">
           <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
                  ng-change="filterComps()">
         </div>
@@ -20,39 +20,32 @@
 
       <div class="panel-footer">
         <div id="action-footer">
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent1.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
-            </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
           </div>
 
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent2.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
-            </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
           </div>
 
-          <div class="col-md-4">
+          <div>
             <script type="text/ng-template" id="myModalContent3.html">
               <div ng-include src="'views/DeleteCompDisplay.html'"></div>
             </script>
-            <div>
-              <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
-            </div>
-          </div>
+            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="col-md-8">
-    <div class="panel panel-default" id="current-comp-panel">
+    <div class="panel panel-default panel-shadow">
       <div class="panel-heading">Competition Info</div>
       <div class="panel-body">
         <div id="current-comp-scroll" class="scroll">

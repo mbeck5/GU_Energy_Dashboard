@@ -20,11 +20,15 @@ body {
 }
 
 #main{
-  margin-top: 50px;
+  margin-top: 75px; //separate nav from main views
 }
 
 .clickable {
   cursor: pointer;
+}
+
+.panel-shadow {
+  box-shadow: 0 0 50px #CCCCCC;
 }
 
 //change color of toggle switch

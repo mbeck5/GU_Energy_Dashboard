@@ -21,18 +21,12 @@
 }
 
 #building-list-panel{
-  margin-top: 30px;
   height: 25%;
-  box-shadow: 0 0 50px #CCCCCC;
 }
 
 #building-scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
-}
-
-#graph-panel {
-  margin-top: 30px;
 }
 
 #graph-alignment {
@@ -41,7 +35,6 @@
 
 #tip-panel{
   outline: none;
-  box-shadow: 0 0 50px #CCCCCC;
 }
 
 .checked-list-item {

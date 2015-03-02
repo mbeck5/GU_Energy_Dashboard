@@ -8,26 +8,8 @@ angular.module('clientApp')
     $scope.displayedCompIndex = 0;
     //$scope.selectedComp;
 
-    //unpack promise returned from rest call
-    compEditSvc.getComp().then(function (data) {
-      comps = data;
-      $scope.filteredComps = data;
-      $scope.displayedCompIndex = 0;
-      compEditSvc.setSelectedComp($scope.filteredComps[0]);
-      $scope.selectedComp = $scope.filteredComps[0];
-      $scope.setDates(0);
-    });
-
-    $scope.$on('updateCompList', function (event, mass) {
-      compEditSvc.getComp().then(function (data) {
-        comps = data;
-        $scope.filteredComps = data;
-        $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp($scope.filteredComps[0]);
-        $scope.selectedComp = $scope.filteredComps[0];
-        $scope.setDates(0);
-      });
-    });
+    //retrieve initial data
+    refreshCompList();
 
     //filters based on search input
     $scope.filterComps = function () {
@@ -40,45 +22,76 @@ angular.module('clientApp')
     $scope.selectComp = function (index) {
       compEditSvc.setSelectedComp($scope.filteredComps[index]);
       $scope.displayedCompIndex = index;
-      $scope.setDates(index);
+      setDates(index);
     };
 
-    $scope.setDates = function (index) {
+    function setDates(index) {
       $scope.filteredComps[index].start_date = moment($scope.filteredComps[index].start_date).format('DD/MMMM/YYYY');
       $scope.filteredComps[index].end_date = moment($scope.filteredComps[index].end_date).format('DD/MMMM/YYYY');
-    };
+    }
 
     $scope.openCreateModal = function (size) {
-      $modal.open({
+      var createModal = $modal.open({
         templateUrl: 'myModalContent1.html',
         controller: 'createModalInstanceCtrl',
         size: size
       });
+
+      createModal.result.then(function(created) {
+        if (created)  //only refresh if user added new
+          refreshCompList();
+      });
     };
 
     $scope.openEditModal = function (size) {
-      $modal.open({
+      var editModal = $modal.open({
         templateUrl: 'myModalContent2.html',
         controller: 'editModalInstanceCtrl',
         size: size
       });
+
+      editModal.result.then(function(edited) {
+        if (edited)  //only refresh if user edited
+          refreshCompList();
+      });
     };
 
     $scope.openDeleteModal = function (size) {
-      $modal.open({
+      var deleteModal = $modal.open({
         templateUrl: 'myModalContent3.html',
         controller: 'deleteModalInstanceCtrl',
         size: size
       });
+
+      deleteModal.result.then(function(deleted) {
+        if (deleted) {  //only refresh if user deleted
+          deleteCurrentItem();
+        }
+      });
     };
 
-    //can't have '/' in url
-    $scope.returnCorrectName = function (index) {
-      return $scope.filteredComps[index].name.replace("/", "--");
-    };
+    //retrieves all competition info
+    function refreshCompList() {
+      compEditSvc.getComp().then(function (data) {
+        comps = data;
+        $scope.searchInput = '';  //reset search
+        $scope.filteredComps = data;
+        $scope.displayedCompIndex = 0;
+        compEditSvc.setSelectedComp($scope.filteredComps[0]);
+        $scope.selectedComp = $scope.filteredComps[0];
+        setDates(0);
+      });
+    }
 
-    var buildingScrollHeight = $(window).height() * .70;
-    $('.scroll').css({'height': buildingScrollHeight + 'px'});
+    //removes current item from front-end ui
+    function deleteCurrentItem() {
+      var index = comps.indexOf($scope.filteredComps[$scope.displayedCompIndex]); //find index
+      comps.splice(index, 1); //remove item
+      $scope.searchInput = '';  //reset search
+      $scope.filteredComps = comps; //reset view
+    }
+
+    //PLACEHOLDER GRAPH CODE BELOW
 
     var selectedResource = 2; //default resource
     var savedData = [];  //save downloaded data to avoid downloading
@@ -93,7 +106,7 @@ angular.module('clientApp')
 
     $scope.options = {
       chart: {
-        type: 'lineWithFocusChart',
+        type: 'lineChart',
         height: 600,
         margin: {
           top: 30,
@@ -109,21 +122,11 @@ angular.module('clientApp')
             return d3.time.format('%m/%d/%y')(new Date(d));
           }
         },
-        x2Axis: {
-          showMaxMin: false,
-          tickFormat: function (d) {
-            return d3.time.format('%m/%y')(new Date(d));
-          }
-        },
         yAxis: {
           axisLabel: 'Electricity', //will change with resource toggle
           showMaxMin: false,
           axisLabelDistance: 25,
           tickPadding: [10]
-        },
-        y2Axis: {
-          tickValues: 0,
-          showMaxMin: false
         },
         lines: {
           forceY: [0]
@@ -159,7 +162,6 @@ angular.module('clientApp')
     function initGraph() {
       createGraphData(savedData[selectedResource]);
       setResourceLabel();
-      setFocusArea();
     }
 
     function setResourceLabel() {
@@ -179,47 +181,26 @@ angular.module('clientApp')
       }
     }
 
-    //sets initial "zoom" view over specified area
-    function setFocusArea() {
-      $scope.$apply();
-
-      //creating focus coordinates
-      var curDate = new Date();
-      var prevDate = new Date();
-      curDate.setMonth(curDate.getMonth() - 4);   //TODO: change to real values later
-      prevDate.setMonth(prevDate.getMonth() - 5);
-
-      var chart = $scope.api.getScope().chart;  //get chart from view
-      chart.brushExtent([prevDate, curDate]);
-      $scope.api.update();
-    }
-
   });
 
 //controller for creating competition
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
   //view variables
-  $scope.checked = false;
   $scope.name = '';
   $scope.checkedBuildings = [];
-  var buildings = [];
-  $scope.searchInput = '';
-  $scope.buildingTypes = [];
-  $scope.filteredBuildings = [];
+  $scope.buildings = [];
   $scope.title = "Create Competition";
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
-    buildings = data;
-    $scope.filteredBuildings = buildings;
+    $scope.buildings = data;
   });
 
   //get todays date and set date variables
   //save them initially to service if they dont change them
-  var today = new Date();
-  $scope.startDate = moment(today).format('DD/MMMM/YYYY');
+  $scope.startDate = moment().format('DD/MMMM/YYYY');
   compEditSvc.saveStartDate($scope.startDate);
-  $scope.endDate = moment(today).add(2, 'weeks').format('DD/MMMM/YYYY');
+  $scope.endDate = moment().add(2, 'weeks').format('DD/MMMM/YYYY');
   compEditSvc.saveEndDate($scope.endDate);
 
   $scope.status = {
@@ -233,11 +214,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("Please specify a competition name");
     }
     else {
-      //check for valid dates
-      //if (Date.parse(compEditSvc.getStartDate()) == NaN || Date.parse(compEditSvc.getEndDate()) == NaN) {
-      //  alert("Invalid Date");
-      // }
-      //else {
       //get dates from service daved from datepicker controller
       var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
       var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
@@ -257,9 +233,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
             compEditSvc.addCompBuilding(maxCid, property);
           }
         }
-        $rootScope.$broadcast('updateCompList');
-        $modalInstance.close();
-        $rootScope.$broadcast('updateCompList');
+        $modalInstance.close(true);
       });
       // }
     }
@@ -278,37 +252,28 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 });
 
 //controller for edit modal
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
   //variables
   $scope.selectedResourceComp = 'Select Resource';
   $scope.selectedComp = compEditSvc.getSelectedComp();
   $scope.name = $scope.selectedComp.comp_name;
   $scope.startDate = $scope.selectedComp.start_date;
   $scope.endDate = $scope.selectedComp.end_date;
-  $scope.cid = $scope.selectedComp.cid;
+  var cid = $scope.selectedComp.cid;
   $scope.checkedBuildings = [];
-  $scope.checkedBuildingsSaved = [];
-  var buildings = [];
-  $scope.searchInput = '';
-  $scope.buildingTypes = [];
-  $scope.filteredBuildings = [];
+  $scope.buildings = [];
   $scope.title = "Edit Competition";
 
   //get list of buildings
-  compEditSvc.getCompBuildingList($scope.cid).then(function (data) {
+  compEditSvc.getCompBuildingList(cid).then(function (data) {
     for (var i = 0; i < data.length; i++) {
-      //for (var j = 0; j < data.length; j++) {
-      //if ($scope.checkedBuildings[i] ==)
       $scope.checkedBuildings[data[i].bid] = true;
-      // }
     }
   });
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
-    buildings = data;
-    $scope.filteredBuildings = buildings;
-    //$scope.checkedBuildingsSaved = compEditSvc.getCompBuildingList($scope.cid);
+    $scope.buildings = data;
     compEditSvc.saveStartDate($scope.startDate);
     compEditSvc.saveEndDate($scope.endDate);
   });
@@ -321,7 +286,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     }
     else {
       //delete old buildings saved for the competition
-      compEditSvc.deleteCompBuildings($scope.cid).then(function () {
+      compEditSvc.deleteCompBuildings(cid).then(function () {
         //get dates saved from service from datepicker
         var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
         var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
@@ -330,9 +295,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
           //save new building selections
           compEditSvc.saveListOfBuildings($scope.checkedBuildings, $scope.cid);
         });
-        $rootScope.$broadcast('updateCompList');
-        $modalInstance.close();
-        $rootScope.$broadcast('updateCompList');
+        $modalInstance.close(true);
       });
     }
 
@@ -345,7 +308,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
 });
 
 //controller for delete modal
-angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, compEditSvc) {
+angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
 
   //on ok
   $scope.ok = function () {
@@ -353,9 +316,7 @@ angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($sco
     var currentCid = compEditSvc.getSelectedCompCid();
     //delete
     compEditSvc.deleteComp(currentCid);
-    $rootScope.$broadcast('updateCompList');
-    $modalInstance.dismiss('ok');
-    $rootScope.$broadcast('updateCompList');
+    $modalInstance.close(true);
   };
 
   //on cancel
@@ -365,18 +326,9 @@ angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($sco
 });
 
 //controller for the datepicker
-angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, compEditSvc) {
-  var today = new Date();
+angular.module('clientApp').controller('DatepickerCtrl', function ($scope, compEditSvc) {
   //set the min date to be today
-  $scope.minDate = moment(today).format('DD/MMMM/YYYY');
-  $scope.today = function () {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
+  $scope.minDate = moment().format('DD/MMMM/YYYY');
 
   $scope.close = function (date, isStart) {
     if (isStart) {
@@ -387,22 +339,10 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, c
     }
   };
 
-  // Disable weekend selection
-  $scope.disabled = function (date, mode) {
-    //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function () {
-    //$scope.minDate = mm + '/' + dd + '/' + yyyy;
-  };
-  $scope.toggleMin();
-
   $scope.open = function ($event) {
     $event.preventDefault();
     $event.stopPropagation();
-    //$scope.close-on-date-selection = false;
     $scope.opened = true;
-
   };
 
   $scope.dateOptions = {
@@ -422,8 +362,5 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, c
       compEditSvc.saveEndDate(moment(date).format('DD/MMMM/YYYY'));
     }
   };
-
-  $scope.formats = ['dd/MMMM/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
 });
 
