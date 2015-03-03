@@ -14,10 +14,17 @@ angular.module('clientApp')
         $scope.selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         //Compare to the values from two weeks ago
-        var compareStart = moment($scope.selectedComp.start_date).subtract(15, 'days').format();
-        var compareEnd = moment($scope.selectedComp.end_date).subtract(15, 'days').format();
         var currentStart = $scope.selectedComp.start_date;
         var currentEnd = $scope.selectedComp.end_date;
+        var compareStart = moment($scope.selectedComp.start_date).subtract(15, 'days').format();
+        if(moment().isAfter(currentEnd) || moment().isSame(currentEnd)){
+          var compareEnd = moment($scope.selectedComp.end_date).subtract(15, 'days').format();
+        }
+        else{
+          var daysPassed = moment().diff(currentStart, 'days');
+          var compareEnd = moment(compareStart).add(daysPassed, 'days').format();
+        }
+
         $scope.data = [];
         $scope.tempData = [];
         $scope.compareList = [];
@@ -28,7 +35,7 @@ angular.module('clientApp')
           compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
-            $scope.options.chart.margin.left = $scope.longestLabel * 7;
+            $scope.options.chart.margin.left = $scope.longestLabel * 6.8;
             calcAllChanges();
             sortChanges();
             createData();
@@ -119,7 +126,6 @@ angular.module('clientApp')
       if(data) {
         for (var i = 0; i < data.length; i++) {
           var nameLength = data[i].building_name.length;
-          console.log(nameLength);
           if(nameLength > $scope.longestLabel){
             $scope.longestLabel = nameLength;
           }
