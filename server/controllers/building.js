@@ -154,7 +154,7 @@ exports.getResourceSum = function(req, res){
             res.send(rows);
         }
     });
-}
+};
 
 exports.getBuildingTypes = function(req, res) {
     var queryString = "SELECT building_type_id as buildingTypeId, building_type as buildingType " +
@@ -167,7 +167,9 @@ exports.getBuildingTypes = function(req, res) {
         else {
             res.send(rows);
         }
-    })
+    });
 };
+
+
 
 
