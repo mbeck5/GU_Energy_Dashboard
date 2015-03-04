@@ -6,7 +6,7 @@ angular.module('clientApp')
     $scope.searchInput = '';
     $scope.filteredComps = [];
     $scope.displayedCompIndex = 0;
-    $scope.selectedComp;
+    //$scope.selectedComp;
 
     //unpack promise returned from rest call
     compEditSvc.getComp().then(function (data) {
@@ -31,7 +31,9 @@ angular.module('clientApp')
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps = comps.filter(filterComps);
+      $scope.filteredComps = comps.filter(function(element) {
+        return element.comp_name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+      });
     };
 
     //when clicking on competition
@@ -44,7 +46,7 @@ angular.module('clientApp')
     $scope.setDates = function (index) {
       $scope.filteredComps[index].start_date = moment($scope.filteredComps[index].start_date).format('DD/MMMM/YYYY');
       $scope.filteredComps[index].end_date = moment($scope.filteredComps[index].end_date).format('DD/MMMM/YYYY');
-    }
+    };
 
     $scope.openCreateModal = function (size) {
       $modal.open({
@@ -74,10 +76,6 @@ angular.module('clientApp')
     $scope.returnCorrectName = function (index) {
       return $scope.filteredComps[index].name.replace("/", "--");
     };
-
-    function filterComps(element) {
-      return element.name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
-    }
 
     var buildingScrollHeight = $(window).height() * .70;
     $('.scroll').css({'height': buildingScrollHeight + 'px'});
@@ -233,7 +231,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
     //check that they entered a name
     if (newName == '') {
       alert("Please specify a competition name");
-      var count = 0;
     }
     else {
       //check for valid dates
@@ -424,7 +421,7 @@ angular.module('clientApp').controller('DatepickerDemoCtrl', function ($scope, c
     else {
       compEditSvc.saveEndDate(moment(date).format('DD/MMMM/YYYY'));
     }
-  }
+  };
 
   $scope.formats = ['dd/MMMM/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[0];
