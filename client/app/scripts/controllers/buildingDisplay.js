@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc) {
+  .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
@@ -11,6 +11,7 @@ angular.module('clientApp')
       $scope.dateOpen1 = false;
       $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
+      $scope.spinnerActive = false;
 
       checkRefresh();
       getBuildingData(null);  //initial call to get data of default type
@@ -94,6 +95,8 @@ angular.module('clientApp')
       }
 
       function getBuildingData(index) {
+        $scope.spinnerActive = true;
+        usSpinnerService.spin('spinner');
         var i = 0;
         var stopCondition = $scope.selectedBuildings.length;
         if(index != null){
@@ -129,6 +132,8 @@ angular.module('clientApp')
         setKeys();
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+        $scope.spinnerActive = false;
+        usSpinnerService.stop('spinner');
       }
 
       //to set the keys for the lines when making multiple lines in a graph. probably bad.
