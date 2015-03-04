@@ -10,7 +10,7 @@ angular.module('clientApp')
     $scope.tabActivity = [true, false, false];
     var selectedCompTimeline = 0;
     $scope.displayedCompIndex = 0;
-    //$scope.selectedComp;
+    var selectedComp;
 
     //retrieve initial data
     refreshCompList();
@@ -110,7 +110,7 @@ angular.module('clientApp')
         sortCompsIntoTabs(data);
         $scope.displayedCompIndex = 0;
         compEditSvc.setSelectedComp(sortedComps[0][0]);
-        $scope.selectedComp = sortedComps[0][0];
+        selectedComp = sortedComps[0][0];
         setDates(0);
       });
     }
@@ -202,11 +202,11 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
   //variables
   $scope.selectedResourceComp = 'Select Resource';
-  $scope.selectedComp = compEditSvc.getSelectedComp();
-  $scope.name = $scope.selectedComp.comp_name;
-  $scope.startDate = $scope.selectedComp.start_date;
-  $scope.endDate = $scope.selectedComp.end_date;
-  var cid = $scope.selectedComp.cid;
+  var selectedComp = compEditSvc.getSelectedComp();
+  $scope.name = selectedComp.comp_name;
+  $scope.startDate = selectedComp.start_date;
+  $scope.endDate = selectedComp.end_date;
+  var cid = selectedComp.cid;
   $scope.checkedBuildings = [];
   $scope.buildings = [];
   $scope.title = "Edit Competition";
