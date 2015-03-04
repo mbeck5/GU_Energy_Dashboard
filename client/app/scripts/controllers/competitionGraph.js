@@ -2,40 +2,42 @@
 
 angular.module('clientApp')
   .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
-    $scope.compareList = [];
-    $scope.currentList = [];
-    $scope.changeList = [];
-    $scope.selectedComp = {};
-    $scope.compService = compEditSvc;
-    $scope.longestLabel = 0;
+    var compareList = [];
+    var currentList = [];
+    var changeList = [];
+    var selectedComp = {};
+    var longestLabel = 0;
+    var tempData = [];
+
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
-      if(newVal != oldVal){
-        $scope.longestLabel = 0;
-        $scope.selectedComp = compEditSvc.getSelectedComp();
+      var compareEnd;
+      if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
+        longestLabel = 0;
+        selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         //Compare to the values from two weeks ago
-        var currentStart = $scope.selectedComp.start_date;
-        var currentEnd = $scope.selectedComp.end_date;
-        var compareStart = moment($scope.selectedComp.start_date).subtract(15, 'days').format();
+        var currentStart = selectedComp.start_date;
+        var currentEnd = selectedComp.end_date;
+        var compareStart = moment(selectedComp.start_date).subtract(15, 'days').format();
         if(moment().isAfter(currentEnd) || moment().isSame(currentEnd)){
-          var compareEnd = moment($scope.selectedComp.end_date).subtract(15, 'days').format();
+          compareEnd = moment(selectedComp.end_date).subtract(15, 'days').format();
         }
         else{
           var daysPassed = moment().diff(currentStart, 'days');
-          var compareEnd = moment(compareStart).add(daysPassed, 'days').format();
+          compareEnd = moment(compareStart).add(daysPassed, 'days').format();
         }
 
         $scope.data = [];
-        $scope.tempData = [];
-        $scope.compareList = [];
-        $scope.currentList = [];
-        $scope.changeList = [];
+        tempData = [];
+        compareList = [];
+        currentList = [];
+        changeList = [];
 
-        compEditSvc.getBuildingTotals(compareStart, compareEnd, $scope.selectedComp.cid).then(function(data1){
-          compEditSvc.getBuildingTotals(currentStart, currentEnd, $scope.selectedComp.cid).then(function(data2){
+        compEditSvc.getBuildingTotals(compareStart, compareEnd, selectedComp.cid).then(function(data1){
+          compEditSvc.getBuildingTotals(currentStart, currentEnd, selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
-            $scope.options.chart.margin.left = $scope.longestLabel * 6.8;
+            $scope.options.chart.margin.left = longestLabel * 6.8;
             calcAllChanges();
             sortChanges();
             createData();
@@ -46,7 +48,7 @@ angular.module('clientApp')
 
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
-    $scope.tempData = [];
+    tempData = [];
     $scope.data = [];
 
     $scope.options = {
@@ -111,13 +113,13 @@ angular.module('clientApp')
       title: {
         enable: true,
         text: function(){
-          return $scope.selectedComp.comp_name;
+          return selectedComp.comp_name;
         }
       },
       subtitle: {
         enable: true,
         text: function(){
-          return $scope.selectedComp.start_date + '-' + $scope.selectedComp.end_date
+          return selectedComp.start_date + '-' + selectedComp.end_date
         }
       }
     };
@@ -126,11 +128,11 @@ angular.module('clientApp')
       if(data) {
         for (var i = 0; i < data.length; i++) {
           var nameLength = data[i].building_name.length;
-          if(nameLength > $scope.longestLabel){
-            $scope.longestLabel = nameLength;
+          if(nameLength > longestLabel){
+            longestLabel = nameLength;
           }
 
-          $scope.compareList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
+          compareList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
         }
       }
     }
@@ -138,7 +140,7 @@ angular.module('clientApp')
     function createCurrentList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
-          $scope.currentList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
+          currentList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
         }
       }
     }
@@ -149,44 +151,44 @@ angular.module('clientApp')
     }
 
     function calcAllChanges(){
-      if($scope.compareList.length == $scope.currentList.length) {
-        for (var i = 0; i < $scope.compareList.length; i++){
-          var percentChange = calcPercentChange($scope.compareList[i].total_cons, $scope.currentList[i].total_cons);
-          $scope.changeList.push({building: $scope.compareList[i], change: percentChange});
+      if(compareList.length == currentList.length) {
+        for (var i = 0; i < compareList.length; i++){
+          var percentChange = calcPercentChange(compareList[i].total_cons, currentList[i].total_cons);
+          changeList.push({building: compareList[i], change: percentChange});
         }
       }
     }
 
     //Insertion Sort since we aren't sorting a lot buildings (max 30ish?)
     function sortChanges(){
-      for(var i = 0; i < $scope.changeList.length; i++){
+      for(var i = 0; i < changeList.length; i++){
         var j = i;
-        while(j > 0 && $scope.changeList[j-1].change < $scope.changeList[j].change){
-          var temp = $scope.changeList[j-1];
-          $scope.changeList[j-1] = $scope.changeList[j];
-          $scope.changeList[j] = temp;
+        while(j > 0 && changeList[j-1].change < changeList[j].change){
+          var temp = changeList[j-1];
+          changeList[j-1] = changeList[j];
+          changeList[j] = temp;
           j--;
         }
       }
     }
 
     function createData(){
-      for(var i = 0; i < $scope.changeList.length; i++){
-        var key = shortenBuildingName($scope.changeList[i].building.building);
+      for(var i = 0; i < changeList.length; i++){
+        var key = shortenBuildingName(changeList[i].building.building);
         var values = [];
-        for(var j = 0; j < $scope.changeList.length; j++){
-          var building = shortenBuildingName($scope.changeList[j].building.building);
+        for(var j = 0; j < changeList.length; j++){
+          var building = shortenBuildingName(changeList[j].building.building);
           if(building === key) {
-            values.push({label: building, value: $scope.changeList[i].change})
+            values.push({label: building, value: changeList[i].change})
           }
           else{
             values.push({label: building, value: 0})
           }
         }
-        $scope.tempData.push({key: key, values: values});
+        tempData.push({key: key, values: values});
       }
 
-      $scope.data = $scope.tempData;
+      $scope.data = tempData;
 
     }
 
