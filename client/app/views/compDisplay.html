@@ -2,22 +2,54 @@
   <div class="col-md-4">
     <div class="panel panel-default panel-shadow">
       <div class="panel-heading">Competition Select</div>
-
       <div class="panel-body">
-        <div class="form-group">
-          <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
-                 ng-change="filterComps()">
-        </div>
-        <div id="comp-scroll" class="scroll">
-          <div id="comp-list" class="list-group">
-            <a ng-repeat="competition in filteredComps" class="list-group-item clickable" ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-              {{competition.comp_name}}
-            </a>
-          </div>
+        <tabset justified="true">
+          <tab heading="Past Competitions" active="tabActivity[0]">
+            <div class="form-group">
+              <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                     ng-change="filterComps()">
+            </div>
+            <div class="scroll">
+              <div class="list-group">
+                <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
+                   ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
+                  {{competition.comp_name}}
+                </a>
+              </div>
+            </div>
+          </tab>
 
-        </div>
+          <tab heading="Running Competitions" active="tabActivity[1]">
+            <div class="form-group">
+              <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                     ng-change="filterComps()">
+            </div>
+            <div class="scroll">
+              <div class="list-group">
+                <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
+                   ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
+                  {{competition.comp_name}}
+                </a>
+              </div>
+            </div>
+          </tab>
+
+          <tab heading="Upcoming Competitions" active="tabActivity[2]">
+            <div id="building-search" class="form-group">
+              <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
+                     ng-change="filterComps()">
+            </div>
+            <div class="scroll">
+              <div class="list-group">
+                <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
+                   ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
+                  {{competition.comp_name}}
+                </a>
+              </div>
+            </div>
+          </tab>
+        </tabset>
       </div>
-
       <div class="panel-footer">
         <div id="action-footer">
           <div>
@@ -44,18 +76,19 @@
       </div>
     </div>
   </div>
-  <div class="col-md-8">
-    <div class="panel panel-default panel-shadow">
-      <div class="panel-heading">Competition Info</div>
-      <div class="panel-body">
-        <div id="current-comp-scroll" class="scroll">
-          <div ng-controller="CompetitionGraphCtrl">
-            <nvd3 options='options' data='data' api='api'></nvd3>
-          </div>
+</div>
+<div class="col-md-8">
+  <div class="panel panel-default panel-shadow">
+    <div class="panel-heading">Competition Info</div>
+    <div class="panel-body">
+      <div id="current-comp-scroll">
+        <div ng-controller="CompetitionGraphCtrl">
+          <nvd3 options='options' data='data' api='api'></nvd3>
         </div>
       </div>
     </div>
-    </div>
   </div>
+</div>
+</div>
 </div>
 

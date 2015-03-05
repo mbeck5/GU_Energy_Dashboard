@@ -2,10 +2,14 @@
   background-color: transparent;
 }
 
-#comp-scroll {
+.scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
   height: 400px;
+}
+
+.nav-tabs li a{
+  white-space: nowrap;
 }
 
 .comp-action-buttons{
@@ -24,7 +28,7 @@
 }
 
 .comp-modal-footer-buttons{
-  margin-left: 5%;
+  //margin-left: 5%;
   width: 15%;
 }
 
