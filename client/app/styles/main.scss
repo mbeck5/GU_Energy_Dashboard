@@ -1,6 +1,11 @@
+@import "bootstrap/bootstrap";
+@import "buildingSelector";
+@import "buildingDisplay";
+@import "compDisplay";
+
 body {
   padding-bottom: 20px;
-  background-color: #DFD7CA;
+  background-color: $gray;
 }
 
 #navbar {
@@ -33,7 +38,7 @@ body {
 
 //change color of toggle switch
 .switch-left {
-  background: #325D88 !important;
+  background: $brand-primary !important;
 }
 
 //for compatability warning
