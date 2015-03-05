@@ -237,20 +237,17 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       }
       else {
         //delete old buildings saved for the competition
-        compEditSvc.deleteCompBuildings($scope.cid).then(function () {
+        compEditSvc.deleteCompBuildings(cid).then(function () {
           //get dates saved from service from datepicker
           var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
           var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
           //update in database
           compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
             //save new building selections
-            compEditSvc.saveListOfBuildings($scope.checkedBuildings, $scope.cid);
+            compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
           });
-          $rootScope.$broadcast('updateCompList');
-          $modalInstance.close();
-          $rootScope.$broadcast('updateCompList');
+          $modalInstance.close(true);
         });
-        $modalInstance.close(true);
       }
     }
   };
