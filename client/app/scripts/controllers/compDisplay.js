@@ -2,65 +2,62 @@
 
 angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
-    var sortedComps = [];
-    $scope.searchInput = '';
-    $scope.filteredRunningComps = [];
-    $scope.filteredPastComps = [];
-    $scope.filteredUpcomingComps = [];
-    $scope.tabActivity = [true, false, false];
-    var selectedCompTimeline = 0;
-    $scope.displayedCompIndex = 0;
+    var sortedComps = {past: [], running: [], upcoming: []};
     var selectedComp;
+    $scope.searchInput = '';
+    $scope.filteredComps = {};   //past, running, upcoming
+    $scope.tabActivity = [false, true, false];  //past, running, upcoming
+    $scope.displayedCompIndex = 0;
 
     //retrieve initial data
     refreshCompList();
 
     function sortCompsIntoTabs(allComps) {
-      $scope.filteredRunningComps = [];
-      $scope.filteredPastComps = [];
-      $scope.filteredUpcomingComps = [];
+      sortedComps = {past: [], running: [], upcoming: []};  //reset
       for (var i = 0; i < allComps.length; i++) {
         var today = new Date();
         if (moment(allComps[i].start_date).diff(today) < 0) {
           if (moment(allComps[i].end_date).diff(today) < 0) {
-            $scope.filteredPastComps[$scope.filteredPastComps.length] = allComps[i];
+            sortedComps.past.push(allComps[i]);
           }
           else {
-            $scope.filteredRunningComps[$scope.filteredRunningComps.length] = allComps[i];
+            sortedComps.running.push(allComps[i]);
           }
         }
         else {
-          $scope.filteredUpcomingComps[$scope.filteredUpcomingComps.length] = allComps[i];
+          sortedComps.upcoming.push(allComps[i]);
         }
       }
-      sortedComps = [$scope.filteredRunningComps, $scope.filteredPastComps, $scope.filteredUpcomingComps];
-      setSelectedTimeLine();
+      $scope.filteredComps = sortedComps;
     }
 
-    function setSelectedTimeLine () {
-      selectedCompTimeline = $scope.tabActivity.indexOf(true);
+    function getSelectedTimeline () {
+      var index = $scope.tabActivity.indexOf(true);
+      switch (index) {
+        case 0: return "past";
+        case 1: return "running";
+        case 2: return "upcoming";
+      }
     }
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps = comps.filter(function(element) {
+      $scope.filteredComps = sortedComps.filter(function(element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
       });
     };
 
     //when clicking on competition
     $scope.selectComp = function (index) {
-      compEditSvc.getComp().then(function (data) {
-        sortCompsIntoTabs(data);
-        compEditSvc.setSelectedComp(sortedComps[selectedCompTimeline][index]);
-        $scope.displayedCompIndex = index;
-        setDates(index);
-      });
+      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
+      $scope.displayedCompIndex = index;
+      setDates(index);
     };
 
     function setDates(index) {
-      sortedComps[selectedCompTimeline][index].start_date = moment(sortedComps[selectedCompTimeline][index].start_date).format('DD/MMMM/YYYY');
-      sortedComps[selectedCompTimeline][index].end_date = moment(sortedComps[selectedCompTimeline][index].end_date).format('DD/MMMM/YYYY');
+      var selectedTimeline = getSelectedTimeline();
+      $scope.filteredComps[selectedTimeline][index].start_date = moment($scope.filteredComps[selectedTimeline][index].start_date).format('DD/MMMM/YYYY');
+      $scope.filteredComps[selectedTimeline][index].end_date = moment($scope.filteredComps[selectedTimeline][index].end_date).format('DD/MMMM/YYYY');
     }
 
     $scope.openCreateModal = function (size) {
@@ -109,20 +106,20 @@ angular.module('clientApp')
         $scope.searchInput = '';  //reset search
         sortCompsIntoTabs(data);
         $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp(sortedComps[0][0]);
-        selectedComp = sortedComps[0][0];
+        compEditSvc.setSelectedComp(sortedComps.running[0]);
+        selectedComp = sortedComps.running[0];
         setDates(0);
       });
     }
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
-      var index = comps.indexOf($scope.filteredComps[$scope.displayedCompIndex]); //find index
-      comps.splice(index, 1); //remove item
+      var index = sortedComps[getSelectedTimeline()].indexOf(selectedComp);
+      sortedComps.splice(index, 1);
+      $scope.filteredComps = sortedComps; //reset list
       $scope.searchInput = '';  //reset search
-      $scope.filteredComps = comps; //reset view
     }
-  });
+});
 
 //controller for creating competition
 angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
@@ -181,10 +178,10 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
             }
           }
           $modalInstance.close(true);
-        }
-      );
+        });
+      }
     }
-  }
+  };
 
   //when cancel clicked
   $scope.cancel = function () {
@@ -196,7 +193,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 
   };
 
-};
+});
 
 //controller for edit modal
 angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
@@ -253,9 +250,8 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
         });
         $modalInstance.close(true);
       }
-      }
     }
-  });
+  };
 
   //on cancel click
   $scope.cancel = function () {

@@ -5,14 +5,14 @@
       <div class="panel-body">
         <div class="form-group">
           <tabset justified="true">
-            <tab heading="Running Competitions" active="tabActivity[0]">
+            <tab heading="Past Competitions" active="tabActivity[0]">
               <div class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
                        ng-change="filterComps()">
               </div>
               <div class="scroll">
                 <div class="list-group">
-                  <a ng-repeat="competition in filteredRunningComps" class="list-group-item clickable"
+                  <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
                      ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
                     {{competition.comp_name}}
                   </a>
@@ -20,14 +20,14 @@
               </div>
             </tab>
 
-            <tab heading="Past Competitions" active="tabActivity[1]">
+            <tab heading="Running Competitions" active="tabActivity[1]">
               <div class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
                        ng-change="filterComps()">
               </div>
               <div class="scroll">
                 <div class="list-group">
-                  <a ng-repeat="competition in filteredPastComps" class="list-group-item clickable"
+                  <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
                      ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
                     {{competition.comp_name}}
                   </a>
@@ -42,7 +42,7 @@
               </div>
               <div class="scroll">
                 <div class="list-group">
-                  <a ng-repeat="competition in filteredUpcomingComps" class="list-group-item clickable"
+                  <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
                      ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
                     {{competition.comp_name}}
                   </a>
