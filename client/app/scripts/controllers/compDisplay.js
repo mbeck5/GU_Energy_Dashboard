@@ -2,7 +2,7 @@
 
 angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
-    var sortedComps = {past: [], running: [], upcoming: []};
+    var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     $scope.searchInput = '';
     $scope.filteredComps = {};   //past, running, upcoming
@@ -14,7 +14,7 @@ angular.module('clientApp')
 
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
-      for (var i = 0; i < allComps.length; i++) {
+      for (var i = 0; i < allComps.length; ++i) {
         var today = new Date();
         if (moment(allComps[i].start_date).diff(today) < 0) {
           if (moment(allComps[i].end_date).diff(today) < 0) {
@@ -31,7 +31,7 @@ angular.module('clientApp')
       $scope.filteredComps = sortedComps;
     }
 
-    function getSelectedTimeline () {
+    function getSelectedTimeline() {
       var index = $scope.tabActivity.indexOf(true);
       switch (index) {
         case 0: return "past";
@@ -51,6 +51,7 @@ angular.module('clientApp')
     $scope.selectComp = function (index) {
       compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
       $scope.displayedCompIndex = index;
+      selectedComp = $scope.filteredComps[getSelectedTimeline()][index];
       setDates(index);
     };
 
@@ -114,8 +115,9 @@ angular.module('clientApp')
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
-      var index = sortedComps[getSelectedTimeline()].indexOf(selectedComp);
-      sortedComps.splice(index, 1);
+      var selectedTimeline = getSelectedTimeline();
+      var index = sortedComps[selectedTimeline].indexOf(selectedComp);
+      sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
       $scope.searchInput = '';  //reset search
     }

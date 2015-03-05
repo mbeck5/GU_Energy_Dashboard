@@ -25,7 +25,7 @@ exports.saveNewComp = function (req, res) {
             throw err;
         }
         else {
-            res.send(true);
+            //res.send(true);
         }
     });
 };
@@ -56,8 +56,7 @@ exports.deleteComp = function (req, res) {
                     throw err;
                 }
                 else {
-
-                    res.send(true);
+                    //res.send(true);
                 }
             });
         }
