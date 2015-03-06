@@ -7,7 +7,6 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
-    var tempData = [];
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -29,7 +28,6 @@ angular.module('clientApp')
         }
 
         $scope.data = [];
-        tempData = [];
         compareList = [];
         currentList = [];
         changeList = [];
@@ -49,7 +47,6 @@ angular.module('clientApp')
 
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
-    tempData = [];
     $scope.data = [];
 
     $scope.options = {
@@ -66,6 +63,7 @@ angular.module('clientApp')
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
+        valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
@@ -174,13 +172,13 @@ angular.module('clientApp')
     }
 
     function createData(){
+      var tempData = [], key;
       for(var i = 0; i < changeList.length; i++){
-        var key = shortenBuildingName(changeList[i].building.building);
-        tempData.push({key: key, values: changeList[i].change});
+        key = shortenBuildingName(changeList[i].building.building);
+        tempData.push({label: key, value: changeList[i].change});
       }
 
-      $scope.data = tempData;
-
+      $scope.data = [{values: tempData}];
     }
 
     function shortenBuildingName(buildingName){

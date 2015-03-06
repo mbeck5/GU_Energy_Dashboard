@@ -113,6 +113,7 @@ angular.module('clientApp')
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
+      $scope.displayedCompIndex = -1; //deselect item on view
       var selectedTimeline = getSelectedTimeline();
       var index = sortedComps[selectedTimeline].indexOf(selectedComp);
       sortedComps[selectedTimeline].splice(index, 1);
