@@ -45,6 +45,7 @@ angular.module('clientApp')
       $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
+      $scope.displayedCompIndex = -1; //deselect item on view
     };
 
     //when clicking on competition
@@ -113,7 +114,6 @@ angular.module('clientApp')
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
-      $scope.displayedCompIndex = -1; //deselect item on view
       var selectedTimeline = getSelectedTimeline();
       var index = sortedComps[selectedTimeline].indexOf(selectedComp);
       sortedComps[selectedTimeline].splice(index, 1);
