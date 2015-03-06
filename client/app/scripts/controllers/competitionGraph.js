@@ -9,6 +9,7 @@ angular.module('clientApp')
     var longestLabel = 0;
     var tempData = [];
 
+    //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
@@ -119,7 +120,7 @@ angular.module('clientApp')
       subtitle: {
         enable: true,
         text: function(){
-          return selectedComp.start_date + '-' + selectedComp.end_date
+          return selectedComp.start_date + ' - ' + selectedComp.end_date
         }
       }
     };
@@ -175,17 +176,7 @@ angular.module('clientApp')
     function createData(){
       for(var i = 0; i < changeList.length; i++){
         var key = shortenBuildingName(changeList[i].building.building);
-        var values = [];
-        for(var j = 0; j < changeList.length; j++){
-          var building = shortenBuildingName(changeList[j].building.building);
-          if(building === key) {
-            values.push({label: building, value: changeList[i].change})
-          }
-          else{
-            values.push({label: building, value: 0})
-          }
-        }
-        tempData.push({key: key, values: values});
+        tempData.push({key: key, values: changeList[i].change});
       }
 
       $scope.data = tempData;

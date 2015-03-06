@@ -49,10 +49,10 @@ angular.module('clientApp')
 
     //when clicking on competition
     $scope.selectComp = function (index) {
-      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
       $scope.displayedCompIndex = index;
       selectedComp = $scope.filteredComps[getSelectedTimeline()][index];
       setDates(index);
+      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
     };
 
     function setDates(index) {
@@ -107,10 +107,7 @@ angular.module('clientApp')
       $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-        $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp(sortedComps.running[0]);
-        selectedComp = sortedComps.running[0];
-        setDates(0);
+        $scope.selectComp(0);
       });
     }
 
