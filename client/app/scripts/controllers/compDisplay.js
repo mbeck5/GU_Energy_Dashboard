@@ -4,7 +4,8 @@ angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
-    $scope.searchInput = '';
+    $scope.searchInput = {};
+    $scope.searchInput.input = '';
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.tabActivity = [false, true, false];  //past, running, upcoming
     $scope.displayedCompIndex = 0;
@@ -28,7 +29,7 @@ angular.module('clientApp')
           sortedComps.upcoming.push(allComps[i]);
         }
       }
-      $scope.filteredComps = sortedComps;
+      $scope.filteredComps = jQuery.extend({},sortedComps);
     }
 
     function getSelectedTimeline() {
@@ -42,8 +43,8 @@ angular.module('clientApp')
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps = sortedComps.filter(function(element) {
-        return element.comp_name.toLowerCase().indexOf($scope.searchInput.toLowerCase().trim()) > -1;
+      $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
+        return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
     };
 
@@ -70,6 +71,7 @@ angular.module('clientApp')
 
       createModal.result.then(function(created) {
         if (created)  //only refresh if user added new
+          $scope.searchInput = '';  //reset search
           refreshCompList();
       });
     };
@@ -83,6 +85,7 @@ angular.module('clientApp')
 
       editModal.result.then(function(edited) {
         if (edited)  //only refresh if user edited
+          $scope.searchInput = '';  //reset search
           refreshCompList();
       });
     };
@@ -96,6 +99,7 @@ angular.module('clientApp')
 
       deleteModal.result.then(function(deleted) {
         if (deleted) {  //only refresh if user deleted
+          $scope.searchInput = '';  //reset search
           deleteCurrentItem();
         }
       });
@@ -104,7 +108,6 @@ angular.module('clientApp')
     //retrieves all competition info
     function refreshCompList() {
       compEditSvc.getComp().then(function (data) {
-        $scope.searchInput = '';  //reset search
         sortCompsIntoTabs(data);
         $scope.displayedCompIndex = 0;
         compEditSvc.setSelectedComp(sortedComps.running[0]);
