@@ -9,7 +9,7 @@
   border-color: #000000;
   border-radius: 20px;
 
-  @media (max-width: $screen-md-min) {
+  @media (max-width: $screen-md) {
     max-width: 100%;
     margin: 0 auto 15px auto;
     padding: 15px 25px 15px 25px;
