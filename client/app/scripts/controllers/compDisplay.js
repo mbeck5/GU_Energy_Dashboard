@@ -145,6 +145,17 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.status = {
     isopen: false
   };
+  
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
+  };
 
   //when ok is clicked
   $scope.ok = function (newName) {
@@ -171,7 +182,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               maxCid = data[i].cid;
             }
           }
-          maxCid = maxCid + 1;
+          maxCid += 1;
           compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
           for (var property in $scope.checkedBuildings) {
             if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
@@ -187,11 +198,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   //when cancel clicked
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
-  };
-
-  //get a new cid that does not exist yet
-  $scope.getNewCid = function () {
-
   };
 
 });
@@ -222,6 +228,17 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     compEditSvc.saveStartDate($scope.startDate);
     compEditSvc.saveEndDate($scope.endDate);
   });
+  
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
+  };
 
   //when ok clicked
   $scope.ok = function (newName) {
