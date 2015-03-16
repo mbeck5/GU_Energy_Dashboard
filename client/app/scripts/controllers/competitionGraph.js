@@ -18,13 +18,13 @@ angular.module('clientApp')
         //Compare to the values from two weeks ago
         var currentStart = selectedComp.start_date;
         var currentEnd = selectedComp.end_date;
-        var compareStart = moment(selectedComp.start_date).subtract(15, 'days').format();
+        var compareStart = moment(currentStart).subtract(15, 'days');
         if(moment().isAfter(currentEnd) || moment().isSame(currentEnd)){
-          compareEnd = moment(selectedComp.end_date).subtract(15, 'days').format();
+          compareEnd = moment(currentEnd).subtract(15, 'days');
         }
         else{
           var daysPassed = moment().diff(currentStart, 'days');
-          compareEnd = moment(compareStart).add(daysPassed, 'days').format();
+          compareEnd = moment(compareStart).add(daysPassed, 'days');
         }
 
         $scope.data = [];
@@ -36,7 +36,7 @@ angular.module('clientApp')
           compEditSvc.getBuildingTotals(currentStart, currentEnd, selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
-            $scope.options.chart.margin.left = longestLabel * 6.8;
+            $scope.options.chart.margin.left = longestLabel * 7;
             calcAllChanges();
             sortChanges();
             createData();
@@ -54,9 +54,6 @@ angular.module('clientApp')
         type: 'multiBarHorizontalChart',
         height: 600,
         margin: {
-          top: 20,
-          right: 20,
-          bottom: 60,
           left: 55
         },
         x: function(d){ return d.label; },
@@ -172,13 +169,22 @@ angular.module('clientApp')
     }
 
     function createData(){
-      var tempData = [], key;
+      var tempData = [];
       for(var i = 0; i < changeList.length; i++){
-        key = shortenBuildingName(changeList[i].building.building);
-        tempData.push({label: key, value: changeList[i].change});
+        var key = shortenBuildingName(changeList[i].building.building);
+        var values = [];
+        for(var j = 0; j < changeList.length; j++){
+          var building = shortenBuildingName(changeList[j].building.building);
+          if(building === key) {
+            values.push({label: building, value: changeList[i].change})
+          }
+          else{
+            values.push({label: building, value: 0})
+          }
+        }
+        tempData.push({key: key, values: values});
       }
-
-      $scope.data = [{values: tempData}];
+      $scope.data = tempData;
     }
 
     function shortenBuildingName(buildingName){
