@@ -9,6 +9,8 @@ angular.module('clientApp')
         };
 
         $scope.toggleCollapse = function() {
-          $scope.navbarCollapsed = !$scope.navbarCollapsed;
+          //don't toggle if large screen
+          if ($(document).width() < 992)
+            $scope.navbarCollapsed = !$scope.navbarCollapsed;
         };
   });

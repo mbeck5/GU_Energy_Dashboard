@@ -64,7 +64,7 @@ angular.module('clientApp')
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
-        tooltips: true,
+        tooltips: false,
         color: function(d, i){
           if(i < 3) {
             return colorArray[i];
