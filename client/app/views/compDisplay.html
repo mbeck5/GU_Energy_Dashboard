@@ -1,4 +1,4 @@
-<div class="row-md-12">
+<div class="row">
   <div class="col-md-4">
     <div class="panel panel-default panel-shadow">
       <div class="panel-heading">Competition Select</div>
@@ -76,19 +76,19 @@
       </div>
     </div>
   </div>
-</div>
-<div class="col-md-8">
-  <div class="panel panel-default panel-shadow">
-    <div class="panel-heading">Competition Info</div>
-    <div class="panel-body">
-      <div id="current-comp-scroll">
-        <div ng-controller="CompetitionGraphCtrl">
-          <nvd3 options='options' data='data' api='api'></nvd3>
+
+  <div class="col-md-8">
+    <div class="panel panel-default panel-shadow">
+      <div class="panel-heading">Competition Info</div>
+      <div class="panel-body">
+        <div id="current-comp-scroll">
+          <div ng-controller="CompetitionGraphCtrl">
+            <nvd3 options='options' data='data' api='api'></nvd3>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-</div>
-</div>
+
 
