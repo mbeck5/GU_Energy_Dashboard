@@ -114,10 +114,11 @@ angular.module('clientApp')
     //removes current item from front-end ui
     function deleteCurrentItem() {
       var selectedTimeline = getSelectedTimeline();
-      var index = sortedComps[selectedTimeline].indexOf(selectedComp);
+      var index = sortedComps[selectedTimeline].indexOf($scope.filteredComps[selectedTimeline][$scope.displayedCompIndex]);
       sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
       $scope.searchInput = '';  //reset search
+      $scope.displayedCompIndex = -1; //deselect item
     }
 });
 
