@@ -51,15 +51,14 @@ angular.module('clientApp')
     //when clicking on competition
     $scope.selectComp = function (index) {
       $scope.displayedCompIndex = index;
-      selectedComp = $scope.filteredComps[getSelectedTimeline()][index];
+      selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
       setDates(index);
-      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
+      compEditSvc.setSelectedComp(selectedComp);
     };
 
-    function setDates(index) {
-      var selectedTimeline = getSelectedTimeline();
-      $scope.filteredComps[selectedTimeline][index].start_date = moment($scope.filteredComps[selectedTimeline][index].start_date).format('DD/MMMM/YYYY');
-      $scope.filteredComps[selectedTimeline][index].end_date = moment($scope.filteredComps[selectedTimeline][index].end_date).format('DD/MMMM/YYYY');
+    function setDates() {
+      selectedComp.start_date = moment(selectedComp.start_date).format('DD/MMMM/YYYY');
+      selectedComp.end_date = moment(selectedComp.end_date).format('DD/MMMM/YYYY');
     }
 
     $scope.openCreateModal = function (size) {
@@ -145,7 +144,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.status = {
     isopen: false
   };
-  
+
   //toggle check value by clicking on item
   $scope.selectBuilding = function(index) {
 	var id = $scope.buildings[index].id;
@@ -228,7 +227,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     compEditSvc.saveStartDate($scope.startDate);
     compEditSvc.saveEndDate($scope.endDate);
   });
-  
+
   //toggle check value by clicking on item
   $scope.selectBuilding = function(index) {
 	var id = $scope.buildings[index].id;

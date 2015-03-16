@@ -16,15 +16,15 @@ angular.module('clientApp')
         selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         //Compare to the values from two weeks ago
-        var currentStart = selectedComp.start_date;
-        var currentEnd = selectedComp.end_date;
-        var compareStart = moment(currentStart).subtract(15, 'days');
+        var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
+        var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
+        var compareStart = currentStart.clone().subtract(15, 'days');
         if(moment().isAfter(currentEnd) || moment().isSame(currentEnd)){
-          compareEnd = moment(currentEnd).subtract(15, 'days');
+          compareEnd = currentEnd.clone().subtract(15, 'days');
         }
         else{
           var daysPassed = moment().diff(currentStart, 'days');
-          compareEnd = moment(compareStart).add(daysPassed, 'days');
+          compareEnd = compareStart.clone().add(daysPassed, 'days');
         }
 
         $scope.data = [];
@@ -32,8 +32,8 @@ angular.module('clientApp')
         currentList = [];
         changeList = [];
 
-        compEditSvc.getBuildingTotals(compareStart, compareEnd, selectedComp.cid).then(function(data1){
-          compEditSvc.getBuildingTotals(currentStart, currentEnd, selectedComp.cid).then(function(data2){
+        compEditSvc.getBuildingTotals(compareStart.format('YYYY/MM/DD'), compareEnd.format('YYYY/MM/DD'), selectedComp.cid).then(function(data1){
+          compEditSvc.getBuildingTotals(currentStart.format('YYYY/MM/DD'), currentEnd.format('YYYY/MM/DD'), selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
             $scope.options.chart.margin.left = longestLabel * 7;
@@ -60,7 +60,7 @@ angular.module('clientApp')
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
-        valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
+        //valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
