@@ -5,6 +5,16 @@ angular.module('clientApp')
     var selectedComp = 'DESELECTED';
     var startDate = '';
     var endDate = '';
+    var loginOK = false;
+
+    function checkLogin(studentID) {
+      loginOK = true;
+    }
+
+    function getLoginStatus()
+    {
+      return loginOK;
+    }
 
     function getComp() {
       var allComps = Restangular.all('getCompetitions');
@@ -84,6 +94,8 @@ angular.module('clientApp')
     }
 
     return {
+      checkLogin: checkLogin,
+      getLoginStatus: getLoginStatus,
       getComp: getComp,
       saveNewComp: saveNewComp,
       editNewComp: editNewComp,

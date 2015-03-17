@@ -63,46 +63,52 @@ angular.module('clientApp')
     }
 
     $scope.openCreateModal = function (size) {
-      var createModal = $modal.open({
-        templateUrl: 'myModalContent1.html',
-        controller: 'createModalInstanceCtrl',
-        size: size
-      });
 
-      createModal.result.then(function(created) {
-        if (created)  //only refresh if user added new
-          $scope.searchInput = '';  //reset search
-          refreshCompList();
-      });
+            var createModal = $modal.open({
+              templateUrl: 'myModalContent1.html',
+              controller: 'createModalInstanceCtrl',
+              size: size
+            });
+
+            createModal.result.then(function(created) {
+              if (created)  //only refresh if user added new
+                $scope.searchInput = '';  //reset search
+              refreshCompList();
+            });
+
     };
 
     $scope.openEditModal = function (size) {
-      var editModal = $modal.open({
-        templateUrl: 'myModalContent2.html',
-        controller: 'editModalInstanceCtrl',
-        size: size
-      });
 
-      editModal.result.then(function(edited) {
-        if (edited)  //only refresh if user edited
-          $scope.searchInput = '';  //reset search
-          refreshCompList();
-      });
+
+            var editModal = $modal.open({
+              templateUrl: 'myModalContent2.html',
+              controller: 'editModalInstanceCtrl',
+              size: size
+            });
+
+            editModal.result.then(function (edited) {
+              if (edited)  //only refresh if user edited
+                $scope.searchInput = '';  //reset search
+              refreshCompList();
+            });
     };
 
     $scope.openDeleteModal = function (size) {
-      var deleteModal = $modal.open({
-        templateUrl: 'myModalContent3.html',
-        controller: 'deleteModalInstanceCtrl',
-        size: size
-      });
 
-      deleteModal.result.then(function(deleted) {
-        if (deleted) {  //only refresh if user deleted
-          $scope.searchInput = '';  //reset search
-          deleteCurrentItem();
-        }
-      });
+            var deleteModal = $modal.open({
+              templateUrl: 'myModalContent3.html',
+              controller: 'deleteModalInstanceCtrl',
+              size: size
+            });
+
+            deleteModal.result.then(function(deleted) {
+              if (deleted) {  //only refresh if user deleted
+                $scope.searchInput = '';  //reset search
+                deleteCurrentItem();
+              }
+            });
+
     };
 
     //retrieves all competition info
@@ -133,6 +139,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.checkedBuildings = [];
   $scope.buildings = [];
   $scope.title = "Create Competition";
+  $scope.loggedIn = compEditSvc.getLoginStatus();
+  $scope.showLogin = !$scope.loggedIn;
+  $scope.studentID = "";
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
@@ -146,8 +155,20 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.endDate = moment().add(2, 'weeks').format('DD/MMMM/YYYY');
   compEditSvc.saveEndDate($scope.endDate);
 
+
   $scope.status = {
     isopen: false
+  };
+
+  $scope.login = function () {
+    compEditSvc.checkLogin($scope.studentID);
+    $scope.loggedIn = compEditSvc.getLoginStatus();
+    $scope.showLogin = !$scope.loggedIn;
+    if(!$scope.loggedIn)
+    {
+      alert("You do not have permissions to perform this action");
+      $modalInstance.dismiss('cancel');
+    }
   };
 
   //when ok is clicked
@@ -157,34 +178,45 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("Please specify a competition name");
     }
     else {
-      //check for valid dates
-      //check for valid dates
-      if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
-        alert("Invalid Date");
-      }
-      else {
-        //get dates from service daved from datepicker controller
-        var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
-        var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
-        //save the new competition to the database
-        compEditSvc.getComp().then(function (data) {
-          var maxCid = 0;
-          var arrayLength = data.length;
-          for (var i = 0; i < arrayLength; i++) {
-            if (data[i].cid > maxCid) {
-              maxCid = data[i].cid;
-            }
+        var clickedBuildingCount = 0;
+        for (var property in $scope.checkedBuildings) {
+          if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+            clickedBuildingCount++;
           }
-          maxCid = maxCid + 1;
-          compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
-          for (var property in $scope.checkedBuildings) {
-            if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-              compEditSvc.addCompBuilding(maxCid, property);
-            }
+        }
+        if(clickedBuildingCount <= 1)
+        {
+          alert("2 or more buildings must be selected")
+        }
+        else {
+          if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
+            alert("Invalid end date");
           }
-          $modalInstance.close(true);
-        });
-      }
+        else
+          {
+            //get dates from service daved from datepicker controller
+            var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
+            var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
+            //save the new competition to the database
+            compEditSvc.getComp().then(function (data) {
+              var maxCid = 0;
+              var arrayLength = data.length;
+              for (var i = 0; i < arrayLength; i++) {
+                if (data[i].cid > maxCid) {
+                  maxCid = data[i].cid;
+                }
+              }
+              maxCid = maxCid + 1;
+              compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
+              for (var property in $scope.checkedBuildings) {
+                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                  compEditSvc.addCompBuilding(maxCid, property);
+                }
+              }
+              $modalInstance.close(true);
+            });
+          }
+        }
     }
   };
 
@@ -212,6 +244,9 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   $scope.checkedBuildings = [];
   $scope.buildings = [];
   $scope.title = "Edit Competition";
+  $scope.loggedIn = compEditSvc.getLoginStatus();
+  $scope.showLogin = !$scope.loggedIn;
+  $scope.studentID = "";
 
   //get list of buildings
   compEditSvc.getCompBuildingList(cid).then(function (data) {
@@ -227,6 +262,17 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     compEditSvc.saveEndDate($scope.endDate);
   });
 
+  $scope.login = function () {
+    compEditSvc.checkLogin($scope.studentID);
+    $scope.loggedIn = compEditSvc.getLoginStatus();
+    $scope.showLogin = !$scope.loggedIn;
+    if(!$scope.loggedIn)
+    {
+      alert("You do not have permissions to perform this action");
+      $modalInstance.dismiss('cancel');
+    }
+  };
+
   //when ok clicked
   $scope.ok = function (newName) {
     //check for valid name
@@ -234,25 +280,36 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       alert("Please specify a competition name");
     }
     else {
-      //check for valid dates
-      if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
-        alert("Invalid Date");
+        var clickedBuildingCount = 0;
+        for (var property in $scope.checkedBuildings) {
+          if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+            clickedBuildingCount++;
+          }
+        }
+        if(clickedBuildingCount <= 1)
+        {
+          alert("2 or more buildings must be selected")
+        }
+        else {
+          if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
+            alert("Invalid end date");
+          }
+          else {
+            //delete old buildings saved for the competition
+            compEditSvc.deleteCompBuildings(cid).then(function () {
+              //get dates saved from service from datepicker
+              var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
+              var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
+              //update in database
+              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
+                //save new building selections
+                compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
+              });
+              $modalInstance.close(true);
+            });
+          }
+        }
       }
-      else {
-        //delete old buildings saved for the competition
-        compEditSvc.deleteCompBuildings(cid).then(function () {
-          //get dates saved from service from datepicker
-          var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
-          var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
-          //update in database
-          compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
-            //save new building selections
-            compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
-          });
-          $modalInstance.close(true);
-        });
-      }
-    }
   };
 
   //on cancel click
@@ -264,6 +321,20 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
 //controller for delete modal
 angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
 
+  $scope.loggedIn = compEditSvc.getLoginStatus();
+  $scope.showLogin = !$scope.loggedIn;
+  $scope.studentID = "";
+
+  $scope.login = function () {
+    compEditSvc.checkLogin($scope.studentID);
+    $scope.loggedIn = compEditSvc.getLoginStatus();
+    $scope.showLogin = !$scope.loggedIn;
+    if(!$scope.loggedIn)
+    {
+      alert("You do not have permissions to perform this action");
+      $modalInstance.dismiss('cancel');
+    }
+  };
   //on ok
   $scope.ok = function () {
     //get the selected competition cid
