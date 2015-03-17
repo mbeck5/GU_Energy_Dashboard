@@ -3,17 +3,21 @@ app = module.parent.exports;
 var buildingController = require('./controllers/building');
 var compQController = require('./controllers/compQuery');
 
-app.get('/api/getBuildings', buildingController.getBuildings);
-app.get('/api/getBuildingData', buildingController.getResources);
-app.get('/api/getBuildingDataFromName', buildingController.getResourcesFromName);
-app.get('/api/getResourceByType', buildingController.getResourcesByType);
-app.get('/api/getResourceSum', buildingController.getResourceSum);
-app.get('/api/getBuildingTypes', buildingController.getBuildingTypes);
-app.get('/api/getCompetitions', compQController.getCompetitions);
-app.get('/api/saveNewComp', compQController.saveNewComp);
-app.get('/api/editNewComp', compQController.editNewComp);
-app.get('/api/deleteComp', compQController.deleteComp);
-app.get('/api/addCompBuilding', compQController.addCompBuilding);
-app.get('/api/deleteCompBuildings', compQController.deleteCompBuildings);
-app.get('/api/getCompBuildingList', compQController.getCompBuildingList);
-app.get('/api/getBuildingTotals', compQController.getBuildingTotals);
+/*Use get for retrieving/viewing information.
+  Use post for creating/editing information.
+ */
+
+app.get('/api/getBuildings', buildingController.getBuildings); //get
+app.get('/api/getBuildingData', buildingController.getResources); //get
+app.get('/api/getBuildingDataFromName', buildingController.getResourcesFromName); //get
+app.get('/api/getResourceByType', buildingController.getResourcesByType); //get
+app.get('/api/getResourceSum', buildingController.getResourceSum); //get
+app.get('/api/getBuildingTypes', buildingController.getBuildingTypes); //get
+app.get('/api/getCompetitions', compQController.getCompetitions); //get
+app.post('/api/saveNewComp', compQController.saveNewComp); //post
+app.post('/api/editNewComp', compQController.editNewComp); //post
+app.post('/api/deleteComp', compQController.deleteComp); //post
+app.post('/api/addCompBuilding', compQController.addCompBuilding); //post
+app.post('/api/deleteCompBuildings', compQController.deleteCompBuildings); //post
+app.get('/api/getCompBuildingList', compQController.getCompBuildingList); //get
+app.get('/api/getBuildingTotals', compQController.getBuildingTotals); //get
