@@ -19,7 +19,7 @@ exports.getCompetitions = function (req, res) {
 
 exports.saveNewComp = function (req, res) {
     var addCompQueryString = "INSERT INTO competitions (cid, start_date, end_date, comp_name, resource) " +
-            "VALUES (" + req.query.cid + ",DATE('" + req.query.startDate + "'),DATE('" + req.query.endDate + "'),'" + req.query.compName + "', 2);"
+            "VALUES (" + req.body.cid + ",DATE('" + req.body.startDate + "'),DATE('" + req.body.endDate + "'),'" + req.body.compName + "', 2);"
     connection.query(addCompQueryString, function (err, rows) {
         if (err) {
             throw err;
@@ -31,8 +31,8 @@ exports.saveNewComp = function (req, res) {
 };
 
 exports.editNewComp = function (req, res) {
-    var editCompQueryString = "UPDATE competitions SET start_date=DATE('" + req.query.startDate+ "'), end_date=DATE('" + req.query.endDate + "')," +
-       " comp_name='" + req.query.compName + "' WHERE cid=" + req.query.cid + ";";
+    var editCompQueryString = "UPDATE competitions SET start_date=DATE('" + req.body.startDate+ "'), end_date=DATE('" + req.body.endDate + "')," +
+       " comp_name='" + req.body.compName + "' WHERE cid=" + req.body.cid + ";";
     connection.query(editCompQueryString, function (err, rows) {
         if (err) {
             console.log(err);
@@ -44,13 +44,13 @@ exports.editNewComp = function (req, res) {
 };
 
 exports.deleteComp = function (req, res) {
-    var deleteCompBuildingsQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid=" + req.query.cid + ";";
+    var deleteCompBuildingsQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid=" + req.body.cid + ";";
     connection.query(deleteCompBuildingsQueryString, function (err, rows) {
         if (err) {
             throw err;
         }
         else {
-            var deleteCompQueryString = "DELETE FROM energy_report.competitions WHERE cid=" + req.query.cid + ";";
+            var deleteCompQueryString = "DELETE FROM energy_report.competitions WHERE cid=" + req.body.cid + ";";
             connection.query(deleteCompQueryString, function (err, rows) {
                 if (err) {
                     throw err;
@@ -64,7 +64,7 @@ exports.deleteComp = function (req, res) {
 };
 
 exports.addCompBuilding = function (req, res) {
-    var addCompBuildingQueryString = "INSERT INTO competition_buildings (cid, bid) VALUES ("+ req.query.cid + "," + req.query.bid + ");";
+    var addCompBuildingQueryString = "INSERT INTO competition_buildings (cid, bid) VALUES ("+ req.body.cid + "," + req.body.bid + ");";
     connection.query(addCompBuildingQueryString, function (err, rows) {
         if (err) {
             throw err;
@@ -76,7 +76,7 @@ exports.addCompBuilding = function (req, res) {
 };
 
 exports.deleteCompBuildings = function (req, res) {
-    var addCompBuildingQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid="+ req.query.cid + ";";
+    var addCompBuildingQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid="+ req.body.cid + ";";
     connection.query(addCompBuildingQueryString, function (err, rows) {
         if (err) {
             throw err;
