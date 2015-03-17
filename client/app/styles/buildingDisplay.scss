@@ -9,7 +9,7 @@
   border-color: #000000;
   border-radius: 20px;
 
-  @media (max-width: 992px) {
+  @media (max-width: $screen-md) {
     max-width: 100%;
     margin: 0 auto 15px auto;
     padding: 15px 25px 15px 25px;
@@ -30,10 +30,6 @@
 
 #graph {
   margin-left: 2%;
-}
-
-#building-display-panel{
-  margin-top: 30px;
 }
 
 #detailed-toggle {

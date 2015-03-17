@@ -6,8 +6,8 @@ angular.module('clientApp')
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
       $scope.isDetailed = true; //detailed toggle value
-      $scope.date1 = moment().subtract(1, 'years').format('DD-MMMM-YYYY'); //default start is one year ago
-      $scope.date2 = moment().format('DD-MMMM-YYYY');
+      $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
+      $scope.date2 = moment().format('DD/MMMM/YYYY');
       $scope.dateOpen1 = false;
       $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();

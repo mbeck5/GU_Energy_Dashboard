@@ -172,9 +172,7 @@ angular.module('clientApp')
       });
     }
     function createPieType(buildingType){
-      var elec = 0;
-      var gas = 0;
-      var water = 0;
+      var elec, gas, water;
 
       if(elec = electricityHash[buildingType]);
       else{elec = 0}

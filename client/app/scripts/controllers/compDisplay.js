@@ -45,20 +45,20 @@ angular.module('clientApp')
       $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
+      $scope.displayedCompIndex = -1; //deselect item on view
     };
 
     //when clicking on competition
     $scope.selectComp = function (index) {
-      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
       $scope.displayedCompIndex = index;
-      selectedComp = $scope.filteredComps[getSelectedTimeline()][index];
+      selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
       setDates(index);
+      compEditSvc.setSelectedComp(selectedComp);
     };
 
-    function setDates(index) {
-      var selectedTimeline = getSelectedTimeline();
-      $scope.filteredComps[selectedTimeline][index].start_date = moment($scope.filteredComps[selectedTimeline][index].start_date).format('DD/MMMM/YYYY');
-      $scope.filteredComps[selectedTimeline][index].end_date = moment($scope.filteredComps[selectedTimeline][index].end_date).format('DD/MMMM/YYYY');
+    function setDates() {
+      selectedComp.start_date = moment(selectedComp.start_date).format('DD/MMMM/YYYY');
+      selectedComp.end_date = moment(selectedComp.end_date).format('DD/MMMM/YYYY');
     }
 
     $scope.openCreateModal = function (size) {
@@ -107,20 +107,18 @@ angular.module('clientApp')
       $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-        $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp(sortedComps.running[0]);
-        selectedComp = sortedComps.running[0];
-        setDates(0);
+        $scope.selectComp(0);
       });
     }
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
       var selectedTimeline = getSelectedTimeline();
-      var index = sortedComps[selectedTimeline].indexOf(selectedComp);
+      var index = sortedComps[selectedTimeline].indexOf($scope.filteredComps[selectedTimeline][$scope.displayedCompIndex]);
       sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
       $scope.searchInput = '';  //reset search
+      $scope.displayedCompIndex = -1; //deselect item
     }
 });
 
@@ -148,6 +146,17 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
     isopen: false
   };
 
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
+  };
+
   //when ok is clicked
   $scope.ok = function (newName) {
     //check that they entered a name
@@ -173,7 +182,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               maxCid = data[i].cid;
             }
           }
-          maxCid = maxCid + 1;
+          maxCid += 1;
           compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
           for (var property in $scope.checkedBuildings) {
             if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
@@ -189,11 +198,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   //when cancel clicked
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
-  };
-
-  //get a new cid that does not exist yet
-  $scope.getNewCid = function () {
-
   };
 
 });
@@ -224,6 +228,17 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     compEditSvc.saveStartDate($scope.startDate);
     compEditSvc.saveEndDate($scope.endDate);
   });
+
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
+  };
 
   //when ok clicked
   $scope.ok = function (newName) {

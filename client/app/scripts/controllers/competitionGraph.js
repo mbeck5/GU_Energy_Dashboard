@@ -7,8 +7,8 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
-    var tempData = [];
 
+    //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
@@ -16,28 +16,27 @@ angular.module('clientApp')
         selectedComp = compEditSvc.getSelectedComp();
         $scope.api.refresh();
         //Compare to the values from two weeks ago
-        var currentStart = selectedComp.start_date;
-        var currentEnd = selectedComp.end_date;
-        var compareStart = moment(selectedComp.start_date).subtract(15, 'days').format();
+        var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
+        var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
+        var compareStart = currentStart.clone().subtract(15, 'days');
         if(moment().isAfter(currentEnd) || moment().isSame(currentEnd)){
-          compareEnd = moment(selectedComp.end_date).subtract(15, 'days').format();
+          compareEnd = currentEnd.clone().subtract(15, 'days');
         }
         else{
           var daysPassed = moment().diff(currentStart, 'days');
-          compareEnd = moment(compareStart).add(daysPassed, 'days').format();
+          compareEnd = compareStart.clone().add(daysPassed, 'days');
         }
 
         $scope.data = [];
-        tempData = [];
         compareList = [];
         currentList = [];
         changeList = [];
 
-        compEditSvc.getBuildingTotals(compareStart, compareEnd, selectedComp.cid).then(function(data1){
-          compEditSvc.getBuildingTotals(currentStart, currentEnd, selectedComp.cid).then(function(data2){
+        compEditSvc.getBuildingTotals(compareStart.format('YYYY/MM/DD'), compareEnd.format('YYYY/MM/DD'), selectedComp.cid).then(function(data1){
+          compEditSvc.getBuildingTotals(currentStart.format('YYYY/MM/DD'), currentEnd.format('YYYY/MM/DD'), selectedComp.cid).then(function(data2){
             createCompareList(data1);
             createCurrentList(data2);
-            $scope.options.chart.margin.left = longestLabel * 6.8;
+            $scope.options.chart.margin.left = longestLabel * 7;
             calcAllChanges();
             sortChanges();
             createData();
@@ -48,7 +47,6 @@ angular.module('clientApp')
 
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
-    tempData = [];
     $scope.data = [];
 
     $scope.options = {
@@ -56,19 +54,17 @@ angular.module('clientApp')
         type: 'multiBarHorizontalChart',
         height: 600,
         margin: {
-          top: 20,
-          right: 20,
-          bottom: 60,
           left: 55
         },
         x: function(d){ return d.label; },
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
+        //valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
-        tooltips: true,
+        tooltips: false,
         color: function(d, i){
           if(i < 3) {
             return colorArray[i];
@@ -119,7 +115,7 @@ angular.module('clientApp')
       subtitle: {
         enable: true,
         text: function(){
-          return selectedComp.start_date + '-' + selectedComp.end_date
+          return selectedComp.start_date + ' - ' + selectedComp.end_date
         }
       }
     };
@@ -173,6 +169,7 @@ angular.module('clientApp')
     }
 
     function createData(){
+      var tempData = [];
       for(var i = 0; i < changeList.length; i++){
         var key = shortenBuildingName(changeList[i].building.building);
         var values = [];
@@ -187,9 +184,7 @@ angular.module('clientApp')
         }
         tempData.push({key: key, values: values});
       }
-
       $scope.data = tempData;
-
     }
 
     function shortenBuildingName(buildingName){
