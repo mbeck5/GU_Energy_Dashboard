@@ -78,6 +78,12 @@ angular.module('clientApp')
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
         var values = [];
+        if(typeof data[0] !== 'undefined') {
+          var buildingName = data[0].name;
+        }
+        else{
+          var buildingName = "";
+        }
 
         if (data) {
           //create graph points
@@ -86,7 +92,7 @@ angular.module('clientApp')
             values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
           }
         }
-        tempData.push({values: values, key: ''});
+        tempData.push({values: values, key: buildingName});
 
         //postpone graph initialization until all points have been created
         if(tempData.length === $scope.selectedBuildings.length){
@@ -129,7 +135,7 @@ angular.module('clientApp')
       //called once data is retrieved
       function initGraph() {
         $scope.data = tempData;
-        setKeys();
+        //setKeys();
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
         $scope.spinnerActive = false;
