@@ -36,6 +36,11 @@ body {
   box-shadow: 0 0 50px #CCCCCC;
 }
 
+//change graph line thickness
+.nvd3 g.nv-groups path.nv-line {
+  stroke-width: 4px;
+}
+
 //change color of toggle switch
 .switch-left {
   background: $brand-primary !important;
