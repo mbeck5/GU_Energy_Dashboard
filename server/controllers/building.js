@@ -28,9 +28,9 @@ exports.getBuildingTypes = function(req, res){
 };
 
 exports.getResources = function(req, res){
-    var isDetailed = req.param("isDetailed");
-    var startDate = req.param("startDate");
-    var endDate = req.param("endDate");
+    var isDetailed = req.query.isDetailed;
+    var startDate = req.query.startDate;
+    var endDate = req.query.endDate;
     var tableName;
     if(isDetailed === 'true'){
         tableName = "meters_dly_data";
@@ -50,11 +50,11 @@ exports.getResources = function(req, res){
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                     "FROM " + tableName + " " +
                     "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
-                    "WHERE meter_type_id = " + req.param("meterType") + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN (SELECT METER_ID " +
+                    "WHERE meter_type_id = " + req.query.meterType + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN (SELECT METER_ID " +
                                                 "FROM erb_tree " +
                                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
                                                                             "FROM erb_tree " +
-                                                                            "WHERE BUILDING_ID = " + req.param("building") + ")) GROUP BY date;";
+                                                                            "WHERE BUILDING_ID = " + req.query.building + ")) GROUP BY date;";
 
     connection.query(queryString, function(err, rows){
         if(err){
@@ -67,9 +67,9 @@ exports.getResources = function(req, res){
 };
 
 exports.getResourcesFromName = function(req, res) {
-    var isDetailed = req.param("isDetailed");
-    var startDate = req.param("startDate");
-    var endDate = req.param("endDate");
+    var isDetailed = req.query.isDetailed;
+    var startDate = req.query.startDate;
+    var endDate = req.query.endDate;
     var tableName;
     if(isDetailed === 'true'){
         tableName = "meters_dly_data";
@@ -89,14 +89,14 @@ exports.getResourcesFromName = function(req, res) {
     var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                         "FROM " + tableName + " " +
                         "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
-                        "WHERE meter_type_id = " + req.param("meterType") + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN " +
+                        "WHERE meter_type_id = " + req.query.meterType + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN " +
                             "(SELECT METER_ID " +
                                 "FROM erb_tree " +
                                 "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
                                                             "FROM erb_tree " +
                                                             "WHERE BUILDING_ID IN (SELECT building_id " +
                                                                                     "FROM building " +
-                                                                                    "WHERE building_name = '" + req.param("building") + "'))) GROUP BY date;";
+                                                                                    "WHERE building_name = '" + req.query.building + "'))) GROUP BY date;";
 
     connection.query(queryString, function(err, rows){
         if(err){
@@ -116,7 +116,7 @@ exports.getResourcesByType = function(req, res){
                                 "FROM meters_dly_data " +
                                 "ORDER BY TREND_DATE DESC) as most_recent_entries " +
                         "JOIN erb_tree ON most_recent_entries.MID = erb_tree.METER_ID " +
-                        "WHERE METER_TYPE_ID= " + req.param("meterType") + " " +
+                        "WHERE METER_TYPE_ID= " + req.query.meterType + " " +
                         "GROUP BY most_recent_entries.MID) as t " +
                     "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID AND bt.BUILDING_TYPE_ID = b.BUILDING_TYPE_ID AND b.BUILDING_TYPE_ID != 1 " +
                     "GROUP BY b.BUILDING_TYPE_ID";
@@ -141,7 +141,7 @@ exports.getResourceSum = function(req, res){
                                     "FROM meters_dly_data " +
                                     "ORDER BY TREND_DATE DESC) as most_recent_entries " +
                             "JOIN erb_tree ON most_recent_entries.MID = erb_tree.METER_ID " +
-                            "WHERE METER_TYPE_ID= " + req.param("meterType") + " " +
+                            "WHERE METER_TYPE_ID= " + req.query.meterType + " " +
                             "GROUP BY most_recent_entries.MID) as t " +
                         "WHERE e.NODE_ID = t.PARENT_NODE_ID AND b.BUILDING_ID = e.BUILDING_ID AND bt.BUILDING_TYPE_ID = b.BUILDING_TYPE_ID AND b.BUILDING_TYPE_ID != 1 " +
                         "GROUP BY b.BUILDING_TYPE_ID) as totals_table";

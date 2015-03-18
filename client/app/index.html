@@ -8,28 +8,24 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
+    <link rel="stylesheet" href="bower_components/nvd3/nv.d3.css" />
     <link rel="stylesheet" href="bower_components/angular-bootstrap-toggle-switch/style/bootstrap3/angular-toggle-switch-bootstrap-3.css"/>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/buildingSelector.css">
-    <link rel="stylesheet" href="styles/buildingDisplay.css">
-    <link rel="stylesheet" href="styles/compDisplay.css">
     <!-- endbuild -->
   </head>
   <body ng-app="clientApp">
-    <!--[if lt IE 8]>
+    <!--[if lt IE 9]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here-->
-    <div ng-controller="HeaderCtrl">
-      <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div>
+      <div id="navbar" class="navbar navbar-default navbar-fixed-top" ng-controller="HeaderCtrl">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="navbarCollapsed = !navbarCollapsed">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="toggleCollapse()">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -60,13 +56,6 @@
        ga('create', 'UA-59391709-1');
        ga('send', 'pageview');
     </script>
-
-    <!-- build:js(.) scripts/oldieshim.js -->
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
-    <![endif]-->
-    <!-- endbuild -->
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->

@@ -23,27 +23,27 @@ angular.module('clientApp')
 
     function saveNewComp(cid, startDate, endDate, compName) {
       var newComp = Restangular.all('saveNewComp');
-      return newComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
+      return newComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
     }
 
     function editNewComp(cid, startDate, endDate, compName) {
       var editedComp = Restangular.all('editNewComp');
-      return editedComp.getList({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
+      return editedComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
     }
 
     function deleteComp(cid) {
       var deletedComp = Restangular.all('deleteComp');
-      return deletedComp.getList({cid: cid});
+      return deletedComp.post({cid: cid});
     }
 
     function addCompBuilding(cid, bid) {
       var newBuilding = Restangular.all('addCompBuilding');
-      return newBuilding.getList({cid: cid, bid: bid});
+      return newBuilding.post({cid: cid, bid: bid});
     }
 
     function deleteCompBuildings(cid) {
       var deleteBidQ = Restangular.all('deleteCompBuildings');
-      return deleteBidQ.getList({cid: cid});
+      return deleteBidQ.post({cid: cid});
     }
 
     function getCompBuildingList(cid) {

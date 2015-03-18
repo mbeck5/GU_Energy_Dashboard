@@ -49,11 +49,11 @@
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
               <div class="checked-list-item" ng-repeat="building in buildings">
-                <span class="input-group-addon" ng-show="true">
+                <span class="input-group-addon">
                   <input type="checkbox" ng-model="checkedBuildings[building.id]"/>
                 </span>
                 <a class="list-group-item"
-                   ng-class="{active: checkedBuildings[building.id], clickable: false}"
+                   ng-class="{active: checkedBuildings[building.id]}"
                    ng-click="selectBuilding($index)">
                   {{building.name}}
                 </a>

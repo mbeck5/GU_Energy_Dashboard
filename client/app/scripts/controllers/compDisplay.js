@@ -4,8 +4,7 @@ angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
-    $scope.searchInput = {};
-    $scope.searchInput.input = '';
+    $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.tabActivity = [false, true, false];  //past, running, upcoming
     $scope.displayedCompIndex = 0;
@@ -29,7 +28,7 @@ angular.module('clientApp')
           sortedComps.upcoming.push(allComps[i]);
         }
       }
-      $scope.filteredComps = jQuery.extend({},sortedComps);
+      $scope.filteredComps = angular.copy(sortedComps);
     }
 
     function getSelectedTimeline() {
@@ -46,20 +45,20 @@ angular.module('clientApp')
       $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
+      $scope.displayedCompIndex = -1; //deselect item on view
     };
 
     //when clicking on competition
     $scope.selectComp = function (index) {
-      compEditSvc.setSelectedComp($scope.filteredComps[getSelectedTimeline()][index]);
       $scope.displayedCompIndex = index;
-      selectedComp = $scope.filteredComps[getSelectedTimeline()][index];
+      selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
       setDates(index);
+      compEditSvc.setSelectedComp(selectedComp);
     };
 
-    function setDates(index) {
-      var selectedTimeline = getSelectedTimeline();
-      $scope.filteredComps[selectedTimeline][index].start_date = moment($scope.filteredComps[selectedTimeline][index].start_date).format('DD/MMMM/YYYY');
-      $scope.filteredComps[selectedTimeline][index].end_date = moment($scope.filteredComps[selectedTimeline][index].end_date).format('DD/MMMM/YYYY');
+    function setDates() {
+      selectedComp.start_date = moment(selectedComp.start_date).format('DD/MMMM/YYYY');
+      selectedComp.end_date = moment(selectedComp.end_date).format('DD/MMMM/YYYY');
     }
 
     $scope.openCreateModal = function (size) {
@@ -72,7 +71,6 @@ angular.module('clientApp')
 
             createModal.result.then(function(created) {
               if (created)  //only refresh if user added new
-                $scope.searchInput = '';  //reset search
               refreshCompList();
             });
 
@@ -89,7 +87,6 @@ angular.module('clientApp')
 
             editModal.result.then(function (edited) {
               if (edited)  //only refresh if user edited
-                $scope.searchInput = '';  //reset search
               refreshCompList();
             });
     };
@@ -113,22 +110,21 @@ angular.module('clientApp')
 
     //retrieves all competition info
     function refreshCompList() {
+      $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-        $scope.displayedCompIndex = 0;
-        compEditSvc.setSelectedComp(sortedComps.running[0]);
-        selectedComp = sortedComps.running[0];
-        setDates(0);
+        $scope.selectComp(0);
       });
     }
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
       var selectedTimeline = getSelectedTimeline();
-      var index = sortedComps[selectedTimeline].indexOf(selectedComp);
+      var index = sortedComps[selectedTimeline].indexOf($scope.filteredComps[selectedTimeline][$scope.displayedCompIndex]);
       sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
       $scope.searchInput = '';  //reset search
+      $scope.displayedCompIndex = -1; //deselect item
     }
 });
 
@@ -155,7 +151,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.endDate = moment().add(2, 'weeks').format('DD/MMMM/YYYY');
   compEditSvc.saveEndDate($scope.endDate);
 
-
   $scope.status = {
     isopen: false
   };
@@ -169,6 +164,17 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("You do not have permissions to perform this action");
       $modalInstance.dismiss('cancel');
     }
+  };
+
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
   };
 
   //when ok is clicked
@@ -225,11 +231,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
     $modalInstance.dismiss('cancel');
   };
 
-  //get a new cid that does not exist yet
-  $scope.getNewCid = function () {
-
-  };
-
 });
 
 //controller for edit modal
@@ -261,6 +262,17 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
     compEditSvc.saveStartDate($scope.startDate);
     compEditSvc.saveEndDate($scope.endDate);
   });
+
+  //toggle check value by clicking on item
+  $scope.selectBuilding = function(index) {
+	var id = $scope.buildings[index].id;
+	if ($scope.checkedBuildings[id]) {
+	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+	}
+	else {
+	  $scope.checkedBuildings[id] = true;
+	}
+  };
 
   $scope.login = function () {
     compEditSvc.checkLogin($scope.studentID);
