@@ -80,8 +80,18 @@
       <div class="panel panel-default panel-shadow" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
-          <div>
-            <knob knob-data="knobData" knob-options="knobOptions"></knob>
+          <div class="row">
+            <div class="col-sm-4">
+              <div knob value="{{knobData[0]}}" readonly="true"></div>
+            </div>
+            <div class="col-sm-4">
+              <div knob value="{{knobData[1]}}" readonly="true"></div>
+            </div>
+            <div class="col-sm-4">
+              <div knob value="{{knobData[2]}}" readonly="true"></div>
+            </div>
+          </div>
+          <div class="row">
             <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
           </div>
         </div>

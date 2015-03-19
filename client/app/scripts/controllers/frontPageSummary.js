@@ -19,17 +19,7 @@ angular.module('clientApp')
     populateBuildingTypes();
     createBarData();
 
-    var pieBuildingType = [
-      {key: "Electricity", y: 0},
-      {key: "Gas", y: 0},
-      {key: "Water", y: 0}];
-
-    $scope.knobOptions = {
-      readOnly: true,
-      width: 100
-    };
-
-    $scope.knobData = 500;
+    $scope.knobData = [];
 
     $scope.barOptions = {
       chart: {
@@ -56,8 +46,6 @@ angular.module('clientApp')
         discretebar: {
           dispatch: {
             elementClick: function(e) {barClicked(e)},
-            elementMouseout: function(e) {revertBarToDefault()},
-            elementMouseover: function(e) {changeResourceDataOnBarMouseover(e)}
           }
         }
       }
@@ -136,31 +124,18 @@ angular.module('clientApp')
     //This function throws 3 exceptions per building service call
     function getKnobData(){
       buildingSvc.getResourceSum(2).then(function (data){
-        $scope.knobData.value = data[0].res_sum;
+        $scope.knobData[0] = data[0].res_sum;
       });
-      //buildingSvc.getResourceSum(3).then(function (data){
-      //  $scope.knobData[1] = {value: data[0].res_sum};
-      //});
-      //buildingSvc.getResourceSum(7).then(function (data){
-      //  $scope.knobData[2] = {value: data[0].res_sum};
-      //});
+      buildingSvc.getResourceSum(3).then(function (data){
+        $scope.knobData[1] = data[0].res_sum;
+      });
+      buildingSvc.getResourceSum(7).then(function (data){
+        $scope.knobData[2] = data[0].res_sum;
+      });
     }
 
     function barClicked(e){
       isBarClicked = !isBarClicked;
-    }
-
-    function changeResourceDataOnBarMouseover(e){
-      if (!isBarClicked){
-        $scope.pieApi.updateWithData(pieBuildingType);
-      }
-    }
-
-    function revertBarToDefault(){
-      if (!isBarClicked) {
-        resourceIndex = 0;
-        $scope.barApi.updateWithData(barElectricity);
-      }
     }
 
     //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
