@@ -5,6 +5,7 @@ angular.module('clientApp')
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
+      var longestLabel = 0;
       $scope.isDetailed = true; //detailed toggle value
       $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
       $scope.date2 = moment().format('DD/MMMM/YYYY');
@@ -134,10 +135,11 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph() {
+        longestLabel = 0;
         $scope.data = tempData;
-        //setKeys();
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+        //longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
         $scope.spinnerActive = false;
         usSpinnerService.stop('spinner');
       }
@@ -213,7 +215,13 @@ angular.module('clientApp')
             }
           }
         }
-        var padding = max / denom;
+        var padding = 0;
+        if(denom === -1){
+          padding = 0;
+        }
+        else{
+          padding = max / denom;
+        }
         return max + padding;
       }
 
