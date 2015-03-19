@@ -1,15 +1,28 @@
 #comp-list {
   background-color: transparent;
+  margin: -50px;
 }
 
+
 #background{
-  background-image: url("gonzaga_background.jpg");
+  background-image: url("../images/gonzaga_background.jpg");
+  background-repeat: no-repeat;
+  background-size: 150%;
+  height: 100%;
+}
+
+#panel-background{
+  background-color: transparent;
 }
 
 .scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
-  height: 400px;
+  height: 500px;
+}
+
+.list-group-item{
+  margin-bottom: 5px;
 }
 
 .nav-tabs li a{
@@ -67,6 +80,14 @@
   margin-outside: 20px;
 }
 
-#building-list-panel{
-  height: 25%;
+.panel-transparent {
+  background: none;
+}
+
+.panel-transparent .panel-heading{
+  background: rgba(255, 255, 255, 1)!important;
+}
+
+.panel-transparent .panel-body{
+  background: rgba(255, 255, 255, 0.7)!important;
 }

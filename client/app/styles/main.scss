@@ -5,7 +5,17 @@
 
 body {
   padding-bottom: 20px;
-  background-color: $gray;
+
+  background-image: url("../images/gonzaga_background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+
+  @media (max-width: $screen-md) {
+    background-color: $gray;
+    background-size: 0%;
+  }
+
 }
 
 #navbar {
