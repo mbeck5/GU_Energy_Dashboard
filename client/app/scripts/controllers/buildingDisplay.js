@@ -23,6 +23,9 @@ angular.module('clientApp')
         chart: {
           type: 'lineChart',
           height: 600,
+          margin: {
+            left: 65
+          },
           xAxis: {
             axisLabel: 'Date',
             showMaxMin: false,
@@ -139,7 +142,8 @@ angular.module('clientApp')
         $scope.data = tempData;
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
-        //longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
+        longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
+        $scope.options.chart.yAxis.axisLabelDistance = 25 - longestLabel;
         $scope.spinnerActive = false;
         usSpinnerService.stop('spinner');
       }
