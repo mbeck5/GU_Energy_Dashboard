@@ -47,14 +47,11 @@ exports.getResources = function(req, res){
         startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
         endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
     }
-    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
-                    "FROM " + tableName + " " +
-                    "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
-                    "WHERE meter_type_id = " + req.query.meterType + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN (SELECT METER_ID " +
-                                                "FROM erb_tree " +
-                                                "WHERE PARENT_NODE_ID IN (SELECT NODE_ID " +
-                                                                            "FROM erb_tree " +
-                                                                            "WHERE BUILDING_ID = " + req.query.building + ")) GROUP BY date;";
+    var queryString = "SELECT building_name as name, " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+                        "FROM building, building_meters, meters, " + tableName + " " +
+                        "WHERE building_meters.meter_id = meters.meter_id AND " + tableName + ".meter_id = meters.meter_id AND trend_date >= '" + startDate +
+                            "' AND trend_date <= '" + endDate + "' AND building_meters.building_id = " + req.query.building +
+                            " AND meter_type_id = " + req.query.meterType + " AND building.building_id = building_meters.building_id GROUP BY date;";
 
     connection.query(queryString, function(err, rows){
         if(err){
@@ -86,7 +83,7 @@ exports.getResourcesFromName = function(req, res) {
         startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
         endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
     }
-    var queryString = "SELECT " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
+    var queryString = "SELECT '" + req.query.building + "' as name, " + tableName + ".trend_date as date, SUM(" + tableName + ".consumption) as consumption " +
                         "FROM " + tableName + " " +
                         "JOIN meters ON " + tableName + ".METER_ID=meters.METER_ID " +
                         "WHERE meter_type_id = " + req.query.meterType + " AND " + tableName + ".trend_date >= '" + startDate + "' AND " + tableName + ".trend_date <= '" + endDate + "' AND meters.meter_id IN " +
