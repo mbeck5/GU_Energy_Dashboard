@@ -3,7 +3,6 @@
 angular.module('clientApp')
   .controller('SummaryCtrl', function ($scope, buildingSvc) {
     var isBarClicked = false;
-    var isPieClicked = false;
     var resourceIndex = 0;
     var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
@@ -16,46 +15,21 @@ angular.module('clientApp')
     var electricityHash = {};
     var gasHash = {};
 
+    getKnobData();
     populateBuildingTypes();
     createBarData();
-
-    var pieDefault = [
-      {key: "Electricity", y: 0},
-      {key: "Gas", y: 0},
-      {key: "Water", y: 0}];
 
     var pieBuildingType = [
       {key: "Electricity", y: 0},
       {key: "Gas", y: 0},
       {key: "Water", y: 0}];
 
-    createPieDefault();
-
-    $scope.pieOptions = {
-      chart: {
-        type: 'pieChart',
-        height: 500,
-        x: function(d){return d.key;},
-        y: function(d){return d.y;},
-        showLabels: true,
-        transitionDuration: 500,
-        color: function(d, i){return colorArray[i]},
-        labelType: "percent",
-        pieLabelsOutside: true,
-        labelThreshold: 0.01,
-        tooltips: true,
-        interactive: true,
-        pie: {
-          dispatch: {
-            elementClick: function(e) {pieClicked(e)},
-            elementMouseout: function(e) {revertBarToDefault()},
-            elementMouseover: function(e) {changeResourceDataOnPieMouseover(e)}
-          }
-        }
-      }
+    $scope.knobOptions = {
+      readOnly: true,
+      width: 100
     };
 
-    $scope.pieData = pieDefault;
+    $scope.knobData = 500;
 
     $scope.barOptions = {
       chart: {
@@ -82,7 +56,7 @@ angular.module('clientApp')
         discretebar: {
           dispatch: {
             elementClick: function(e) {barClicked(e)},
-            elementMouseout: function(e) {revertPieToDefault()},
+            elementMouseout: function(e) {revertBarToDefault()},
             elementMouseover: function(e) {changeResourceDataOnBarMouseover(e)}
           }
         }
@@ -160,77 +134,30 @@ angular.module('clientApp')
     }
 
     //This function throws 3 exceptions per building service call
-    function createPieDefault(){
+    function getKnobData(){
       buildingSvc.getResourceSum(2).then(function (data){
-        pieDefault[0].y = data[0].res_sum;
+        $scope.knobData.value = data[0].res_sum;
       });
-      buildingSvc.getResourceSum(3).then(function (data){
-        pieDefault[1].y = data[0].res_sum;
-      });
-      buildingSvc.getResourceSum(7).then(function (data){
-        pieDefault[2].y = data[0].res_sum;
-      });
-    }
-    function createPieType(buildingType){
-      var elec, gas, water;
-
-      if(elec = electricityHash[buildingType]);
-      else{elec = 0}
-
-      if(gas = gasHash[buildingType]);
-      else{gas = 0}
-
-      if(water = waterHash[buildingType]);
-      else{water = 0}
-
-      pieBuildingType[0].y = elec;
-      pieBuildingType[1].y = gas;
-      pieBuildingType[2].y = water;
+      //buildingSvc.getResourceSum(3).then(function (data){
+      //  $scope.knobData[1] = {value: data[0].res_sum};
+      //});
+      //buildingSvc.getResourceSum(7).then(function (data){
+      //  $scope.knobData[2] = {value: data[0].res_sum};
+      //});
     }
 
-    function pieClicked(e){
-      if(!isBarClicked) {
-        isPieClicked = !isPieClicked;
-      }
-    }
     function barClicked(e){
-      if(!isPieClicked) {
-        isBarClicked = !isBarClicked;
-      }
+      isBarClicked = !isBarClicked;
     }
 
-    function changeResourceDataOnPieMouseover(e){
-      var resourceName = e.label;
-      resourceIndex = e.pointIndex;
-      if (!isPieClicked && !isBarClicked){
-        if (resourceName == "Water") {
-          $scope.barApi.updateWithData(barWater);
-        }
-        else if(resourceName == "Gas") {
-          $scope.barApi.updateWithData(barGas);
-        }
-        else if(resourceName == "Electricity"){
-          $scope.barApi.updateWithData(barElectricity);
-        }
-        else{
-          console.log("DO BETTER ERROR CHECKING");
-        }
-      }
-    }
     function changeResourceDataOnBarMouseover(e){
-      if (!isPieClicked && !isBarClicked){
-        createPieType(e.point.label);
+      if (!isBarClicked){
         $scope.pieApi.updateWithData(pieBuildingType);
       }
     }
 
-    function revertPieToDefault() {
-      if (!isPieClicked && !isBarClicked) {
-        $scope.pieApi.updateWithData(pieDefault);
-      }
-    }
     function revertBarToDefault(){
-      if (!isPieClicked && !isBarClicked) {
+      if (!isBarClicked) {
         resourceIndex = 0;
         $scope.barApi.updateWithData(barElectricity);
       }
