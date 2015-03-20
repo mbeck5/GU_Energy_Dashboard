@@ -2,18 +2,12 @@
 
 angular.module('clientApp')
   .controller('SummaryCtrl', function ($scope, buildingSvc) {
-    var isBarClicked = false;
-    var resourceIndex = 0;
     var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
 
-    var barWater = [{key: "Building Types", values: []}];
-    var barElectricity = [{key: "Building Types", values: []}];
-    var barGas = [{key: "Building Types", values: []}];
-
-    var waterHash = {};
-    var electricityHash = {};
-    var gasHash = {};
+    var barWater = {key: "Water", values: []};
+    var barElectricity = {key: "Electricity", values: []};
+    var barGas = {key: "Gas", values: []};
 
     getKnobData();
     populateBuildingTypes();
@@ -23,7 +17,7 @@ angular.module('clientApp')
 
     $scope.barOptions = {
       chart: {
-        type: 'discreteBarChart',
+        type: 'multiBarChart',
         height: 450,
         margin: {
           top: 20,
@@ -42,16 +36,12 @@ angular.module('clientApp')
           axisLabel: 'Y Axis'
         },
         showYAxis: false,
-        color: function(d, i) {return colorArray[resourceIndex]},
-        discretebar: {
-          dispatch: {
-            elementClick: function(e) {barClicked(e)},
-          }
-        }
+        showControls: false,
+        color: function(d, i) {return colorArray[i]}
       }
     };
 
-    $scope.barData = barElectricity;
+    $scope.barData = [barElectricity, barGas];
 
     function populateBuildingTypes(){
       buildingSvc.getBuildingTypes().then(function (data){
@@ -63,62 +53,38 @@ angular.module('clientApp')
 
     function createBarWaterData(data){
       //reset
-      barWater[0].values = [];
+      barWater.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-          barWater[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+          barWater.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarElectricityData(data){
       //reset
-      barElectricity[0].values = [];
+      barElectricity.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barElectricity[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barElectricity.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarGasData(data){
       //reset
-      barGas[0].values = [];
+      barGas.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barGas[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barGas.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarData(){
       buildingSvc.getResourceByType(7).then(function (data){
         createBarWaterData(data);
-        createWaterHash();
       });
       buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
-        createElectricityHash();
       });
       buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
-        createGasHash();
       });
-    }
-    function createWaterHash() {
-      if (barWater[0].values.length > 0) {
-        for (var i = 0; i < barWater[0].values.length; i++) {
-          waterHash[barWater[0].values[i].label] = barWater[0].values[i].value;
-        }
-      }
-    }
-    function createElectricityHash() {
-      if (barElectricity[0].values.length > 0) {
-        for (var i = 0; i < barElectricity[0].values.length; i++) {
-          electricityHash[barElectricity[0].values[i].label] = barElectricity[0].values[i].value;
-        }
-      }
-    }
-    function createGasHash(){
-      if(barGas[0].values.length > 0) {
-        for (var i = 0; i < barGas[0].values.length; i++) {
-          gasHash[barGas[0].values[i].label] = barGas[0].values[i].value;
-        }
-      }
     }
 
     //This function throws 3 exceptions per building service call
@@ -132,10 +98,6 @@ angular.module('clientApp')
       buildingSvc.getResourceSum(7).then(function (data){
         $scope.knobData[2] = data[0].res_sum;
       });
-    }
-
-    function barClicked(e){
-      isBarClicked = !isBarClicked;
     }
 
     //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
