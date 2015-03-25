@@ -8,20 +8,16 @@
           <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
           <img src="images/FIREbevel.png" ng-click="selectResource(3)">
         </div>
-      </div>
-      <div class="col-md-10">
-        <div class="row">
-          <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
-          <div class="col-sm-2">
-            <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter" popover-placement="bottom">
-              <toggle-switch model="isDetailed" ></toggle-switch>
-              Detailed View
-            </label>
+        <div id="date-detail-controls">
+          <div>
+
           </div>
-          <div class="col-sm-4">
+          <div>
             <span>From</span>
+
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1"
+                     is-open="dateOpen1"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -29,10 +25,12 @@
               </span>
             </div>
           </div>
-          <div class="col-sm-4">
+          <div>
             <span>To</span>
+
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2"
+                     is-open="dateOpen2"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>
@@ -40,12 +38,20 @@
               </span>
             </div>
           </div>
-          <div class="col-sm-2">
+          <div>
+              <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
+              <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter"
+                     popover-placement="bottom">
+                <toggle-switch model="isDetailed"></toggle-switch>
+                Detailed View
+              </label>
             <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()">
               Apply
             </button>
           </div>
         </div>
+      </div>
+      <div class="col-md-10">
         <div class="row">
           <div id="graph">
             <nvd3 options='options' data='data' api="api"></nvd3>

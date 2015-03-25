@@ -17,6 +17,25 @@
     <!-- endbuild -->
   </head>
   <body ng-app="clientApp">
+  <!-- set the background image based on time-->
+  <script type="text/javascript">
+    var currentTime = new Date().getHours();
+    if (6 <= currentTime && currentTime < 12) {
+      if (document.body) {
+        document.body.background = "../images/morning.jpg";
+      }
+    }
+    else if (12 <= currentTime && currentTime < 17) {
+      if (document.body) {
+        document.body.background = "../images/gonzaga_backgroundone.jpg";
+      }
+    }
+    else {
+      if (document.body) {
+        document.body.background = "../images/gonzaga_backgroundtwo.jpg";
+      }
+    }
+  </script>
     <!--[if lt IE 9]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->

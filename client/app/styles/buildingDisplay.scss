@@ -28,14 +28,28 @@
   }
 }
 
+#date-detail-controls
+{
+  margin-top: -10%;
+  margin-left: 2%;
+}
+
+#detail-view-toggle{
+  //margin-right: 3%;
+  margin-top: 3%;
+}
+
+
 #graph {
   margin-left: 2%;
 }
 
 #detailed-toggle {
-  margin-top: 20px;
+  margin-top: 25px;
+  //float: right;
 }
 
 #display-apply {
   margin-top: 20px;
+  float: right;
 }
