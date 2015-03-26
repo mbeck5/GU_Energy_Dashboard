@@ -80,21 +80,23 @@
       <div class="panel panel-default panel-shadow" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
-          <div class="row">
+          <div id="knobs" class="row">
+            <h3>Percent Change from Previous {{selectedKnobTime}}:</h3>
             <div class="col-sm-4">
               Electricity
-              <div knob value="{{knobData[0]}}" readonly="true" max="100000"></div>
+              <div knob value="{{knobData[0]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
             <div class="col-sm-4">
               Gas
-              <div knob value="{{knobData[1]}}" readonly="true" max="100000"></div>
+              <div knob value="{{knobData[1]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
             <div class="col-sm-4">
               Water
-              <div knob value="{{knobData[2]}}" readonly="true" max="100000"></div>
+              <div knob value="{{knobData[2]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
           </div>
           <div class="row">
+            <h3 id="building-type-graph-header">Daily Consumption by Building Type:</h3>
             <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
           </div>
         </div>

@@ -37,6 +37,14 @@
   outline: none;
 }
 
+#knobs {
+  margin: -15px auto 0 auto;
+}
+
+#building-type-graph-header {
+  margin: 20px 0 0 20px;
+}
+
 .checked-list-item {
   display: table;
   width: 100%;
@@ -54,9 +62,4 @@
   position: absolute;
   float: left;
   z-index: 1;
-}
-
-knob {
-  display: inline-block;
-  padding: 10px;
 }

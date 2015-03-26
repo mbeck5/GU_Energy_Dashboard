@@ -4,10 +4,10 @@ angular.module('clientApp')
   .controller('SummaryCtrl', function ($scope, buildingSvc) {
     var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
-
     var barWater = {key: "Water", values: []};
     var barElectricity = {key: "Electricity", values: []};
     var barGas = {key: "Gas", values: []};
+    $scope.selectedKnobTime = 'Day';  //day or year
 
     getKnobData();
     populateBuildingTypes();
@@ -41,7 +41,7 @@ angular.module('clientApp')
       }
     };
 
-    $scope.barData = [barElectricity, barGas];
+    $scope.barData = [barElectricity, barGas, barWater];
 
     function populateBuildingTypes(){
       buildingSvc.getBuildingTypes().then(function (data){

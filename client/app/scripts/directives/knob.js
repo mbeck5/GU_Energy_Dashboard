@@ -19,12 +19,12 @@ angular.module('clientApp').directive('knob', function() {
       var sign = attr.sign ? attr.sign : "";
       var fgColor = "#00A65A"; //green - success
 
-      var dangerLimit = attr.dangerLowerThen;
-      var warnLimit = attr.warnLowerThen;
+      var dangerLimit = attr.dangerHigherThan;
+      var warnLimit = attr.warnHigherThan;
 
-      if(dangerLimit && val < dangerLimit) {
+      if(dangerLimit && val > dangerLimit) {
         fgColor = "#F56954"; //red - danger
-      } else if(warnLimit && val < warnLimit) {
+      } else if(warnLimit && val > warnLimit) {
         fgColor = "#F39C12"; //yellow - warning
       }
 
