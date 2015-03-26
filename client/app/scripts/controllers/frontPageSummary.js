@@ -9,7 +9,7 @@ angular.module('clientApp')
     var barGas = {key: "Gas", values: []};
     $scope.selectedKnobTime = 'Day';  //day or year
 
-    getKnobData();
+    getKnobData(false);
     populateBuildingTypes();
     createBarData();
 
@@ -76,27 +76,43 @@ angular.module('clientApp')
       }
     }
     function createBarData(){
-      buildingSvc.getResourceByType(7).then(function (data){
+      var date = moment().subtract(1, 'days').format('YYYY/MM/DD'); //previous date
+      buildingSvc.getResourceByType(7, date).then(function (data){
         createBarWaterData(data);
       });
-      buildingSvc.getResourceByType(2).then(function (data){
+      buildingSvc.getResourceByType(2, date).then(function (data){
         createBarElectricityData(data);
       });
-      buildingSvc.getResourceByType(3).then(function (data){
+      buildingSvc.getResourceByType(3, date).then(function (data){
         createBarGasData(data);
       });
     }
 
     //This function throws 3 exceptions per building service call
-    function getKnobData(){
-      buildingSvc.getResourceSum(2).then(function (data){
-        $scope.knobData[0] = data[0].res_sum;
+    //calculates percent change
+    function getKnobData(compareLastYear){
+      var end = moment().subtract(1, 'days').format('YYYY/MM/DD'); //previous date
+      var start;
+
+      if (!compareLastYear)
+        start = moment().subtract(2, 'days').format('YYYY/MM/DD'); //day before last
+      else
+        start = moment().subtract(1, 'days').subtract(1, 'years').format('YYYY/MM/DD'); //year ago
+
+      buildingSvc.getResourceSum(2, end).then(function (data){
+        buildingSvc.getResourceSum(2, start).then(function (data2){
+          $scope.knobData[0] = data[0].res_sum / data2[0].res_sum * 100;
+        });
       });
-      buildingSvc.getResourceSum(3).then(function (data){
-        $scope.knobData[1] = data[0].res_sum;
+      buildingSvc.getResourceSum(3, end).then(function (data){
+        buildingSvc.getResourceSum(3, start).then(function (data2){
+          $scope.knobData[1] = data[0].res_sum / data2[0].res_sum * 100;
+        });
       });
-      buildingSvc.getResourceSum(7).then(function (data){
-        $scope.knobData[2] = data[0].res_sum;
+      buildingSvc.getResourceSum(7, end).then(function (data){
+        buildingSvc.getResourceSum(7, start).then(function(data2){
+          $scope.knobData[2] = data[0].res_sum / data2[0].res_sum * 100;
+        });
       });
     }
 
