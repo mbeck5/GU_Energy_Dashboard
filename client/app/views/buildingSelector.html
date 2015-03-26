@@ -80,9 +80,14 @@
       <div class="panel panel-default panel-transparent" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
-          <div>
-            <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
-            <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
+          <div class="row">
+            <div class="col-sm-4">
+              <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
+            </div>
+            <div class="col-sm-8">
+              <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
+            </div>
+            </div>
           </div>
         </div>
       </div>

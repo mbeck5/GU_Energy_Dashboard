@@ -1,23 +1,64 @@
-<div class="panel panel-default panel-transparent">
-  <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-2">
-        <div id="toggles">
-          <img src="images/WATERbaby.png" ng-click="selectResource(7)">
-          <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
+<div class="row">
+  <div class="col-sm-2" id="resource-panel-column">
+    <div class="panel panel-success panel-shadow" >
+      <!--<div class="hoverable">-->
+        <div class="panel-heading">
+          <h3 class="panel-title">Electricity</h3>
+        </div>
+        <div class="panel-body" id="electricity-panel-background">
+          <div class="toggles" id="hoverable">
+            <img src="images/ELECTRICbaby.png" ng-click="selectResource(2)">
+          </div>
+        </div>
+      <!--</div>-->
+    </div>
+
+    <div class="panel panel-primary panel-shadow">
+      <div class="panel-heading">
+        <h3 class="panel-title">Water</h3>
+      </div>
+      <!--<div class="hoverable">-->
+        <div class="panel-body" id="water-panel-background">
+          <div class="toggles" id="hoverable">
+            <img src="images/WATERbaby.png" ng-click="selectResource(7)">
+          </div>
+        </div>
+      <!--</div>-->
+    </div>
+
+    <div class="panel panel-warning panel-shadow">
+      <div class="panel-heading">Gas</div>
+      <div class="panel-body" id="gas-panel-background">
+        <div class="toggles" id="hoverable">
           <img src="images/FIREbevel.png" ng-click="selectResource(3)">
         </div>
-        <div id="date-detail-controls">
-          <div>
+      </div>
+    </div>
 
+    <div class="panel panel-default panel-shadow">
+      <div class="panel-heading">Options</div>
+      <div class="panel-body">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-10">
+    <div class="panel panel-default panel-shadow" id="building-display-panel">
+      <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
+      <div class="panel-body">
+        <div class="row">
+          <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
+          <div class="col-sm-2">
+            <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter" popover-placement="bottom">
+              <toggle-switch model="isDetailed" ></toggle-switch>
+              Detailed View
+            </label>
           </div>
-          <div>
+          <div class="col-sm-4">
             <span>From</span>
-
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1"
-                     is-open="dateOpen1"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date1" is-open="dateOpen1"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -25,12 +66,10 @@
               </span>
             </div>
           </div>
-          <div>
+          <div class="col-sm-4">
             <span>To</span>
-
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2"
-                     is-open="dateOpen2"/>
+              <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="date2" is-open="dateOpen2"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>
@@ -38,20 +77,12 @@
               </span>
             </div>
           </div>
-          <div>
-              <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
-              <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter"
-                     popover-placement="bottom">
-                <toggle-switch model="isDetailed"></toggle-switch>
-                Detailed View
-              </label>
+          <div class="col-sm-2">
             <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()">
               Apply
             </button>
           </div>
         </div>
-      </div>
-      <div class="col-md-10">
         <div class="row">
           <div id="graph">
             <nvd3 options='options' data='data' api="api"></nvd3>
