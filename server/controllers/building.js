@@ -155,26 +155,37 @@ exports.getResourceSum = function(req, res){
 
 exports.getResourcesByType = function(req, res){
 
-    var startDate = req.query.startDate;
-    var endDate = req.query.endDate;
+    var date = req.query.date;
+
+    console.log(date);
+
     //if no dates entered, provide defaults
-    if(!startDate || !endDate){
-        endDate = moment().format("YYYY-MM-DD HH:mm:ss");
-        startDate = moment().subtract(1, 'days');
+    if(!date){
+        date = moment().subtract(1, 'days');
     }
     else{
-        startDate = moment(startDate).format("YYYY-MM-DD HH:mm:ss");
-        endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
+        date = moment(date).format("YYYY-MM-DD HH:mm:ss");
     }
 
-    queryString = "SELECT building_type.building_type as type, SUM(consumption) as res_sum FROM " +
-                    "(SELECT SUM(meters_dly_data.consumption) as consumption, building.building_type_id " +
-                        "FROM building, building_meters, meters, meters_dly_data, building_type " +
-                        "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date >= '" + startDate +
-                        "' AND trend_date <= '" + endDate + "' AND building_meters.building_id IN (SELECT building.building_id FROM building WHERE building_id != 1) " +
-                        " AND meter_type_id = " + req.query.meterType + " AND building.building_id = building_meters.building_id GROUP BY building.building_id) as t, building_type" +
+    console.log(date);
+
+    queryString = "SELECT building_type.building_type as type, SUM(consumption) as total_cons FROM " +
+                    "(SELECT meters_dly_data.consumption as consumption, building.building_type_id " +
+                        "FROM building, building_meters, meters, meters_dly_data " +
+                        "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date = '" + date +
+                        "' AND building_meters.building_id IN (SELECT building.building_id FROM building WHERE building_id != 1) " +
+                        " AND meter_type_id = " + req.query.meterType + " AND building.building_id = building_meters.building_id GROUP BY building.building_id) as t, building_type " +
                     "WHERE t.building_type_id = building_type.building_type_id GROUP BY t.building_type_id;";
-}
+
+    connection.query(queryString, function(err, rows){
+        if(err){
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+};
 
 exports.getBuildingTypes = function(req, res) {
     var queryString = "SELECT building_type_id as buildingTypeId, building_type as buildingType " +
