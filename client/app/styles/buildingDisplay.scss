@@ -42,33 +42,21 @@
   background: url("../images/electricity-background.png");
   background-position-y: 50%;
   background-repeat: no-repeat;
-  background-size: 200px 150px;
-
-  @media (max-width: 1900px) {
-    background-size: 280px 280px;
-  }
+  background-size: 100% 100%;
 }
 
 #gas-panel-background {
   background: url("../images/gas-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: 200px 150px;
-
-  @media (max-width: 1900px) {
-    background-size: 280px 280px;
-  }
+  background-size: 100% 100%;
 }
 
 #water-panel-background {
   background: url("../images/water-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: 200px 150px;
-
-  @media (max-width: 1900px) {
-    background-size: 280px 280px;
-  }
+  background-size: 100% 100%;
 }
 
 #hoverable {
