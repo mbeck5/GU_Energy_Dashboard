@@ -124,16 +124,15 @@ angular.module('clientApp')
       }
     }
     function createBarData(){
-      var date = "2014-03-14";
-      buildingSvc.getResourceByType(7, date).then(function (data){
+      buildingSvc.getResourceByType(7).then(function (data){
         createBarWaterData(data);
         createWaterHash();
       });
-      buildingSvc.getResourceByType(2, date).then(function (data){
+      buildingSvc.getResourceByType(2).then(function (data){
         createBarElectricityData(data);
         createElectricityHash();
       });
-      buildingSvc.getResourceByType(3, date).then(function (data){
+      buildingSvc.getResourceByType(3).then(function (data){
         createBarGasData(data);
         createGasHash();
       });
