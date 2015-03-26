@@ -14,9 +14,9 @@ angular.module('clientApp')
       return buildingData.getList({building: buildingId, meterType: meterTypeId, isDetailed: isDetailed, startDate: startDate, endDate: endDate});
     }
 
-    function getResourceByType(meterTypeId){
+    function getResourceByType(meterTypeId, date){
       var resourceData = Restangular.all('getResourceByType');
-      return resourceData.getList({meterType: meterTypeId});
+      return resourceData.getList({meterType: meterTypeId, date: date});
     }
 
     function getBuildingDataFromName(buildingName, meterTypeId, isDetailed, startDate, endDate) {
@@ -24,9 +24,9 @@ angular.module('clientApp')
       return buildingData.getList({building: buildingName, meterType: meterTypeId, isDetailed: isDetailed, startDate: startDate, endDate: endDate});
     }
 
-    function getResourceSum(meterTypeId){
+    function getResourceSum(meterTypeId, date){
       var resourceSum = Restangular.all('getResourceSum');
-      return resourceSum.getList({meterType: meterTypeId});
+      return resourceSum.getList({meterType: meterTypeId, date: date});
     }
 
     function getSelectedBuildings() {
