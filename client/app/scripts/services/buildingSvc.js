@@ -14,9 +14,9 @@ angular.module('clientApp')
       return buildingData.getList({building: buildingId, meterType: meterTypeId, isDetailed: isDetailed, startDate: startDate, endDate: endDate});
     }
 
-    function getResourceByType(meterTypeId){
+    function getResourceByType(meterTypeId, startDate, endDate){
       var resourceData = Restangular.all('getResourceByType');
-      return resourceData.getList({meterType: meterTypeId});
+      return resourceData.getList({meterType: meterTypeId, startDate: startDate, endDate: endDate});
     }
 
     function getBuildingDataFromName(buildingName, meterTypeId, isDetailed, startDate, endDate) {
