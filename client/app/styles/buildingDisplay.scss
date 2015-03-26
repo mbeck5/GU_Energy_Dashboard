@@ -24,8 +24,7 @@
   }
 }
 
-#date-detail-controls
-{
+#date-detail-controls {
   margin-top: -10%;
   margin-left: 2%;
 }
@@ -35,7 +34,7 @@
   max-height: 10%;
 }
 
-#building-display-panel{
+#building-display-panel {
   margin-top: 30px;
   height: 100%;
 }
@@ -44,21 +43,21 @@
   background: url("../images/electricity-background.png");
   background-position-y: 50%;
   background-repeat: no-repeat;
-  background-size: 200px 150px;
+  background-size: cover;
 }
 
 #gas-panel-background {
   background: url("../images/gas-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: 200px 150px;
+  background-size: cover;
 }
 
 #water-panel-background {
   background: url("../images/water-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: 200px 150px;
+  background-size: cover;
 }
 
 #hoverable {
@@ -67,11 +66,12 @@
     opacity: 0.7;
     filter: alpha(opacity=70);
   }
-#detail-view-toggle{
+}
+
+#detail-view-toggle {
   //margin-right: 3%;
   margin-top: 3%;
 }
-
 
 #graph {
   margin-left: 2%;
@@ -85,4 +85,9 @@
 #display-apply {
   margin-top: 20px;
   float: right;
+}
+
+#date-detail-controls
+{
+  margin-top: 1%;
 }
