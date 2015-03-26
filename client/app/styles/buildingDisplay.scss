@@ -1,11 +1,11 @@
 .toggles {
   max-width: 100%;
-  margin: auto 50% auto 50%;
+  margin: 5% auto 5% auto;
   //padding: auto 50% auto 50%;
   max-height: 100%;
   display: table;
 
-  @media (max-width: $screen-md) {
+  @media (max-width: 992px) {
     max-width: 100%;
     margin: 0 auto 15px auto;
     padding: 15px 25px 15px 25px;
@@ -24,8 +24,7 @@
   }
 }
 
-#date-detail-controls {
-  margin-top: -10%;
+#graph {
   margin-left: 2%;
 }
 
@@ -34,7 +33,7 @@
   max-height: 10%;
 }
 
-#building-display-panel {
+#building-display-panel{
   margin-top: 30px;
   height: 100%;
 }
@@ -43,21 +42,33 @@
   background: url("../images/electricity-background.png");
   background-position-y: 50%;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 200px 150px;
+
+  @media (max-width: 1900px) {
+    background-size: 280px 280px;
+  }
 }
 
 #gas-panel-background {
   background: url("../images/gas-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: cover;
+  background-size: 200px 150px;
+
+  @media (max-width: 1900px) {
+    background-size: 280px 280px;
+  }
 }
 
 #water-panel-background {
   background: url("../images/water-background.png");
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: cover;
+  background-size: 200px 150px;
+
+  @media (max-width: 1900px) {
+    background-size: 280px 280px;
+  }
 }
 
 #hoverable {
@@ -68,18 +79,8 @@
   }
 }
 
-#detail-view-toggle {
-  //margin-right: 3%;
-  margin-top: 3%;
-}
-
-#graph {
-  margin-left: 2%;
-}
-
 #detailed-toggle {
-  margin-top: 25px;
-  //float: right;
+  margin-top: 20px;
 }
 
 #display-apply {
