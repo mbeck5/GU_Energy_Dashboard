@@ -4,7 +4,10 @@ angular.module('clientApp')
   .controller('SummaryCtrl', function ($scope, buildingSvc) {
     var isBarClicked = false;
     var isPieClicked = false;
-    var resourceIndex = 0;
+    var PieResourceIndex = 0;
+    var BarResourceIndex = 0;
+    var PieUnitMap = {0: 'kwh', 1: 'kBTU', 2: 'liters'};
+    var BarUnitMap = {0: 'kwh', 1: 'kBTU', 2: 'liters'};
     var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
 
@@ -45,6 +48,29 @@ angular.module('clientApp')
         labelThreshold: 0.01,
         tooltips: true,
         interactive: true,
+        tooltipContent: function(key, x, y, e, graph){
+          return '<div>' +
+            '<style type="text/css">' +
+            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
+            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
+            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
+            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
+            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
+            '' +
+            '</style>' +
+            '<table class="tg" style="undefined;">' +
+            '<colgroup>' +
+              //'<col style="width: 134px">' +
+            '</colgroup>' +
+            '<tr>' +
+            '<th class="tg-o8k2">' + key + '<br></th>' +
+            '</tr>' +
+            '<tr>' +
+            '<td class="tg-431l">' + y + ' ' + PieUnitMap[PieResourceIndex]  + '</td>' +
+            '</tr>' +
+            '</table>' +
+            '</div>';
+        },
         pie: {
           dispatch: {
             elementClick: function(e) {pieClicked(e)},
@@ -77,8 +103,31 @@ angular.module('clientApp')
         yAxis: {
           axisLabel: 'Y Axis'
         },
+        tooltipContent: function(key, x, y, e, graph){
+          return '<div>' +
+            '<style type="text/css">' +
+            '.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}' +
+            '.tg td{font-family:Arial, sans-serif;font-size:14px;padding:8px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}' +
+            '.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;border-bottom-width:2px;border-bottom-color:#f0f0f0}' +
+            '.tg .tg-o8k2{font-size:22px;font-family:Arial, Helvetica, sans-serif !important;;background-color:#f9f9f9;text-align:center}' +
+            '.tg .tg-431l{font-family:Arial, Helvetica, sans-serif !important;;text-align:center}' +
+            '' +
+            '</style>' +
+            '<table class="tg" style="undefined;">' +
+            '<colgroup>' +
+              //'<col style="width: 134px">' +
+            '</colgroup>' +
+            '<tr>' +
+            '<th class="tg-o8k2">' + x + '<br></th>' +
+            '</tr>' +
+            '<tr>' +
+            '<td class="tg-431l">' + y + " " + BarUnitMap[BarResourceIndex] + '</td>' +
+            '</tr>' +
+            '</table>' +
+            '</div>';
+        },
         showYAxis: false,
-        color: function(d, i) {return colorArray[resourceIndex]},
+        color: function(d, i) {return colorArray[BarResourceIndex]},
         discretebar: {
           dispatch: {
             elementClick: function(e) {barClicked(e)},
@@ -202,9 +251,9 @@ angular.module('clientApp')
     }
 
     function changeResourceDataOnPieMouseover(e){
-      var resourceName = e.label;
-      resourceIndex = e.pointIndex;
       if (!isPieClicked && !isBarClicked){
+        var resourceName = e.label;
+        PieResourceIndex = e.pointIndex;
         if (resourceName == "Water") {
           $scope.barApi.updateWithData(barWater);
         }
@@ -221,6 +270,8 @@ angular.module('clientApp')
     }
     function changeResourceDataOnBarMouseover(e){
       if (!isPieClicked && !isBarClicked){
+        var resourceName = e.label;
+        BarResourceIndex = e.pointIndex;
         createPieType(e.point.label);
         $scope.pieApi.updateWithData(pieBuildingType);
       }
@@ -233,7 +284,7 @@ angular.module('clientApp')
     }
     function revertBarToDefault(){
       if (!isPieClicked && !isBarClicked) {
-        resourceIndex = 0;
+        BarResourceIndex = 0;
         $scope.barApi.updateWithData(barElectricity);
       }
     }
