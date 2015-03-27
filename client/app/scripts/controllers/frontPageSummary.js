@@ -8,6 +8,7 @@ angular.module('clientApp')
     var barElectricity = {key: "Electricity", values: []};
     var barGas = {key: "Gas", values: []};
     $scope.selectedKnobTime = 'Day';  //day or year
+    $scope.isKnobYearly = false;
 
     getKnobData(false);
     populateBuildingTypes();
@@ -42,6 +43,19 @@ angular.module('clientApp')
     };
 
     $scope.barData = [barElectricity, barGas, barWater];
+
+    //when user hits the toggle for the knobs
+    $scope.toggleKnobs = function() {
+      //the model may not update immediately, so the logic below may not make sense, but it works
+      if ($scope.isKnobYearly) {
+        getKnobData(false);
+        $scope.selectedKnobTime = 'Day';
+      }
+      else {
+        getKnobData(true);
+        $scope.selectedKnobTime = 'Year';
+      }
+    };
 
     function populateBuildingTypes(){
       buildingSvc.getBuildingTypes().then(function (data){
