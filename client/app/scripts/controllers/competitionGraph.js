@@ -3,10 +3,12 @@
 angular.module('clientApp')
   .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
     var compareList = [];
-    var currentList = [];
+    $scope.currentList = [];
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
+    var temp;
+    $scope.thing = [];// = ['1', '2', '3'];
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -14,7 +16,7 @@ angular.module('clientApp')
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
         selectedComp = compEditSvc.getSelectedComp();
-        $scope.api.refresh();
+        //$scope.api.refresh();
         //Compare to the values from two weeks ago
         var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
         var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
@@ -29,7 +31,7 @@ angular.module('clientApp')
 
         $scope.data = [];
         compareList = [];
-        currentList = [];
+        $scope.currentList = [];
         changeList = [];
 
         compEditSvc.getBuildingTotals(compareStart.format('YYYY/MM/DD'), compareEnd.format('YYYY/MM/DD'), selectedComp.cid).then(function(data1){
@@ -40,10 +42,15 @@ angular.module('clientApp')
             calcAllChanges();
             sortChanges();
             createData();
+            $scope.thing  = [$scope.data[0].key, $scope.data[1].key, $scope.data[2].key];
+            //$scope.thing = angular.copy($scope.data);
+            //temp = angular.copy($scope.data);
           });
         });
+        //$scope.thing = [$scope.data[0].key, $scope.data[1].key, $scope.data[2].key];
       }
     });
+
 
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
@@ -136,7 +143,7 @@ angular.module('clientApp')
     function createCurrentList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
-          currentList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
+          $scope.currentList[i] = {building: data[i].building_name, total_cons: data[i].consumption};
         }
       }
     }
@@ -147,9 +154,9 @@ angular.module('clientApp')
     }
 
     function calcAllChanges(){
-      if(compareList.length == currentList.length) {
-        for (var i = 0; i < compareList.length; i++){
-          var percentChange = calcPercentChange(compareList[i].total_cons, currentList[i].total_cons);
+      if(compareList.length == $scope.currentList.length) {
+        for (var i = 0; i < compareList.length; i++) {
+          var percentChange = calcPercentChange(compareList[i].total_cons, $scope.currentList[i].total_cons);
           changeList.push({building: compareList[i], change: percentChange});
         }
       }
@@ -184,7 +191,8 @@ angular.module('clientApp')
         }
         tempData.push({key: key, values: values});
       }
-      $scope.data = tempData;
+      $scope.data = angular.copy(tempData);
+
     }
 
     function shortenBuildingName(buildingName){

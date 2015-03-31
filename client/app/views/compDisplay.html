@@ -3,9 +3,9 @@
     <div class="col-md-4">
       <div class="panel panel-default panel-transparent">
         <div class="panel-heading">Competition Select</div>
-        <div class="panel-body" >
+        <div class="panel-body">
           <tabset justified="true" id="tab-op">
-            <tab heading="Past Competitions" active="tabActivity[0]" ng-click="filterComps()">
+            <tab heading="Past Competitions" active="compTabActivity[0]" ng-click="filterComps()">
               <div class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                        ng-change="filterComps()">
@@ -20,7 +20,7 @@
               </div>
             </tab>
 
-            <tab heading="Running Competitions" active="tabActivity[1]" ng-click="filterComps()">
+            <tab heading="Running Competitions" active="compTabActivity[1]" ng-click="filterComps()">
               <div class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                        ng-change="filterComps()">
@@ -35,7 +35,7 @@
               </div>
             </tab>
 
-            <tab heading="Upcoming Competitions" active="tabActivity[2]" ng-click="filterComps()">
+            <tab heading="Upcoming Competitions" active="compTabActivity[2]" ng-click="filterComps()">
               <div id="building-search" class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                        ng-change="filterComps()">
@@ -81,11 +81,57 @@
     <div class="col-md-8">
       <div class="panel panel-default panel-transparent">
         <div class="panel-heading">Competition Info</div>
-        <div class="panel-body" >
+        <div class="panel-body">
           <div id="current-comp-scroll">
-            <div ng-controller="CompetitionGraphCtrl">
-              <nvd3 options='options' data='data' api='api'></nvd3>
-            </div>
+            <tabset justified="true">
+              <tab heading="Top Buildings" active="compDisplayTabActivity[0]">
+                <div ng-controller="CompetitionGraphCtrl">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="panel panel-default panel-transparent" id="top-building">
+                        <div class="panel-heading">First Place</div>
+                        <div class="panel-body">
+                          <div align="center">
+                            <img src="/images/first_place.png" alt="first" height="200" width="200">
+                            <font size="10" ng-bind="thing[0]"></font>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="panel panel-default panel-transparent" id="mid-building">
+                        <div class="panel-heading">Second Place</div>
+                        <div class="panel-body">
+                          <div align="center">
+                            <img src="/images/second_place.png" alt="first" height="200" width="200">
+                            <font size="5" ng-bind="thing[1]"></font>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="panel panel-default panel-transparent" id="bottom-building">
+                        <div class="panel-heading">Third Place</div>
+                        <div class="panel-body">
+                          <div align="center">
+                            <img src="/images/third_place.png" alt="first" height="200" width="200">
+                            <font size="5" ng-bind="thing[2]"></font>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tab>
+
+              <tab heading="Full View" active="compDisplayTabActivity[1]">
+                <div ng-controller="CompetitionGraphCtrl">
+                  <nvd3 options='options' data='data' api='api'></nvd3>
+                </div>
+              </tab>
+            </tabset>
           </div>
         </div>
       </div>

@@ -6,7 +6,8 @@ angular.module('clientApp')
     var selectedComp;
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
-    $scope.tabActivity = [false, true, false];  //past, running, upcoming
+    $scope.compTabActivity = [false, true, false];  //past, running, upcoming
+    $scope.compDisplayTabActivity = [true, false];  //podium, all
     $scope.displayedCompIndex = 0;
 
     //retrieve initial data
@@ -32,11 +33,23 @@ angular.module('clientApp')
     }
 
     function getSelectedTimeline() {
-      var index = $scope.tabActivity.indexOf(true);
+      var index = $scope.compTabActivity.indexOf(true);
       switch (index) {
-        case 0: return "past";
-        case 1: return "running";
+        case 0:
+          //$scope.compDisplayTabActivity = [true, false];
+          return "past";
+        case 1:
+          //$scope.compDisplayTabActivity = [false, true];
+          return "running";
         case 2: return "upcoming";
+      }
+    }
+
+    function getSelectedCompView() {
+      var index = $scope.compDisplayTabActivity.indexOf(true);
+      switch (index) {
+        case 0: return "podium";
+        case 1: return "all";
       }
     }
 
@@ -62,7 +75,6 @@ angular.module('clientApp')
     }
 
     $scope.openCreateModal = function (size) {
-
             var createModal = $modal.open({
               templateUrl: 'myModalContent1.html',
               controller: 'createModalInstanceCtrl',
@@ -73,12 +85,9 @@ angular.module('clientApp')
               if (created)  //only refresh if user added new
               refreshCompList();
             });
-
     };
 
     $scope.openEditModal = function (size) {
-
-
             var editModal = $modal.open({
               templateUrl: 'myModalContent2.html',
               controller: 'editModalInstanceCtrl',
@@ -92,7 +101,6 @@ angular.module('clientApp')
     };
 
     $scope.openDeleteModal = function (size) {
-
             var deleteModal = $modal.open({
               templateUrl: 'myModalContent3.html',
               controller: 'deleteModalInstanceCtrl',
@@ -105,7 +113,6 @@ angular.module('clientApp')
                 deleteCurrentItem();
               }
             });
-
     };
 
     //retrieves all competition info
@@ -190,9 +197,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
             clickedBuildingCount++;
           }
         }
-        if(clickedBuildingCount <= 1)
+        if(clickedBuildingCount <= 2)
         {
-          alert("2 or more buildings must be selected")
+          alert("3 or more buildings must be selected")
         }
         else {
           if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
@@ -298,9 +305,9 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
             clickedBuildingCount++;
           }
         }
-        if(clickedBuildingCount <= 1)
+        if(clickedBuildingCount <= 2)
         {
-          alert("2 or more buildings must be selected")
+          alert("3 or more buildings must be selected")
         }
         else {
           if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
