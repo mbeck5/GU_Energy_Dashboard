@@ -37,6 +37,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
             <li ng-class="{active: isActive('/Competitions')}" ng-click="toggleCollapse()"><a href="#/Competitions">Competitions</a></li>
+            <li ng-class="{active: isActive('/Login')}" ng-click="toggleCollapse()"><a href="#/Login">Login</a></li>
           </ul>
         </div>
       </div>
@@ -87,8 +88,10 @@
     <script src="scripts/controllers/compDisplay.js"></script>
     <script src="scripts/controllers/frontPageSummary.js"></script>
     <script src="scripts/controllers/competitionGraph.js"></script>
+    <script src="scripts/controllers/login.js"></script>
     <script src="scripts/services/buildingSvc.js"></script>
     <script src="scripts/services/compEditSvc.js"></script>
+    <script src="scripts/services/loginSvc.js"></script>
 
     <!-- endbuild -->
   </body>
