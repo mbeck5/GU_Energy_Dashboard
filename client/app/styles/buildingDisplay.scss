@@ -19,16 +19,10 @@
 
 #graph {
   margin-left: 2%;
-}
 
-#resource-panel-column {
-  margin-top: 30px;
-  max-height: 10%;
-}
-
-#building-display-panel{
-  margin-top: 30px;
-  height: 100%;
+  @media (max-width: $screen-sm) {
+    max-width: 100%;
+  }
 }
 
 #electricity-panel-background {
@@ -53,11 +47,18 @@
 }
 
 .resource-div-effects {
+  max-width: 300px;
+  height: 15%;
   :hover {
     cursor: pointer;
     img {
       opacity: 0.7;
     }
+  }
+  @media (max-width: $screen-md) {
+    display: inline-block;
+   // margin-left: 15%;
+    //margin-right: 15%;
   }
 }
 
