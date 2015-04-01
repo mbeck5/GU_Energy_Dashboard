@@ -22,4 +22,4 @@ exports.getPassword = function(req, res) {
             res.send(rows);
         }
     });
-}
+};

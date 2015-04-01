@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('LoginCtrl', function ($scope, $location, loginSvc) {
+  .controller('LoginCtrl', function ($scope, $location, $cookies, loginSvc) {
 
     $scope.login = function(){
       loginSvc.getUser($scope.studentId).then(function(data){
@@ -10,7 +10,7 @@ angular.module('clientApp')
           loginSvc.getPassword($scope.studentId).then(function(data2){
             if(data2[0].password === $scope.password){
               //Successful Login.  Redirect to original page, keep the session.
-              console.log("success");
+              $cookies['loggedIn'] = 'true';
               $location.path('/');
             }
             else{
