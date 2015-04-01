@@ -48,10 +48,17 @@ angular.module('clientApp')
     function getSelectedCompView() {
       var index = $scope.compDisplayTabActivity.indexOf(true);
       switch (index) {
-        case 0: return "podium";
-        case 1: return "all";
+        case 0:
+          return "podium";
+        case 1:
+          return "all";
       }
     }
+
+    $scope.getTopThree = function ()
+    {
+      return compEditSvc.getTopThree();
+    };
 
     //filters based on search input
     $scope.filterComps = function () {
