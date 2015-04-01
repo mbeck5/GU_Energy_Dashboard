@@ -107,7 +107,8 @@ angular.module('clientApp')
             '</tr>' +
             '</table>' +
             '</div>';
-        }
+        },
+        noData: 'Competition Coming Soon!'
       },
       title: {
         enable: true,
