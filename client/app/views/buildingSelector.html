@@ -80,8 +80,29 @@
       <div class="panel panel-default panel-shadow" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
-          <div>
-            <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
+          <div id="knobs" class="row">
+            <div id="knob-header">
+              <span>Percent Change from Previous {{selectedKnobTime}} for Entire Campus:</span>
+              <label class="pull-right" popover="Compares previous day to day one year ago" popover-trigger="mouseenter" popover-placement="bottom">
+                <toggle-switch model="isKnobYearly" on-change="toggleKnobs()" ></toggle-switch>
+                Previous year
+              </label>
+            </div>
+            <div class="col-sm-4">
+              Electricity
+              <div knob value="{{knobData[0]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
+            </div>
+            <div class="col-sm-4">
+              Gas
+              <div knob value="{{knobData[1]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
+            </div>
+            <div class="col-sm-4">
+              Water
+              <div knob value="{{knobData[2]}}" readonly="true" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
+            </div>
+          </div>
+          <div class="row">
+            <h3 id="building-type-graph-header">Daily Consumption by Building Type For Previous Day:</h3>
             <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
           </div>
         </div>
