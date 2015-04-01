@@ -4,6 +4,7 @@ angular.module('clientApp')
   .controller('HeaderCtrl', function ($scope, $location, $cookies) {
         $scope.navbarCollapsed = true;
 
+        setupLogin();
         $scope.isActive = function (location) {
           return location === $location.path();
         };
@@ -14,15 +15,22 @@ angular.module('clientApp')
             $scope.navbarCollapsed = !$scope.navbarCollapsed;
         };
 
+
         $scope.logout = function(){
+          $scope.toggleCollapse();
           $cookies['loggedIn'] = '';
         };
 
-        $scope.loggedIn = $cookies['loggedIn'];
-        if($scope.loggedIn === 'true'){
-          $scope.loggedOut = '';
-        }
-        else{
-          $scope.loggedOut = 'true';
+
+        function setupLogin(){
+          var loggedIn = $cookies['loggedIn'];
+          if(loggedIn === 'true'){
+            $scope.loginPage = "";
+            $scope.loginText = "Logout";
+          }
+          else{
+            $scope.loginPage = "Login"
+            $scope.loginText = "Login";
+          }
         }
   });

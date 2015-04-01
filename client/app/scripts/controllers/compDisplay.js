@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     $scope.searchInput = {input: ''};
@@ -11,6 +11,19 @@ angular.module('clientApp')
 
     //retrieve initial data
     refreshCompList();
+    showFooter();
+
+    function showFooter(){
+      $scope.loggedIn = $cookies['loggedIn'];
+      /*if(loggedIn === 'true'){
+        $scope.loginPage = "";
+        $scope.loginText = "Logout";
+      }
+      else{
+        $scope.loginPage = "Login"
+        $scope.loginText = "Login";
+      }*/
+    }
 
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
