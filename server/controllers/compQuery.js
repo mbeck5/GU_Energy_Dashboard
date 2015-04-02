@@ -44,13 +44,13 @@ exports.editNewComp = function (req, res) {
 };
 
 exports.deleteComp = function (req, res) {
-    var deleteCompBuildingsQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid=" + req.body.cid + ";";
+    var deleteCompBuildingsQueryString = "DELETE FROM competition_buildings WHERE cid=" + req.body.cid + ";";
     connection.query(deleteCompBuildingsQueryString, function (err, rows) {
         if (err) {
             throw err;
         }
         else {
-            var deleteCompQueryString = "DELETE FROM energy_report.competitions WHERE cid=" + req.body.cid + ";";
+            var deleteCompQueryString = "DELETE FROM competitions WHERE cid=" + req.body.cid + ";";
             connection.query(deleteCompQueryString, function (err, rows) {
                 if (err) {
                     throw err;
@@ -76,7 +76,7 @@ exports.addCompBuilding = function (req, res) {
 };
 
 exports.deleteCompBuildings = function (req, res) {
-    var addCompBuildingQueryString = "DELETE FROM energy_report.competition_buildings WHERE cid="+ req.body.cid + ";";
+    var addCompBuildingQueryString = "DELETE FROM competition_buildings WHERE cid="+ req.body.cid + ";";
     connection.query(addCompBuildingQueryString, function (err, rows) {
         if (err) {
             throw err;
