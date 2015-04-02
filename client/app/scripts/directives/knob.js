@@ -36,7 +36,8 @@ angular.module('clientApp').directive('knob', function() {
         max : max > val ? max : val,
         dynamicDraw: true,
         fgColor : fgColor,
-        readOnly: readonly,
+        readonly : readonly,
+        readOnly: readonly, //need to set both because I don't know
         rtl : (attr.dir == 'rtl'),
         draw : function () { $(this.i).val(this.cv + sign); }
       };
