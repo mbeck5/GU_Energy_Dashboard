@@ -7,6 +7,7 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
+    var graphWidth = window.innerWidth;
     $scope.topThree = [];
 
     //when new competition is selected, retrieve new data
@@ -15,7 +16,9 @@ angular.module('clientApp')
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
         selectedComp = compEditSvc.getSelectedComp();
+        //$(window).trigger('resize');
         $scope.api.refresh();
+        //$(window).trigger('resize');
         //Compare to the values from two weeks ago
         var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
         var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
@@ -46,12 +49,9 @@ angular.module('clientApp')
         });
       }
     });
-
-
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
     $scope.data = [];
-
     $scope.options = {
       chart: {
         type: 'multiBarHorizontalChart',

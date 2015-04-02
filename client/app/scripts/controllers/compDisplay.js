@@ -13,6 +13,13 @@ angular.module('clientApp')
     //retrieve initial data
     refreshCompList();
 
+    $scope.alertMe = function() {
+      setTimeout(function() {
+        jQuery(window).trigger('resize');
+      }, 0);
+      jQuery(window).trigger('resize');
+    };
+
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
       for (var i = 0; i < allComps.length; ++i) {

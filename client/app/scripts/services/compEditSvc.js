@@ -21,6 +21,11 @@ angular.module('clientApp')
       return allComps.getList();
     }
 
+    function getWindowWidth()
+    {
+      return window.innerWidth;
+    }
+
     function setTopThree(topThreeIn) {
       if (topThreeIn.length > 0)
         topThree = angular.copy(topThreeIn);
@@ -105,6 +110,7 @@ angular.module('clientApp')
       checkLogin: checkLogin,
       getLoginStatus: getLoginStatus,
       getComp: getComp,
+      getWindowWidth: getWindowWidth,
       setTopThree: setTopThree,
       getTopThree: getTopThree,
       saveNewComp: saveNewComp,

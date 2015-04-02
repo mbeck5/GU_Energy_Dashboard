@@ -1,4 +1,4 @@
-<div>
+<body>
   <div class="row">
     <div class="col-md-4">
       <div class="panel panel-default panel-transparent">
@@ -84,7 +84,7 @@
         <div class="panel-body">
           <div id="current-comp-scroll">
             <tabset justified="true">
-              <tab heading="Top Buildings" active="compDisplayTabActivity[0]" ng-click="setTopThree(true)">
+              <tab heading="Top Buildings" active="compDisplayTabActivity[0]">
                 <div>
                   <div class="row">
                     <div class="col-md-12">
@@ -125,9 +125,9 @@
                   </div>
                 </div>
               </tab>
-              <tab heading="Full View" active="compDisplayTabActivity[1]" ng-click="setTopThree(false)">
-                <div ng-controller="CompetitionGraphCtrl">
-                  <nvd3 options='options' data='data' api='api'></nvd3>
+              <tab id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]" select="alertMe()" >
+                <div ng-controller="CompetitionGraphCtrl" id="comp-div">
+                  <nvd3 options='options' id="comp-graph" data='data' api='api'></nvd3>
                 </div>
               </tab>
             </tabset>
@@ -136,5 +136,5 @@
       </div>
     </div>
   </div>
-</div>
+</body>
 
