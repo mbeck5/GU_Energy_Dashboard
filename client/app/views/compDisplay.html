@@ -88,7 +88,7 @@
                 <div>
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="panel panel-default panel-transparent" id="top-building">
+                      <div class="panel panel-default panel-shadow" id="top-building">
                         <div class="panel-heading">First Place</div>
                         <div class="panel-body">
                           <div align="center">
@@ -101,7 +101,7 @@
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <div class="panel panel-default panel-transparent" id="mid-building">
+                      <div class="panel panel-default panel-shadow" id="mid-building">
                         <div class="panel-heading">Second Place</div>
                         <div class="panel-body">
                           <div align="center">
@@ -112,7 +112,7 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div class="panel panel-default panel-transparent" id="bottom-building">
+                      <div class="panel panel-default panel-shadow" id="bottom-building">
                         <div class="panel-heading">Third Place</div>
                         <div class="panel-body">
                           <div align="center">
@@ -125,7 +125,7 @@
                   </div>
                 </div>
               </tab>
-              <tab id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]" select="alertMe()" >
+              <tab id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]" select="fixGraph()" >
                 <div ng-controller="CompetitionGraphCtrl" id="comp-div">
                   <nvd3 options='options' id="comp-graph" data='data' api='api'></nvd3>
                 </div>

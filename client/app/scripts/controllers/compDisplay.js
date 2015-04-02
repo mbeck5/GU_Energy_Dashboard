@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, $timeout) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     $scope.searchInput = {input: ''};
@@ -13,10 +13,10 @@ angular.module('clientApp')
     //retrieve initial data
     refreshCompList();
 
-    $scope.alertMe = function() {
-      setTimeout(function() {
+    $scope.fixGraph = function() {
+      $timeout(function() {
         jQuery(window).trigger('resize');
-      }, 0);
+      });
       jQuery(window).trigger('resize');
     };
 
