@@ -54,7 +54,7 @@ angular.module('clientApp').directive('knob', function() {
     }
 
     scope.$watch(function () {
-      return [attr.value, attr.max, attr.min , attr.readonly];
+      return [attr.value, attr.max, attr.min];
     }, draw, true);
 
   }
