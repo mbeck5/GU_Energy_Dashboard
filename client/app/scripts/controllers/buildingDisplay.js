@@ -82,11 +82,9 @@ angular.module('clientApp')
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
         var values = [];
+        var buildingName = '';
         if(typeof data[0] !== 'undefined') {
-          var buildingName = data[0].name;
-        }
-        else{
-          var buildingName = "";
+          buildingName = data[0].name;
         }
 
         if (data) {

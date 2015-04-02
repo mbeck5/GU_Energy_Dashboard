@@ -2,64 +2,23 @@
 
 angular.module('clientApp')
   .controller('SummaryCtrl', function ($scope, buildingSvc) {
-    var isBarClicked = false;
-    var isPieClicked = false;
-    var resourceIndex = 0;
     var colorArray = ['#FFCC00','#f20000','#1F77B4']; //Electricity, Gas, Water
     var buildingTypes = [];
+    var barWater = {key: "Water", values: []};
+    var barElectricity = {key: "Electricity", values: []};
+    var barGas = {key: "Gas", values: []};
+    $scope.selectedKnobTime = 'Day';  //day or year
+    $scope.isKnobYearly = false;
 
-    var barWater = [{key: "Building Types", values: []}];
-    var barElectricity = [{key: "Building Types", values: []}];
-    var barGas = [{key: "Building Types", values: []}];
-
-    var waterHash = {};
-    var electricityHash = {};
-    var gasHash = {};
-
+    getKnobData(false);
     populateBuildingTypes();
     createBarData();
 
-    var pieDefault = [
-      {key: "Electricity", y: 0},
-      {key: "Gas", y: 0},
-      {key: "Water", y: 0}];
-
-    var pieBuildingType = [
-      {key: "Electricity", y: 0},
-      {key: "Gas", y: 0},
-      {key: "Water", y: 0}];
-
-    createPieDefault();
-
-    $scope.pieOptions = {
-      chart: {
-        type: 'pieChart',
-        height: 500,
-        x: function(d){return d.key;},
-        y: function(d){return d.y;},
-        showLabels: true,
-        transitionDuration: 500,
-        color: function(d, i){return colorArray[i]},
-        labelType: "percent",
-        pieLabelsOutside: true,
-        labelThreshold: 0.01,
-        tooltips: true,
-        interactive: true,
-        pie: {
-          dispatch: {
-            elementClick: function(e) {pieClicked(e)},
-            elementMouseout: function(e) {revertBarToDefault()},
-            elementMouseover: function(e) {changeResourceDataOnPieMouseover(e)}
-          }
-        }
-      }
-    };
-
-    $scope.pieData = pieDefault;
+    $scope.knobData = [];
 
     $scope.barOptions = {
       chart: {
-        type: 'discreteBarChart',
+        type: 'multiBarChart',
         height: 450,
         margin: {
           top: 20,
@@ -71,25 +30,29 @@ angular.module('clientApp')
         y: function(d){return d.value;},
         showValues: true,
         transitionDuration: 500,
-        //xAxis: {
-        //  axisLabel: 'X Axis'
-        //},
         yAxis: {
           axisLabel: 'Y Axis'
         },
         showYAxis: false,
-        color: function(d, i) {return colorArray[resourceIndex]},
-        discretebar: {
-          dispatch: {
-            elementClick: function(e) {barClicked(e)},
-            elementMouseout: function(e) {revertPieToDefault()},
-            elementMouseover: function(e) {changeResourceDataOnBarMouseover(e)}
-          }
-        }
+        showControls: false,
+        color: function(d, i) {return colorArray[i]}
       }
     };
 
-    $scope.barData = barElectricity;
+    $scope.barData = [barElectricity, barGas, barWater];
+
+    //when user hits the toggle for the knobs
+    $scope.toggleKnobs = function() {
+      //the model may not update immediately, so the logic below may not make sense, but it works
+      if ($scope.isKnobYearly) {
+        getKnobData(false);
+        $scope.selectedKnobTime = 'Day';
+      }
+      else {
+        getKnobData(true);
+        $scope.selectedKnobTime = 'Year';
+      }
+    };
 
     function populateBuildingTypes(){
       buildingSvc.getBuildingTypes().then(function (data){
@@ -101,139 +64,67 @@ angular.module('clientApp')
 
     function createBarWaterData(data){
       //reset
-      barWater[0].values = [];
+      barWater.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-          barWater[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+          barWater.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarElectricityData(data){
       //reset
-      barElectricity[0].values = [];
+      barElectricity.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barElectricity[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barElectricity.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarGasData(data){
       //reset
-      barGas[0].values = [];
+      barGas.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barGas[0].values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barGas.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
       }
     }
     function createBarData(){
-      buildingSvc.getResourceByType(7).then(function (data){
+      var date = moment().subtract(2, 'days').format('YYYY/MM/DD'); //previous date
+      buildingSvc.getResourceByType(7, date).then(function (data){
         createBarWaterData(data);
-        createWaterHash();
       });
-      buildingSvc.getResourceByType(2).then(function (data){
+      buildingSvc.getResourceByType(2, date).then(function (data){
         createBarElectricityData(data);
-        createElectricityHash();
       });
-      buildingSvc.getResourceByType(3).then(function (data){
+      buildingSvc.getResourceByType(3, date).then(function (data){
         createBarGasData(data);
-        createGasHash();
       });
-    }
-    function createWaterHash() {
-      if (barWater[0].values.length > 0) {
-        for (var i = 0; i < barWater[0].values.length; i++) {
-          waterHash[barWater[0].values[i].label] = barWater[0].values[i].value;
-        }
-      }
-    }
-    function createElectricityHash() {
-      if (barElectricity[0].values.length > 0) {
-        for (var i = 0; i < barElectricity[0].values.length; i++) {
-          electricityHash[barElectricity[0].values[i].label] = barElectricity[0].values[i].value;
-        }
-      }
-    }
-    function createGasHash(){
-      if(barGas[0].values.length > 0) {
-        for (var i = 0; i < barGas[0].values.length; i++) {
-          gasHash[barGas[0].values[i].label] = barGas[0].values[i].value;
-        }
-      }
     }
 
     //This function throws 3 exceptions per building service call
-    function createPieDefault(){
-      buildingSvc.getResourceSum(2).then(function (data){
-        pieDefault[0].y = data[0].res_sum;
+    //calculates percent change
+    function getKnobData(compareLastYear){
+      var end = moment().subtract(2, 'days').format('YYYY/MM/DD'); //previous date
+      var start;
+
+      if (!compareLastYear)
+        start = moment().subtract(3, 'days').format('YYYY/MM/DD'); //day before last
+      else
+        start = moment().subtract(2, 'days').subtract(1, 'years').format('YYYY/MM/DD'); //year ago
+
+      buildingSvc.getResourceSum(2, end).then(function (data){
+        buildingSvc.getResourceSum(2, start).then(function (data2){
+          $scope.knobData[0] = data[0].res_sum / data2[0].res_sum * 100;
+        });
       });
-      buildingSvc.getResourceSum(3).then(function (data){
-        pieDefault[1].y = data[0].res_sum;
+      buildingSvc.getResourceSum(3, end).then(function (data){
+        buildingSvc.getResourceSum(3, start).then(function (data2){
+          $scope.knobData[1] = data[0].res_sum / data2[0].res_sum * 100;
+          buildingSvc.getResourceSum(7, end).then(function (data){
+        });
       });
-      buildingSvc.getResourceSum(7).then(function (data){
-        pieDefault[2].y = data[0].res_sum;
+        buildingSvc.getResourceSum(7, start).then(function(data2){
+          $scope.knobData[2] = data[0].res_sum / data2[0].res_sum * 100;
+        });
       });
-    }
-    function createPieType(buildingType){
-      var elec, gas, water;
-
-      if(elec = electricityHash[buildingType]);
-      else{elec = 0}
-
-      if(gas = gasHash[buildingType]);
-      else{gas = 0}
-
-      if(water = waterHash[buildingType]);
-      else{water = 0}
-
-      pieBuildingType[0].y = elec;
-      pieBuildingType[1].y = gas;
-      pieBuildingType[2].y = water;
-    }
-
-    function pieClicked(e){
-      if(!isBarClicked) {
-        isPieClicked = !isPieClicked;
-      }
-    }
-    function barClicked(e){
-      if(!isPieClicked) {
-        isBarClicked = !isBarClicked;
-      }
-    }
-
-    function changeResourceDataOnPieMouseover(e){
-      var resourceName = e.label;
-      resourceIndex = e.pointIndex;
-      if (!isPieClicked && !isBarClicked){
-        if (resourceName == "Water") {
-          $scope.barApi.updateWithData(barWater);
-        }
-        else if(resourceName == "Gas") {
-          $scope.barApi.updateWithData(barGas);
-        }
-        else if(resourceName == "Electricity"){
-          $scope.barApi.updateWithData(barElectricity);
-        }
-        else{
-          console.log("DO BETTER ERROR CHECKING");
-        }
-      }
-    }
-    function changeResourceDataOnBarMouseover(e){
-      if (!isPieClicked && !isBarClicked){
-        createPieType(e.point.label);
-        $scope.pieApi.updateWithData(pieBuildingType);
-      }
-    }
-
-    function revertPieToDefault() {
-      if (!isPieClicked && !isBarClicked) {
-        $scope.pieApi.updateWithData(pieDefault);
-      }
-    }
-    function revertBarToDefault(){
-      if (!isPieClicked && !isBarClicked) {
-        resourceIndex = 0;
-        $scope.barApi.updateWithData(barElectricity);
-      }
     }
 
     //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
