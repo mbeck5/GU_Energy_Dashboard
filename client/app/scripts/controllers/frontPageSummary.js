@@ -30,9 +30,6 @@ angular.module('clientApp')
         y: function(d){return d.value;},
         showValues: true,
         transitionDuration: 500,
-        //xAxis: {
-        //  axisLabel: 'X Axis'
-        //},
         yAxis: {
           axisLabel: 'Y Axis'
         },
@@ -90,7 +87,7 @@ angular.module('clientApp')
       }
     }
     function createBarData(){
-      var date = moment().subtract(1, 'days').format('YYYY/MM/DD'); //previous date
+      var date = moment().subtract(2, 'days').format('YYYY/MM/DD'); //previous date
       buildingSvc.getResourceByType(7, date).then(function (data){
         createBarWaterData(data);
       });
@@ -105,13 +102,13 @@ angular.module('clientApp')
     //This function throws 3 exceptions per building service call
     //calculates percent change
     function getKnobData(compareLastYear){
-      var end = moment().subtract(1, 'days').format('YYYY/MM/DD'); //previous date
+      var end = moment().subtract(2, 'days').format('YYYY/MM/DD'); //previous date
       var start;
 
       if (!compareLastYear)
-        start = moment().subtract(2, 'days').format('YYYY/MM/DD'); //day before last
+        start = moment().subtract(3, 'days').format('YYYY/MM/DD'); //day before last
       else
-        start = moment().subtract(1, 'days').subtract(1, 'years').format('YYYY/MM/DD'); //year ago
+        start = moment().subtract(2, 'days').subtract(1, 'years').format('YYYY/MM/DD'); //year ago
 
       buildingSvc.getResourceSum(2, end).then(function (data){
         buildingSvc.getResourceSum(2, start).then(function (data2){
@@ -121,9 +118,9 @@ angular.module('clientApp')
       buildingSvc.getResourceSum(3, end).then(function (data){
         buildingSvc.getResourceSum(3, start).then(function (data2){
           $scope.knobData[1] = data[0].res_sum / data2[0].res_sum * 100;
+          buildingSvc.getResourceSum(7, end).then(function (data){
         });
       });
-      buildingSvc.getResourceSum(7, end).then(function (data){
         buildingSvc.getResourceSum(7, start).then(function(data2){
           $scope.knobData[2] = data[0].res_sum / data2[0].res_sum * 100;
         });

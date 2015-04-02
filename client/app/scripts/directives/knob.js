@@ -15,7 +15,7 @@ angular.module('clientApp').directive('knob', function() {
       var min = attr.min ? parseInt(attr.min) : 0;
       var max = attr.max ? parseInt(attr.max) : 0;
       var val = attr.value ? parseInt(attr.value) : "";
-      var readonly = attr.readonly == "true";
+      var readonly = attr.readonly === "true";
       var sign = attr.sign ? attr.sign : "";
       var fgColor = "#00A65A"; //green - success
 
@@ -36,7 +36,7 @@ angular.module('clientApp').directive('knob', function() {
         max : max > val ? max : val,
         dynamicDraw: true,
         fgColor : fgColor,
-        readOnly : readonly,
+        readOnly: readonly,
         rtl : (attr.dir == 'rtl'),
         draw : function () { $(this.i).val(this.cv + sign); }
       };
