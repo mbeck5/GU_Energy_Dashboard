@@ -38,6 +38,23 @@
   outline: none;
 }
 
+#knobs {
+  margin: -15px auto 0 auto;
+}
+
+#knob-header {
+  margin: 20px 0 10px 0;
+
+  > span {
+    display: inline-block;
+    font-size: 24px;
+  }
+}
+
+#building-type-graph-header {
+  margin: 20px 0 0 20px;
+}
+
 .checked-list-item {
   display: table;
   width: 100%;

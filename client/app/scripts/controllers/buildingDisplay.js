@@ -5,6 +5,7 @@ angular.module('clientApp')
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
+      var longestLabel = 0;
       $scope.isDetailed = true; //detailed toggle value
       $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
       $scope.date2 = moment().format('DD/MMMM/YYYY');
@@ -22,6 +23,9 @@ angular.module('clientApp')
         chart: {
           type: 'lineChart',
           height: 600,
+          margin: {
+            left: 65
+          },
           xAxis: {
             axisLabel: 'Date',
             showMaxMin: false,
@@ -78,6 +82,10 @@ angular.module('clientApp')
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
         var values = [];
+        var buildingName = '';
+        if(typeof data[0] !== 'undefined') {
+          buildingName = data[0].name;
+        }
 
         if (data) {
           //create graph points
@@ -86,7 +94,7 @@ angular.module('clientApp')
             values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
           }
         }
-        tempData.push({values: values, key: ''});
+        tempData.push({values: values, key: buildingName});
 
         //postpone graph initialization until all points have been created
         if(tempData.length === $scope.selectedBuildings.length){
@@ -128,10 +136,12 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph() {
+        longestLabel = 0;
         $scope.data = tempData;
-        setKeys();
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+        longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
+        $scope.options.chart.yAxis.axisLabelDistance = 25 - longestLabel;
         $scope.spinnerActive = false;
         usSpinnerService.stop('spinner');
       }
@@ -207,7 +217,13 @@ angular.module('clientApp')
             }
           }
         }
-        var padding = max / denom;
+        var padding = 0;
+        if(denom === -1){
+          padding = 0;
+        }
+        else{
+          padding = max / denom;
+        }
         return max + padding;
       }
 
