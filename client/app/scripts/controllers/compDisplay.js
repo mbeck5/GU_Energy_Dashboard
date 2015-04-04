@@ -117,8 +117,7 @@ angular.module('clientApp')
       var index = sortedComps[selectedTimeline].indexOf($scope.filteredComps[selectedTimeline][$scope.displayedCompIndex]);
       sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
-      $scope.searchInput = '';  //reset search
-      $scope.displayedCompIndex = -1; //deselect item
+      $scope.selectComp(0); //select first comp in new list
     }
 });
 

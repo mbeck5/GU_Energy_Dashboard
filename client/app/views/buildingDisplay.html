@@ -42,9 +42,10 @@
           <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
           <div class="col-sm-2">
             <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter" popover-placement="bottom">
-              <toggle-switch model="isDetailed" ></toggle-switch>
+              <toggle-switch model="isDetailed" on-change="toggleDetailed()" ></toggle-switch>
               Detailed View
             </label>
+            <div id="vertical-separator"></div>
           </div>
           <div class="col-sm-4">
             <span>From</span>

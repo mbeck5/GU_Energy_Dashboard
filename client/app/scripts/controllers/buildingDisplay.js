@@ -6,7 +6,8 @@ angular.module('clientApp')
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
       var longestLabel = 0;
-      $scope.isDetailed = true; //detailed toggle value
+      var isDetailed = true;  //used by code
+      $scope.isDetailed = true; //for gui
       $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
       $scope.date2 = moment().format('DD/MMMM/YYYY');
       $scope.dateOpen1 = false;
@@ -59,6 +60,11 @@ angular.module('clientApp')
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           getBuildingData(i);
         }
+      };
+
+      $scope.toggleDetailed = function() {
+        isDetailed = !isDetailed;
+        $scope.applyGraphOptions();
       };
 
       //applies toggle and date filter options and retrieves new data
@@ -119,7 +125,7 @@ angular.module('clientApp')
             $scope.selectedBuildings[i].name = tempName;
 
             //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -127,7 +133,7 @@ angular.module('clientApp')
           //if coming from the building select page
           else {
             //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, $scope.isDetailed, $scope.date1, $scope.date2).then(function (data) {
+            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
               createGraphData(data);
             });
           }
@@ -160,7 +166,7 @@ angular.module('clientApp')
         switch (selectedResource) {
           case 2:
             $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if($scope.isDetailed) {
+            if(isDetailed) {
               $scope.options.title.text = 'Daily Electricity Usage';
             }
             else{
@@ -169,7 +175,7 @@ angular.module('clientApp')
             break;
           case 3:
             $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if($scope.isDetailed) {
+            if(isDetailed) {
               $scope.options.title.text = 'Daily Gas Usage';
             }
             else{
@@ -178,7 +184,7 @@ angular.module('clientApp')
             break;
           case 7:
             $scope.options.chart.yAxis.axisLabel = 'Water';
-            if($scope.isDetailed) {
+            if(isDetailed) {
               $scope.options.title.text = 'Daily Water Usage';
             }
             else{
@@ -187,7 +193,7 @@ angular.module('clientApp')
             break;
           default:
             $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if($scope.isDetailed) {
+            if(isDetailed) {
               $scope.options.title.text = 'Daily Whatever Usage';
             }
             else{
