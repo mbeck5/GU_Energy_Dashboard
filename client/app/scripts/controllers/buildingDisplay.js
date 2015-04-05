@@ -5,7 +5,6 @@ angular.module('clientApp')
       var selectedResource = 2; //default resource
       var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
       var tempData = [];
-      var longestLabel = 0;
       var isDetailed = true;  //used by code
       $scope.isDetailed = true; //for gui
       $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
@@ -75,6 +74,7 @@ angular.module('clientApp')
 
       //applies toggle and date filter options and retrieves new data
       $scope.applyGraphOptions = function() {
+        $scope.isDatesChanged = false;
         resetData();
         getBuildingData();
       };
@@ -148,7 +148,7 @@ angular.module('clientApp')
 
       //called once data is retrieved
       function initGraph() {
-        longestLabel = 0;
+        var longestLabel;
         $scope.data = tempData;
         setResourceLabel();
         $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
@@ -156,15 +156,6 @@ angular.module('clientApp')
         $scope.options.chart.yAxis.axisLabelDistance = 25 - longestLabel;
         $scope.spinnerActive = false;
         usSpinnerService.stop('spinner');
-      }
-
-      //to set the keys for the lines when making multiple lines in a graph. probably bad.
-      function setKeys(){
-        for(var i = 0; i < $scope.selectedBuildings.length; i++){
-          if($scope.data[i]) {
-            $scope.data[i].key = $scope.selectedBuildings[i].name;
-          }
-        }
       }
 
       function setResourceLabel() {

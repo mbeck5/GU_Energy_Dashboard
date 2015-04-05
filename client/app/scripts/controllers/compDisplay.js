@@ -107,7 +107,10 @@ angular.module('clientApp')
       $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-        $scope.selectComp(0);
+
+        //don't select if nothing there
+        if ($scope.filteredComps["running"].length !== 0)
+          $scope.selectComp(0);
       });
     }
 
