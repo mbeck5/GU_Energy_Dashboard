@@ -109,7 +109,7 @@ angular.module('clientApp')
         sortCompsIntoTabs(data);
 
         //don't select if nothing there
-        if ($scope.filteredComps["running"].length !== 0)
+        if ($scope.filteredComps[getSelectedTimeline()].length !== 0)
           $scope.selectComp(0);
       });
     }
