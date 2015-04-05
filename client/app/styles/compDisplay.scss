@@ -9,7 +9,7 @@
 }
 
 .nav-tabs li a{
-  white-space: nowrap;
+  height: 52px;
 }
 
 .comp-action-buttons{
@@ -17,6 +17,7 @@
 }
 
 #action-footer{
+  padding-left: 2%; //fixes spacing
   div {
     width: 32%;
     display: inline-block;
