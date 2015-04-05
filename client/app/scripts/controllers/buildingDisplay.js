@@ -14,6 +14,7 @@ angular.module('clientApp')
       $scope.dateOpen2 = false;
       $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
       $scope.spinnerActive = false;
+      $scope.isDatesChanged = false;  //toggles when date inputs are changed
 
       checkRefresh();
       getBuildingData(null);  //initial call to get data of default type
@@ -60,6 +61,11 @@ angular.module('clientApp')
         for(var i = 0; i < $scope.selectedBuildings.length; i++) {
           getBuildingData(i);
         }
+      };
+
+      //when date inputs have been changed
+      $scope.datesChanged = function() {
+        $scope.isDatesChanged = true;
       };
 
       $scope.toggleDetailed = function() {
