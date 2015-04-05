@@ -69,5 +69,6 @@
 }
 
 #detailed-toggle-wrapper {
-  border-right: thin solid $gray;
+  border-right: thin solid $gray; //gives us a separator
+  height: 70px;
 }
