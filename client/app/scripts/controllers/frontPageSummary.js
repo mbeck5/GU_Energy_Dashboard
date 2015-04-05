@@ -110,21 +110,27 @@ angular.module('clientApp')
       else
         start = moment().subtract(2, 'days').subtract(1, 'years').format('YYYY/MM/DD'); //year ago
 
-      buildingSvc.getResourceSum(2, end).then(function (data){
-        buildingSvc.getResourceSum(2, start).then(function (data2){
-          $scope.knobData[0] = data[0].res_sum / data2[0].res_sum * 100;
+      buildingSvc.getResourceSum(2, end).then(function (elecData){
+        buildingSvc.getResourceSum(2, start).then(function (elecData2){
+          $scope.knobData[0] = calcPercentChange(elecData[0].res_sum, elecData2[0].res_sum);
         });
       });
-      buildingSvc.getResourceSum(3, end).then(function (data){
-        buildingSvc.getResourceSum(3, start).then(function (data2){
-          $scope.knobData[1] = data[0].res_sum / data2[0].res_sum * 100;
-          buildingSvc.getResourceSum(7, end).then(function (data){
+      buildingSvc.getResourceSum(3, end).then(function (gasData){
+        buildingSvc.getResourceSum(3, start).then(function (gasData2){
+          $scope.knobData[1] = calcPercentChange(gasData[0].res_sum, gasData2[0].res_sum);
         });
       });
-        buildingSvc.getResourceSum(7, start).then(function(data2){
-          $scope.knobData[2] = data[0].res_sum / data2[0].res_sum * 100;
+      buildingSvc.getResourceSum(7, end).then(function (waterData) {
+        buildingSvc.getResourceSum(7, start).then(function(waterData2){
+          $scope.knobData[2] = calcPercentChange(waterData[0].res_sum, waterData2[0].res_sum);
         });
       });
+
+    }
+
+    function calcPercentChange(endTotal, startTotal) {
+      var difference = endTotal - startTotal;
+      return difference / startTotal * 100;
     }
 
     //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
