@@ -7,6 +7,8 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
+    var graphWidth = window.innerWidth;
+    $scope.topThree = [];
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -14,7 +16,9 @@ angular.module('clientApp')
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
         selectedComp = compEditSvc.getSelectedComp();
+        //$(window).trigger('resize');
         $scope.api.refresh();
+        //$(window).trigger('resize');
         //Compare to the values from two weeks ago
         var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
         var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
@@ -40,15 +44,14 @@ angular.module('clientApp')
             calcAllChanges();
             sortChanges();
             createData();
+            compEditSvc.setTopThree([$scope.data[0].key, $scope.data[1].key, $scope.data[2].key]);
           });
         });
       }
     });
-
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
     $scope.data = [];
-
     $scope.options = {
       chart: {
         type: 'multiBarHorizontalChart',
@@ -104,7 +107,8 @@ angular.module('clientApp')
             '</tr>' +
             '</table>' +
             '</div>';
-        }
+        },
+        noData: 'Competition Coming Soon!'
       },
       title: {
         enable: true,
@@ -148,7 +152,7 @@ angular.module('clientApp')
 
     function calcAllChanges(){
       if(compareList.length == currentList.length) {
-        for (var i = 0; i < compareList.length; i++){
+        for (var i = 0; i < compareList.length; i++) {
           var percentChange = calcPercentChange(compareList[i].total_cons, currentList[i].total_cons);
           changeList.push({building: compareList[i], change: percentChange});
         }
@@ -184,7 +188,8 @@ angular.module('clientApp')
         }
         tempData.push({key: key, values: values});
       }
-      $scope.data = tempData;
+      $scope.data = angular.copy(tempData);
+
     }
 
     function shortenBuildingName(buildingName){

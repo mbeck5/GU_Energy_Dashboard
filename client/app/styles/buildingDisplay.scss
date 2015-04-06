@@ -62,10 +62,55 @@
   }
 }
 
+#resource-panel-column {
+  //margin-top: 30px;
+  max-height: 10%;
+}
+
+#building-display-panel{
+ // margin-top: 30px;
+  height: 100%;
+}
+
+#electricity-panel-background {
+  background: url("../images/electricity-background.png");
+  background-position-y: 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#gas-panel-background {
+  background: url("../images/gas-background.png");
+  background-repeat: no-repeat;
+  background-position-y: 50%;
+  background-size: 100% 100%;
+}
+
+#water-panel-background {
+  background: url("../images/water-background.png");
+  background-repeat: no-repeat;
+  background-position-y: 50%;
+  background-size: 100% 100%;
+}
+
+#hoverable {
+  :hover {
+    cursor: pointer;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+  }
+}
+
 #detailed-toggle {
   margin-top: 20px;
 }
 
 #display-apply {
   margin-top: 20px;
+  float: right;
+}
+
+#date-detail-controls
+{
+  margin-top: .05%;
 }
