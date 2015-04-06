@@ -40,16 +40,16 @@
       <div class="panel-body">
         <div class="row">
           <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
-          <div class="col-sm-2">
-            <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter" popover-placement="bottom">
-              <toggle-switch model="isDetailed" ></toggle-switch>
+          <div id="detailed-toggle-wrapper" class="col-sm-2">
+            <label id="detailed-toggle" popover="Helpful for looking at large data sets." popover-trigger="mouseenter" popover-placement="bottom">
+              <toggle-switch model="isDetailed" on-change="toggleDetailed()" ></toggle-switch>
               Detailed View
             </label>
           </div>
           <div class="col-sm-4">
             <span>From</span>
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1" ng-change="datesChanged()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -60,7 +60,7 @@
           <div class="col-sm-4">
             <span>To</span>
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2" ng-change="datesChanged()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>
@@ -69,7 +69,7 @@
             </div>
           </div>
           <div class="col-sm-2">
-            <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()">
+            <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()" ng-disabled="!isDatesChanged">
               Apply
             </button>
           </div>
