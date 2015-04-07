@@ -26,7 +26,6 @@ angular.module('clientApp')
 
         function updateHeader(){
           var isLoggedIn = $cookies['loggedIn'];
-          console.log(isLoggedIn);
           if(isLoggedIn === 'true'){
             $scope.loggedIn = true;
           }
