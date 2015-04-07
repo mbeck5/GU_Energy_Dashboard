@@ -134,18 +134,30 @@ angular.module('clientApp')
       $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-        $scope.selectComp(0);
+
+        //don't select if nothing there
+        if ($scope.filteredComps[getSelectedTimeline()].length !== 0)
+          $scope.selectComp(0);
       });
     }
 
     //removes current item from front-end ui
     function deleteCurrentItem() {
       var selectedTimeline = getSelectedTimeline();
-      var index = sortedComps[selectedTimeline].indexOf($scope.filteredComps[selectedTimeline][$scope.displayedCompIndex]);
+      var index = getOriginalIndex(selectedTimeline);
       sortedComps[selectedTimeline].splice(index, 1);
       $scope.filteredComps = sortedComps; //reset list
-      $scope.searchInput = '';  //reset search
-      $scope.displayedCompIndex = -1; //deselect item
+      $scope.selectComp(0); //select first comp in new list
+    }
+
+    //returns index of unfiltered array of selected comp in filtered
+    function getOriginalIndex(selectedTimeline) {
+      var id = $scope.filteredComps[selectedTimeline][$scope.displayedCompIndex].cid;
+      for (var i = 0; i < sortedComps[selectedTimeline].length; ++i) {
+        if (id === sortedComps[selectedTimeline][i].cid)
+          return i;
+      }
+      return -1;
     }
 });
 
