@@ -45,15 +45,22 @@ angular.module('clientApp')
       $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
-      $scope.displayedCompIndex = -1; //deselect item on view
+      $scope.selectComp(0);
     };
 
     //when clicking on competition
     $scope.selectComp = function (index) {
-      $scope.displayedCompIndex = index;
-      selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
-      setDates(index);
-      compEditSvc.setSelectedComp(selectedComp);
+      //don't select if nothing there
+      if ($scope.filteredComps[getSelectedTimeline()].length > index) {
+        $scope.displayedCompIndex = index;
+        selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
+        setDates();
+        compEditSvc.setSelectedComp(selectedComp);
+      }
+      else {
+        selectedComp = null;
+        $scope.displayedCompIndex = -1; //deselect item
+      }
     };
 
     function setDates() {
@@ -102,15 +109,16 @@ angular.module('clientApp')
       });
     };
 
+    $scope.isCompetitionSelected = function() {
+      return selectedComp != null;
+    };
+
     //retrieves all competition info
     function refreshCompList() {
       $scope.searchInput.input = '';  //reset search
       compEditSvc.getComp().then(function (data) {
         sortCompsIntoTabs(data);
-
-        //don't select if nothing there
-        if ($scope.filteredComps[getSelectedTimeline()].length !== 0)
-          $scope.selectComp(0);
+        $scope.selectComp(0);
       });
     }
 
