@@ -156,9 +156,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.checkedBuildings = [];
   $scope.buildings = [];
   $scope.title = "Create Competition";
-  $scope.loggedIn = compEditSvc.getLoginStatus();
-  $scope.showLogin = !$scope.loggedIn;
-  $scope.studentID = "";
 
   //get list of buildings
   buildingSvc.getBuildings().then(function (data) {
@@ -176,16 +173,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
     isopen: false
   };
 
-  $scope.login = function () {
-    compEditSvc.checkLogin($scope.studentID);
-    $scope.loggedIn = compEditSvc.getLoginStatus();
-    $scope.showLogin = !$scope.loggedIn;
-    if(!$scope.loggedIn)
-    {
-      alert("You do not have permissions to perform this action");
-      $modalInstance.dismiss('cancel');
-    }
-  };
 
   //toggle check value by clicking on item
   $scope.selectBuilding = function(index) {
@@ -266,9 +253,6 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   $scope.checkedBuildings = [];
   $scope.buildings = [];
   $scope.title = "Edit Competition";
-  $scope.loggedIn = compEditSvc.getLoginStatus();
-  $scope.showLogin = !$scope.loggedIn;
-  $scope.studentID = "";
 
   //get list of buildings
   compEditSvc.getCompBuildingList(cid).then(function (data) {
@@ -295,16 +279,6 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
 	}
   };
 
-  $scope.login = function () {
-    compEditSvc.checkLogin($scope.studentID);
-    $scope.loggedIn = compEditSvc.getLoginStatus();
-    $scope.showLogin = !$scope.loggedIn;
-    if(!$scope.loggedIn)
-    {
-      alert("You do not have permissions to perform this action");
-      $modalInstance.dismiss('cancel');
-    }
-  };
 
   //when ok clicked
   $scope.ok = function (newName) {
@@ -354,20 +328,6 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
 //controller for delete modal
 angular.module('clientApp').controller('deleteModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc) {
 
-  $scope.loggedIn = compEditSvc.getLoginStatus();
-  $scope.showLogin = !$scope.loggedIn;
-  $scope.studentID = "";
-
-  $scope.login = function () {
-    compEditSvc.checkLogin($scope.studentID);
-    $scope.loggedIn = compEditSvc.getLoginStatus();
-    $scope.showLogin = !$scope.loggedIn;
-    if(!$scope.loggedIn)
-    {
-      alert("You do not have permissions to perform this action");
-      $modalInstance.dismiss('cancel');
-    }
-  };
   //on ok
   $scope.ok = function () {
     //get the selected competition cid
