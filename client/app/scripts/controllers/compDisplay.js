@@ -12,17 +12,20 @@ angular.module('clientApp')
     //retrieve initial data
     refreshCompList();
     showFooter();
+    $scope.$on("logout", function(){
+      showFooter();
+    });
 
     function showFooter(){
-      $scope.loggedIn = $cookies['loggedIn'];
-      /*if(loggedIn === 'true'){
-        $scope.loginPage = "";
-        $scope.loginText = "Logout";
+      var isLoggedIn = $cookies['loggedIn'];
+      if(isLoggedIn === 'true'){
+        $scope.loggedIn = true;
+        $scope.loggedOut = false;
       }
       else{
-        $scope.loginPage = "Login"
-        $scope.loginText = "Login";
-      }*/
+        $scope.loggedIn = false;
+        $scope.loggedOut = true;
+      }
     }
 
     function sortCompsIntoTabs(allComps) {
@@ -111,6 +114,20 @@ angular.module('clientApp')
         if (deleted) {  //only refresh if user deleted
           $scope.searchInput.input = '';  //reset search
           deleteCurrentItem();
+        }
+      });
+    };
+
+    $scope.openLoginModal = function(size){
+      var loginModal = $modal.open({
+        templateUrl: 'loginModal.html',
+        controller: 'LoginCtrl',
+        size: size
+      })
+
+      loginModal.result.then(function(loggedin){
+        if(loggedin){
+          showFooter();
         }
       });
     };

@@ -74,6 +74,16 @@
           </div>
         </div>
       </div>
+      <div ng-if="loggedOut" class="panel-footer">
+        <div id="login-footer">
+          <div>
+            <script type="text/ng-template" id="loginModal.html">
+              <div ng-include src="'views/loginDisplay.html'"></div>
+            </script>
+            <button class="btn btn-default comp-action-buttons" ng-click="openLoginModal('sm')">Login</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

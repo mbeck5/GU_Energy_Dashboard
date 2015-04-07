@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('HeaderCtrl', function ($scope, $location, $cookies) {
+  .controller('HeaderCtrl', function ($scope, $location, $cookies, $rootScope) {
+        updateHeader();
+        $scope.$on("login", function(){
+          updateHeader();
+        });
         $scope.navbarCollapsed = true;
 
-        setupLogin();
         $scope.isActive = function (location) {
           return location === $location.path();
         };
@@ -15,22 +18,20 @@ angular.module('clientApp')
             $scope.navbarCollapsed = !$scope.navbarCollapsed;
         };
 
-
         $scope.logout = function(){
-          $scope.toggleCollapse();
-          $cookies['loggedIn'] = '';
+          $cookies['loggedIn'] = false;
+          $rootScope.$broadcast("logout");
+          updateHeader();
         };
 
-
-        function setupLogin(){
-          var loggedIn = $cookies['loggedIn'];
-          if(loggedIn === 'true'){
-            $scope.loginPage = "";
-            $scope.loginText = "Logout";
+        function updateHeader(){
+          var isLoggedIn = $cookies['loggedIn'];
+          console.log(isLoggedIn);
+          if(isLoggedIn === 'true'){
+            $scope.loggedIn = true;
           }
           else{
-            $scope.loginPage = "Login"
-            $scope.loginText = "Login";
+            $scope.loggedIn = false;
           }
-        }
+        };
   });

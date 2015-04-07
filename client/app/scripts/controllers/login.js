@@ -1,28 +1,37 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('LoginCtrl', function ($scope, $location, $cookies, loginSvc) {
+  .controller('LoginCtrl', function ($scope, $cookies, $modalInstance, $rootScope, loginSvc) {
 
-    $scope.login = function(){
-      loginSvc.getUser($scope.studentId).then(function(data){
+    $scope.login = function(studentId, password){
+      loginSvc.getUser(studentId).then(function(data){
         if(data.length == 1){
           //The user exists, check if passwords match
-          loginSvc.getPassword($scope.studentId).then(function(data2){
-            if(data2[0].password === $scope.password){
-              //Successful Login.  Redirect to original page, keep the session.
+          loginSvc.getPassword(studentId).then(function(data2){
+            if(data2[0].password === password){
+              //Successful Login.
               $cookies['loggedIn'] = 'true';
-              $location.path('/');
+              $rootScope.$broadcast("login");
+              $modalInstance.close(true);
             }
             else{
               //Wrong password entered.
-              console.log("Wrong Password");
+              $scope.studentId = '';
+              $scope.password = '';
+              alert("Incorrect Username or Password");
             }
           });
         }
         else{
           //Wrong username entered.
-          console.log("Wrong Username");
+          $scope.studentId = '';
+          $scope.password = '';
+          alert("Incorrect Username or Password");
         }
       });
     };
+
+    $scope.cancel = function(){
+      $modalInstance.dismiss('cancel');
+    }
   });

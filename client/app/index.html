@@ -37,7 +37,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
             <li ng-class="{active: isActive('/Competitions')}" ng-click="toggleCollapse()"><a href="#/Competitions">Competitions</a></li>
-            <li ng-class="{active: isActive('#/')}" ng-click="logout()"><a ng-href="#/{{loginPage}}">{{loginText}}</a></li>
+            <li ng-if="loggedIn" ng-click="logout()"><a>Logout</a></li>
           </ul>
         </div>
       </div>
