@@ -75,16 +75,7 @@ angular.module('clientApp')
       //applies toggle and date filter options and retrieves new data
       $scope.applyGraphOptions = function() {
         $scope.isDatesChanged = false;
-
-        //if dates are equal date 2 += 1 because user doesn't understand
-        if (moment($scope.date1).isSame($scope.date2)) {
-          $scope.date2 = moment($scope.date2).add(1, 'day').format('DD/MM/YYYY'); // +1 day
-        }
-        else {
-          $scope.date2 = $scope.date2.format('DD/MM/YYYY'); //else, just convert to string
-        }
-
-        $scope.date1 = moment($scope.date1).format('DD/MM/YYYY'); //convert back to string
+        checkIfEqual();
         resetData();
         getBuildingData();
       };
@@ -100,6 +91,30 @@ angular.module('clientApp')
           $scope.dateOpen2 = true;
         }
       };
+
+      function checkIfEqual() {
+        //convert back to moment objects
+        if(moment.isDate($scope.date1))
+          $scope.date1 = moment($scope.date1);
+        else  //string
+          $scope.date1 = moment($scope.date1, 'DD/MMMM/YYYY');
+
+        if(moment.isDate($scope.date2))
+          $scope.date2 = moment($scope.date2);
+        else  //string
+          $scope.date2 = moment($scope.date2, 'DD/MMMM/YYYY');
+
+
+        //if dates are equal date 2 += 1 because user doesn't understand
+        if (moment($scope.date1).isSame($scope.date2)) {
+          $scope.date2 = moment($scope.date2).add(1, 'day').format('DD/MMMM/YYYY'); // +1 day
+        }
+        else {
+          $scope.date2 = $scope.date2.format('DD/MMMM/YYYY'); //else, just convert to string
+        }
+
+        $scope.date1 = moment($scope.date1).format('DD/MMMM/YYYY'); //convert back to string
+      }
 
       //Changed this to just push to temporary data variable.
       function createGraphData(data){
