@@ -75,6 +75,16 @@ angular.module('clientApp')
       //applies toggle and date filter options and retrieves new data
       $scope.applyGraphOptions = function() {
         $scope.isDatesChanged = false;
+
+        //if dates are equal date 2 += 1 because user doesn't understand
+        if (moment($scope.date1).isSame($scope.date2)) {
+          $scope.date2 = moment($scope.date2).add(1, 'day').format('DD/MM/YYYY'); // +1 day
+        }
+        else {
+          $scope.date2 = $scope.date2.format('DD/MM/YYYY'); //else, just convert to string
+        }
+
+        $scope.date1 = moment($scope.date1).format('DD/MM/YYYY'); //convert back to string
         resetData();
         getBuildingData();
       };

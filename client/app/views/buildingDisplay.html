@@ -49,7 +49,7 @@
           <div class="col-sm-4">
             <span>From</span>
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1" ng-change="datesChanged()"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1" close-text="Close" ng-change="datesChanged()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
                   <i class="fa fa-calendar"></i>
@@ -60,7 +60,7 @@
           <div class="col-sm-4">
             <span>To</span>
             <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2" ng-change="datesChanged()"/>
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2" close-text="Close" ng-change="datesChanged()"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
                   <i class="fa fa-calendar"></i>
