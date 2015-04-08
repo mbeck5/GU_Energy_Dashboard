@@ -103,7 +103,7 @@ angular.module('clientApp')
           //create graph points
           values = new Array(data.length);
           for (var j = 0; j < data.length; j++) {
-            values[j] = {x: Date.parse(data[j].date), y: data[j].consumption};
+            values[j] = {x: Date.parse(data[j].date), y: Math.round(data[j].consumption)};
           }
         }
         tempData.push({values: values, key: buildingName});
