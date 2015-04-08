@@ -13,7 +13,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -28,7 +28,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -43,7 +43,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
