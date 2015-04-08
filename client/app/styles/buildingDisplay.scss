@@ -1,10 +1,11 @@
 .toggles {
   max-width: 100%;
   margin: 5% auto 5% auto;
-  max-height: 90%;
+  //padding: auto 50% auto 50%;
+  max-height: 100%;
   display: table;
 
-  @media (max-width: $screen-md) {
+  @media (max-width: 992px) {
     max-width: 100%;
     margin: 0 auto 15px auto;
     padding: 15px 25px 15px 25px;
@@ -15,67 +16,32 @@
       width: 50px;
     }
   }
+
+  :hover {
+    cursor: pointer;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+  }
 }
 
 #graph {
   margin-left: 2%;
+}
 
-  @media (max-width: $screen-sm) {
-    max-width: 100%;
-  }
+#resource-panel-column {
+  margin-top: 30px;
+  max-height: 10%;
+}
+
+#building-display-panel{
+  margin-top: 30px;
+  height: 100%;
 }
 
 #electricity-panel-background {
   background: url(../images/electricity-background.png);
   background-repeat: no-repeat;
   background-position-y: 50%;
-  background-size: 100% 100%;
-}
-
-#gas-panel-background {
-  background: url("../images/gas-background.png");
-  background-repeat: no-repeat;
-  background-position-y: 50%;
-  background-size: 100% 100%;
-}
-
-#water-panel-background {
-  background: url("../images/water-background.png");
-  background-repeat: no-repeat;
-  background-position-y: 50%;
-  background-size: 100% 100%;
-}
-
-.resource-div-effects {
-  max-width: 300px;
-  height: 15%;
-  :hover {
-    cursor: pointer;
-    img {
-      opacity: 0.7;
-    }
-  }
-  @media (max-width: $screen-md) {
-    display: inline-block;
-    // margin-left: 15%;
-    //margin-right: 15%;
-  }
-}
-
-#resource-panel-column {
-  //margin-top: 30px;
-  max-height: 10%;
-}
-
-#building-display-panel{
-  // margin-top: 30px;
-  height: 100%;
-}
-
-#electricity-panel-background {
-  background: url("../images/electricity-background.png");
-  background-position-y: 50%;
-  background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 
@@ -107,10 +73,4 @@
 
 #display-apply {
   margin-top: 20px;
-  float: right;
-}
-
-#date-detail-controls
-{
-  margin-top: .05%;
 }
