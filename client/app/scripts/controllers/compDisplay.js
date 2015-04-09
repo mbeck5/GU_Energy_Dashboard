@@ -7,17 +7,19 @@ angular.module('clientApp')
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
-    $scope.compDisplayTabActivity = [true, false];  //podium, all
+    $scope.compDisplayTabActivity = [false, true];  //podium, all
     $scope.displayedCompIndex = 0;
 
     //retrieve initial data
     refreshCompList();
 
-    $scope.fixGraph = function() {
-      $timeout(function() {
+    $scope.fixGraph = function () {
+      setTimeout(function () {
         jQuery(window).trigger('resize');
-      });
+        $(window).trigger('resize');
+      }, 0);
       jQuery(window).trigger('resize');
+      $(window).trigger('resize');
     };
 
     function sortCompsIntoTabs(allComps) {
@@ -25,11 +27,11 @@ angular.module('clientApp')
       for (var i = 0; i < allComps.length; ++i) {
         var today = new Date();
         if (moment(allComps[i].start_date).diff(today) < 0) {
-          if (moment(allComps[i].end_date).diff(today) < 0) {
-            sortedComps.past.push(allComps[i]);
-          }
-          else {
+          if (moment(allComps[i].end_date).diff(today) == 1) {
             sortedComps.running.push(allComps[i]);
+          }
+          else if (moment(allComps[i].end_date).diff(today) < 0) {
+            sortedComps.past.push(allComps[i]);
           }
         }
         else {
@@ -48,7 +50,9 @@ angular.module('clientApp')
         case 1:
           //$scope.compDisplayTabActivity = [false, true];
           return "running";
-        case 2: return "upcoming";
+        case 2:
+          //$scope.compDisplayTabActivity = [false, true];
+          return "upcoming";
       }
     }
 
@@ -62,17 +66,29 @@ angular.module('clientApp')
       }
     }
 
-    $scope.getTopThree = function ()
-    {
+    $scope.getTopThree = function () {
       return compEditSvc.getTopThree();
     };
 
     //filters based on search input
     $scope.filterComps = function () {
-      $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function(element) {
+      $scope.filteredComps[getSelectedTimeline()] = sortedComps[getSelectedTimeline()].filter(function (element) {
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
       $scope.displayedCompIndex = -1; //deselect item on view
+      var index = $scope.compTabActivity.indexOf(true);
+      switch (index) {
+        case 0:
+          $scope.compDisplayTabActivity = [true, false];
+          break;
+        case 1:
+          $scope.compDisplayTabActivity = [false, true];
+          break;
+        case 2:
+          $scope.compDisplayTabActivity = [false, true];
+          break;
+      }
+      $scope.selectComp(0);
     };
 
     //when clicking on competition
@@ -89,44 +105,44 @@ angular.module('clientApp')
     }
 
     $scope.openCreateModal = function (size) {
-            var createModal = $modal.open({
-              templateUrl: 'myModalContent1.html',
-              controller: 'createModalInstanceCtrl',
-              size: size
-            });
+      var createModal = $modal.open({
+        templateUrl: 'myModalContent1.html',
+        controller: 'createModalInstanceCtrl',
+        size: size
+      });
 
-            createModal.result.then(function(created) {
-              if (created)  //only refresh if user added new
-              refreshCompList();
-            });
+      createModal.result.then(function (created) {
+        if (created)  //only refresh if user added new
+          refreshCompList();
+      });
     };
 
     $scope.openEditModal = function (size) {
-            var editModal = $modal.open({
-              templateUrl: 'myModalContent2.html',
-              controller: 'editModalInstanceCtrl',
-              size: size
-            });
+      var editModal = $modal.open({
+        templateUrl: 'myModalContent2.html',
+        controller: 'editModalInstanceCtrl',
+        size: size
+      });
 
-            editModal.result.then(function (edited) {
-              if (edited)  //only refresh if user edited
-              refreshCompList();
-            });
+      editModal.result.then(function (edited) {
+        if (edited)  //only refresh if user edited
+          refreshCompList();
+      });
     };
 
     $scope.openDeleteModal = function (size) {
-            var deleteModal = $modal.open({
-              templateUrl: 'myModalContent3.html',
-              controller: 'deleteModalInstanceCtrl',
-              size: size
-            });
+      var deleteModal = $modal.open({
+        templateUrl: 'myModalContent3.html',
+        controller: 'deleteModalInstanceCtrl',
+        size: size
+      });
 
-            deleteModal.result.then(function(deleted) {
-              if (deleted) {  //only refresh if user deleted
-                $scope.searchInput = '';  //reset search
-                deleteCurrentItem();
-              }
-            });
+      deleteModal.result.then(function (deleted) {
+        if (deleted) {  //only refresh if user deleted
+          $scope.searchInput = '';  //reset search
+          deleteCurrentItem();
+        }
+      });
     };
 
     //retrieves all competition info
@@ -159,7 +175,7 @@ angular.module('clientApp')
       }
       return -1;
     }
-});
+  });
 
 //controller for creating competition
 angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
@@ -187,14 +203,14 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 
 
   //toggle check value by clicking on item
-  $scope.selectBuilding = function(index) {
-	var id = $scope.buildings[index].id;
-	if ($scope.checkedBuildings[id]) {
-	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
-	}
-	else {
-	  $scope.checkedBuildings[id] = true;
-	}
+  $scope.selectBuilding = function (index) {
+    var id = $scope.buildings[index].id;
+    if ($scope.checkedBuildings[id]) {
+      $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+    }
+    else {
+      $scope.checkedBuildings[id] = true;
+    }
   };
 
   //when ok is clicked
@@ -204,45 +220,53 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("Please specify a competition name");
     }
     else {
-        var clickedBuildingCount = 0;
-        for (var property in $scope.checkedBuildings) {
-          if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-            clickedBuildingCount++;
-          }
+      var tempStart = compEditSvc.getStartDate();
+      var tempEnd = compEditSvc.getEndDate();
+
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+
+      var clickedBuildingCount = 0;
+      for (var property in $scope.checkedBuildings) {
+        if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+          clickedBuildingCount++;
         }
-        if(clickedBuildingCount <= 2)
-        {
-          alert("3 or more buildings must be selected")
+      }
+      if (clickedBuildingCount <= 2) {
+        alert("3 or more buildings must be selected")
+      }
+      else {
+        if (!(startDateStrMoment.diff(endDateStrMoment, 'days') < 1)) {
+          alert("Invalid end date");
         }
         else {
-          if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
-            alert("Invalid end date");
-          }
-        else
-          {
-            //get dates from service daved from datepicker controller
-            var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
-            var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
-            //save the new competition to the database
-            compEditSvc.getComp().then(function (data) {
-              var maxCid = 0;
-              var arrayLength = data.length;
-              for (var i = 0; i < arrayLength; i++) {
-                if (data[i].cid > maxCid) {
-                  maxCid = data[i].cid;
-                }
+          //get dates from service daved from datepicker controller
+
+
+          var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
+
+
+          var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+          //save the new competition to the database
+          compEditSvc.getComp().then(function (data) {
+            var maxCid = 0;
+            var arrayLength = data.length;
+            for (var i = 0; i < arrayLength; i++) {
+              if (data[i].cid > maxCid) {
+                maxCid = data[i].cid;
               }
-              maxCid = maxCid + 1;
-              compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
-              for (var property in $scope.checkedBuildings) {
-                if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-                  compEditSvc.addCompBuilding(maxCid, property);
-                }
+            }
+            maxCid = maxCid + 1;
+            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
+            for (var property in $scope.checkedBuildings) {
+              if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                compEditSvc.addCompBuilding(maxCid, property);
               }
-              $modalInstance.close(true);
-            });
-          }
+            }
+            $modalInstance.close(true);
+          });
         }
+      }
     }
   };
 
@@ -281,14 +305,14 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
   });
 
   //toggle check value by clicking on item
-  $scope.selectBuilding = function(index) {
-	var id = $scope.buildings[index].id;
-	if ($scope.checkedBuildings[id]) {
-	  $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
-	}
-	else {
-	  $scope.checkedBuildings[id] = true;
-	}
+  $scope.selectBuilding = function (index) {
+    var id = $scope.buildings[index].id;
+    if ($scope.checkedBuildings[id]) {
+      $scope.checkedBuildings[id] = !$scope.checkedBuildings[id];
+    }
+    else {
+      $scope.checkedBuildings[id] = true;
+    }
   };
 
 
@@ -299,36 +323,41 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       alert("Please specify a competition name");
     }
     else {
-        var clickedBuildingCount = 0;
-        for (var property in $scope.checkedBuildings) {
-          if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-            clickedBuildingCount++;
-          }
-        }
-        if(clickedBuildingCount <= 2)
-        {
-          alert("3 or more buildings must be selected")
-        }
-        else {
-          if (moment(compEditSvc.getStartDate()).diff(moment(compEditSvc.getEndDate() < 0))) {
-            alert("Invalid end date");
-          }
-          else {
-            //delete old buildings saved for the competition
-            compEditSvc.deleteCompBuildings(cid).then(function () {
-              //get dates saved from service from datepicker
-              var startDateStr = moment(compEditSvc.getStartDate()).format('YYYY/MM/DD');
-              var endDateStr = moment(compEditSvc.getEndDate()).format('YYYY/MM/DD');
-              //update in database
-              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
-                //save new building selections
-                compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
-              });
-              $modalInstance.close(true);
-            });
-          }
+      var tempStart = compEditSvc.getStartDate();
+      var tempEnd = compEditSvc.getEndDate();
+
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+
+      var clickedBuildingCount = 0;
+      for (var property in $scope.checkedBuildings) {
+        if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+          clickedBuildingCount++;
         }
       }
+      if (clickedBuildingCount <= 2) {
+        alert("3 or more buildings must be selected")
+      }
+      else {
+        if (!(startDateStrMoment.diff(endDateStrMoment, 'days') < 1)) {
+          alert("Invalid end date");
+        }
+        else {
+          //delete old buildings saved for the competition
+          compEditSvc.deleteCompBuildings(cid).then(function () {
+            //get dates saved from service from datepicker
+            var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
+            var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+            //update in database
+            compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
+              //save new building selections
+              compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
+            });
+            $modalInstance.close(true);
+          });
+        }
+      }
+    }
   };
 
   //on cancel click
