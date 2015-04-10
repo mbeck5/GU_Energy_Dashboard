@@ -165,7 +165,9 @@ angular.module('clientApp')
           else {
             //get resource info for building
             buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
-              createGraphData(data);
+              if(tempData.length < $scope.selectedBuildings.length) {
+                createGraphData(data);
+              }
             });
           }
         }
