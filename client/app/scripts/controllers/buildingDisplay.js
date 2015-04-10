@@ -157,7 +157,9 @@ angular.module('clientApp')
 
             //get resource info for building from name rather than ID
             buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
-              createGraphData(data);
+              if(tempData.length < $scope.selectedBuildings.length) {
+                createGraphData(data);
+              }
             });
           }
 
