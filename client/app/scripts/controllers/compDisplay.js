@@ -146,7 +146,7 @@ angular.module('clientApp')
 
       deleteModal.result.then(function (deleted) {
         if (deleted) {  //only refresh if user deleted
-          $scope.searchInput = '';  //reset search
+          $scope.searchInput.input = '';  //reset search
           deleteCurrentItem();
         }
       });
