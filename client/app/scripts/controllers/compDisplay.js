@@ -14,9 +14,9 @@ angular.module('clientApp')
     refreshCompList();
 
     $scope.fixGraph = function () {
-      setTimeout(function () {
+      $timeout(function () {
         compEditSvc.refreshCompGraph();
-      }, 100);
+      });
     };
 
     function sortCompsIntoTabs(allComps) {
@@ -42,24 +42,11 @@ angular.module('clientApp')
       var index = $scope.compTabActivity.indexOf(true);
       switch (index) {
         case 0:
-          //$scope.compDisplayTabActivity = [true, false];
           return "past";
         case 1:
-          //$scope.compDisplayTabActivity = [false, true];
           return "running";
         case 2:
-          //$scope.compDisplayTabActivity = [false, true];
           return "upcoming";
-      }
-    }
-
-    function getSelectedCompView() {
-      var index = $scope.compDisplayTabActivity.indexOf(true);
-      switch (index) {
-        case 0:
-          return "podium";
-        case 1:
-          return "all";
       }
     }
 
@@ -73,6 +60,12 @@ angular.module('clientApp')
         return element.comp_name.toLowerCase().indexOf($scope.searchInput.input.toLowerCase().trim()) > -1;
       });
       $scope.displayedCompIndex = -1; //deselect item on view
+      $scope.selectComp(0);
+    };
+
+    //called when competition tab is clicked
+    $scope.compTabClick = function () {
+      $scope.filterComps();
       var index = $scope.compTabActivity.indexOf(true);
       switch (index) {
         case 0:
@@ -85,7 +78,6 @@ angular.module('clientApp')
           $scope.compDisplayTabActivity = [false, true];
           break;
       }
-      $scope.selectComp(0);
     };
 
     //when clicking on competition

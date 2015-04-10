@@ -7,14 +7,7 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
-    var graphWidth = window.innerWidth;
     $scope.topThree = [];
-
-    window.setInterval(function(){
-      //$scope.api.refresh();
-      //$(window).trigger('resize');
-     // jQuery(window).trigger('resize');
-    }, 1000);
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -23,9 +16,7 @@ angular.module('clientApp')
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
         selectedComp = compEditSvc.getSelectedComp();
-        //$(window).trigger('resize');
         $scope.api.refresh();
-        //$(window).trigger('resize');
         //Compare to the values from two weeks ago
         var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
         var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');

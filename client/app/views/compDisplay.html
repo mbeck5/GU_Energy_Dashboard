@@ -4,7 +4,7 @@
       <div class="panel-heading">Competition Select</div>
       <div class="panel-body">
         <tabset justified="true" id="tab-op">
-          <tab heading="Past Competitions" active="compTabActivity[0]" ng-click="filterComps()">
+          <tab heading="Past Competitions" active="compTabActivity[0]" ng-click="compTabClick()">
             <div class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">
@@ -19,7 +19,7 @@
             </div>
           </tab>
 
-          <tab heading="Running Competitions" active="compTabActivity[1]" ng-click="filterComps()">
+          <tab heading="Running Competitions" active="compTabActivity[1]" ng-click="compTabClick()">
             <div class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">
@@ -34,7 +34,7 @@
             </div>
           </tab>
 
-          <tab heading="Upcoming Competitions" active="compTabActivity[2]" ng-click="filterComps()">
+          <tab heading="Upcoming Competitions" active="compTabActivity[2]" ng-click="compTabClick()">
             <div id="building-search" class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">

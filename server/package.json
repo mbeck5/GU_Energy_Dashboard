@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "SET \"NODE_ENV=production\" && node ./bin/www",
-    "test": "SET \"NODE_ENV=development\" && node ./bin/www"
+    "test": "SET \"NODE_ENV=development\" && nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.10.2",
