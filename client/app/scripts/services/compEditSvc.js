@@ -6,6 +6,17 @@ angular.module('clientApp')
     var startDate = '';
     var endDate = '';
     var topThree = [];
+    var compGraphScope;
+
+    function saveCompGraphScope(newScope)
+    {
+      compGraphScope = newScope;
+    }
+
+    function refreshCompGraph()
+    {
+      compGraphScope.api.refresh();
+    }
 
     function getComp() {
       var allComps = Restangular.all('getCompetitions');
@@ -98,6 +109,8 @@ angular.module('clientApp')
     }
 
     return {
+      saveCompGraphScope: saveCompGraphScope,
+      refreshCompGraph: refreshCompGraph,
       getComp: getComp,
       getWindowWidth: getWindowWidth,
       setTopThree: setTopThree,

@@ -15,11 +15,8 @@ angular.module('clientApp')
 
     $scope.fixGraph = function () {
       setTimeout(function () {
-        jQuery(window).trigger('resize');
-        $(window).trigger('resize');
-      }, 0);
-      jQuery(window).trigger('resize');
-      $(window).trigger('resize');
+        compEditSvc.refreshCompGraph();
+      }, 100);
     };
 
     function sortCompsIntoTabs(allComps) {
@@ -27,7 +24,7 @@ angular.module('clientApp')
       for (var i = 0; i < allComps.length; ++i) {
         var today = new Date();
         if (moment(allComps[i].start_date).diff(today) < 0) {
-          if (moment(allComps[i].end_date).diff(today) == 1) {
+          if (moment(allComps[i].end_date).diff(today) > 0) {
             sortedComps.running.push(allComps[i]);
           }
           else if (moment(allComps[i].end_date).diff(today) < 0) {

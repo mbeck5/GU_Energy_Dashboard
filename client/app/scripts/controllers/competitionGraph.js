@@ -10,8 +10,15 @@ angular.module('clientApp')
     var graphWidth = window.innerWidth;
     $scope.topThree = [];
 
+    window.setInterval(function(){
+      //$scope.api.refresh();
+      //$(window).trigger('resize');
+     // jQuery(window).trigger('resize');
+    }, 1000);
+
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
+      compEditSvc.saveCompGraphScope($scope);
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
