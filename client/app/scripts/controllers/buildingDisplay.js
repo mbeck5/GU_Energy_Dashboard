@@ -57,9 +57,7 @@ angular.module('clientApp')
       $scope.selectResource = function (resourceType) {
         resetData();
         selectedResource = resourceType;
-        for(var i = 0; i < $scope.selectedBuildings.length; i++) {
-          getBuildingData(i);
-        }
+        getBuildingData();
       };
 
       //when date inputs have been changed
