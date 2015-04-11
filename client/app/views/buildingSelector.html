@@ -1,7 +1,7 @@
 <div>
   <div class="row">
     <div class="col-md-3">
-      <div class="panel panel-default panel-shadow" id="building-list-panel">
+      <div class="panel panel-default panel-transparent" id="building-list-panel">
         <div class="panel-heading">Campus Building Select</div>
 
         <div class="panel-body">
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div class="panel panel-default panel-shadow" id="tip-panel">
+      <div class="panel panel-default panel-transparent" id="tip-panel">
         <div class="panel-heading">Energy Saving Tips</div>
         <div class="panel-body">
           <tabset justified="true" type="pills">
@@ -77,17 +77,33 @@
     </div>
     <div class="col-md-9" id="graph-panel">
     <div ng-controller="SummaryCtrl">
-      <div class="panel panel-default panel-shadow" id="graph-alignment">
+      <div class="panel panel-default panel-transparent" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
-          <div class="row">
+          <div id="knobs" class="row">
+            <div id="knob-header">
+              <span>Percent Increase from Previous {{selectedKnobTime}} for Entire Campus:</span>
+              <label class="pull-right" popover="Compares previous day to day one year ago" popover-trigger="mouseenter" popover-placement="bottom">
+                <toggle-switch model="isKnobYearly" on-change="toggleKnobs()" ></toggle-switch>
+                Previous year
+              </label>
+            </div>
             <div class="col-sm-4">
-              <nvd3 options='pieOptions' data='pieData' api="pieApi" config="{refreshDataOnly: true}"></nvd3>
+              Electricity
+              <div knob value="{{knobData[0]}}" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
-            <div class="col-sm-8">
-              <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
+            <div class="col-sm-4">
+              Gas
+              <div knob value="{{knobData[1]}}" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
+            <div class="col-sm-4">
+              Water
+              <div knob value="{{knobData[2]}}" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
+          </div>
+          <div class="row">
+            <h3 id="building-type-graph-header">Daily Consumption by Building Type For Previous Day:</h3>
+            <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>
           </div>
         </div>
       </div>
