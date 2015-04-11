@@ -1,0 +1,31 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">User Login</h3>
+  </div>
+  <div class="modal-body" id="login-body">
+    <div>
+      <label>Enter your Gonzaga email</label>
+    </div>
+    <div>
+      <input type="text" ng-model="email" class="form-control">
+    </div>
+    <div>
+      <label>Enter a Password</label>
+    </div>
+    <div>
+      <input type="password" ng-model="password" class="form-control">
+    </div>
+    <div>
+      <label>Confirm your Password</label>
+    </div>
+    <div>
+      <input type="password" ng-model="password" class="form-control">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div id="login-footer">
+      <button class="btn btn-default signup-modal-footer-buttons" ng-click="login(studentId, password)">Ok</button>
+      <button class="btn btn-default signup-modal-footer-buttons" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>

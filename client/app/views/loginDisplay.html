@@ -19,6 +19,12 @@
   <div class="modal-footer">
     <div id="login-footer">
       <button class="btn btn-default login-modal-footer-buttons" ng-click="login(studentId, password)">Login</button>
+      <div>
+        <script type="text/ng-template" id="signupModal.html">
+          <div ng-include src="'views/signupDisplay.html'"></div>
+        </script>
+        <button class="btn btn-default login-modal-footer-buttons" ng-click="openSignupModal()">Sign Up</button>
+      </div>
       <button class="btn btn-default login-modal-footer-buttons" ng-click="cancel()">Cancel</button>
     </div>
   </div>

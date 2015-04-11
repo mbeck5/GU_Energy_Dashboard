@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('LoginCtrl', function ($scope, $cookies, $modalInstance, $rootScope, loginSvc) {
+  .controller('LoginCtrl', function ($scope, $cookies, $modal, $modalInstance, $rootScope, loginSvc) {
 
     $scope.login = function(studentId, password){
       loginSvc.getUser(studentId).then(function(data){
@@ -29,6 +29,17 @@ angular.module('clientApp')
           alert("Incorrect Username or Password");
         }
       });
+    };
+
+    $scope.openSignupModal = function(size){
+      var signupModal = $modal.open({
+        templateUrl: 'signupModal.html',
+        controller: 'SignupCtrl',
+        size: size
+      })
+
+      //signupModal.result.then(function(result){
+      //});
     };
 
     $scope.cancel = function(){
