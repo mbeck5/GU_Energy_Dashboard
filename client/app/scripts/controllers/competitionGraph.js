@@ -49,7 +49,7 @@ angular.module('clientApp')
             calcAllChanges();
             sortChanges();
             createData();
-            if($scope.data.length >= 3)
+            if($scope.data.length >= 1)
               compEditSvc.setTopThree([$scope.data[0].key, $scope.data[1].key, $scope.data[2].key]);
           });
         });
