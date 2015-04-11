@@ -23,9 +23,7 @@ angular.module('clientApp')
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
         selectedComp = compEditSvc.getSelectedComp();
-        //$(window).trigger('resize');
         $scope.api.refresh();
-        //$(window).trigger('resize');
         //Compare to the values from two weeks ago
         var currentStart = moment(selectedComp.start_date, 'DD/MMMM/YYYY');
         var currentEnd = moment(selectedComp.end_date, 'DD/MMMM/YYYY');
@@ -51,7 +49,8 @@ angular.module('clientApp')
             calcAllChanges();
             sortChanges();
             createData();
-            compEditSvc.setTopThree([$scope.data[0].key, $scope.data[1].key, $scope.data[2].key]);
+            if($scope.data.length >= 3)
+              compEditSvc.setTopThree([$scope.data[0].key, $scope.data[1].key, $scope.data[2].key]);
           });
         });
       }
