@@ -14,7 +14,7 @@ angular.module('clientApp')
     $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
     $scope.spinnerActive = false;
     $scope.isDatesChanged = false;  //toggles when date inputs are changed
-    var selectedToggle = 2; //1 = electricity 7 = water 3 = gas
+    var selectedToggle = 2; //2 = electricity 7 = water 3 = gas
 
     checkRefresh();
     getBuildingData(null);  //initial call to get data of default type
@@ -59,6 +59,7 @@ angular.module('clientApp')
       if (resourceType != selectedToggle) {
         resetData();
         selectedResource = resourceType;
+        getBuildingData();
         for (var i = 0; i < $scope.selectedBuildings.length; i++) {
           getBuildingData(i);
         }
