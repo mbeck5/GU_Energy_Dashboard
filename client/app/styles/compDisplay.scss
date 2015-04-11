@@ -1,28 +1,11 @@
 #comp-list {
   background-color: transparent;
-  margin: -50px;
-}
-
-
-#background{
-  background-image: url("../images/gonzaga_backgroundone.jpg");
-  background-repeat: no-repeat;
-  background-size: 150%;
-  height: 100%;
-}
-
-#panel-background{
-  background-color: transparent;
 }
 
 .scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
   height: 500px;
-}
-
-.list-group-item{
-  margin-bottom: 5px;
 }
 
 #competition-tabs .nav-tabs li a{

@@ -13,7 +13,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -28,7 +28,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -43,7 +43,7 @@
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -63,14 +63,14 @@
             <script type="text/ng-template" id="myModalContent2.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')" ng-disabled="!isCompetitionSelected()">Edit</button>
           </div>
 
           <div>
             <script type="text/ng-template" id="myModalContent3.html">
               <div ng-include src="'views/DeleteCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()" ng-disabled="!isCompetitionSelected()">Delete</button>
           </div>
         </div>
       </div>
