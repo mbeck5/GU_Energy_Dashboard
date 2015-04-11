@@ -6,7 +6,17 @@
 //main app body (everything not header)
 body {
   padding-bottom: 20px;
-  background-color: $gray;
+
+  //background-image: url("../images/gonzaga_backgroundtwo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+
+  @media (max-width: $screen-md) {
+    background-color: $gray;
+    background-size: 0%;
+  }
+
 }
 
 #navbar {
