@@ -25,7 +25,7 @@ exports.saveNewComp = function (req, res) {
             throw err;
         }
         else {
-            //res.send(true);
+            res.send("OK");
         }
     });
 };
@@ -38,7 +38,7 @@ exports.editNewComp = function (req, res) {
             console.log(err);
         }
         else {
-            res.send([]);
+            res.send("OK");
         }
     });
 };
@@ -56,7 +56,7 @@ exports.deleteComp = function (req, res) {
                     throw err;
                 }
                 else {
-                    res.send(true);
+                    res.send("OK");
                 }
             });
         }
@@ -70,7 +70,7 @@ exports.addCompBuilding = function (req, res) {
             throw err;
         }
         else {
-            res.send([]);
+            res.send("OK");
         }
     });
 };
@@ -82,7 +82,7 @@ exports.deleteCompBuildings = function (req, res) {
             throw err;
         }
         else {
-            res.send([]);
+            res.send("OK");
         }
     });
 };
