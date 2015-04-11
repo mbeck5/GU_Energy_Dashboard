@@ -60,9 +60,6 @@ angular.module('clientApp')
         resetData();
         selectedResource = resourceType;
         getBuildingData();
-        for (var i = 0; i < $scope.selectedBuildings.length; i++) {
-          getBuildingData(i);
-        }
         selectedToggle = resourceType;
       }
     };
