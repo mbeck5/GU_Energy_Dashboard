@@ -1,3 +1,6 @@
+var bcrypt = require('bcrypt-nodejs');
+
+
 exports.getUser = function(req, res){
     var user = req.query.email;
     var queryString = "SELECT * FROM users WHERE username = '" + user + "'";
@@ -14,7 +17,6 @@ exports.getUser = function(req, res){
 exports.getPassword = function(req, res) {
     var user = req.query.email;
     var password = req.query.password;
-    console.log(password);
     var queryString = "SELECT password FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function (err, rows) {
         if (err) {
@@ -41,7 +43,7 @@ exports.addUser = function(req, res){
         var queryString = "INSERT INTO users (email, username, password) VALUES ('" + email + "', '" + username + "', '" + hash + "')";
         connection.query(queryString, function (err, rows) {
             if (err) {
-                throw err;
+                res.send(err);
             }
             else {
                 res.send([]);
