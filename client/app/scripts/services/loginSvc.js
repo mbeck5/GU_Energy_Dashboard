@@ -4,14 +4,14 @@ angular.module('clientApp')
   .factory('loginSvc', function (Restangular) {
     var user = "";
 
-    function getUser(studentId){
+    function getUser(email){
       var user = Restangular.all("getUser");
-      return user.getList({studentId: studentId});
+      return user.getList({email: email});
     }
 
-    function getPassword(studentId){
+    function getPassword(email){
       var password = Restangular.all("getPassword");
-      return password.getList({studentId: studentId});
+      return password.getList({email: email});
     }
 
     return {

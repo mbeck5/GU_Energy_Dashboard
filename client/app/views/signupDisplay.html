@@ -19,12 +19,12 @@
       <label>Confirm your Password</label>
     </div>
     <div>
-      <input type="password" ng-model="password" class="form-control">
+      <input type="password" ng-model="passwordConfirm" class="form-control">
     </div>
   </div>
   <div class="modal-footer">
     <div id="login-footer">
-      <button class="btn btn-default signup-modal-footer-buttons" ng-click="login(studentId, password)">Ok</button>
+      <button class="btn btn-default signup-modal-footer-buttons" ng-click="ok(email, password, passwordConfirm)">Ok</button>
       <button class="btn btn-default signup-modal-footer-buttons" ng-click="cancel()">Cancel</button>
     </div>
   </div>

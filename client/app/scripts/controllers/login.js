@@ -3,11 +3,11 @@
 angular.module('clientApp')
   .controller('LoginCtrl', function ($scope, $cookies, $modal, $modalInstance, $rootScope, loginSvc) {
 
-    $scope.login = function(studentId, password){
-      loginSvc.getUser(studentId).then(function(data){
+    $scope.login = function(email, password){
+      loginSvc.getUser(email).then(function(data){
         if(data.length == 1){
           //The user exists, check if passwords match
-          loginSvc.getPassword(studentId).then(function(data2){
+          loginSvc.getPassword(email).then(function(data2){
             if(data2[0].password === password){
               //Successful Login.
               $cookies['loggedIn'] = 'true';
@@ -16,15 +16,15 @@ angular.module('clientApp')
             }
             else{
               //Wrong password entered.
-              $scope.studentId = '';
+              $scope.email = '';
               $scope.password = '';
-              alert("Incorrect Username or Password");
+              alert("Incorrect Email or Password");
             }
           });
         }
         else{
           //Wrong username entered.
-          $scope.studentId = '';
+          $scope.email = '';
           $scope.password = '';
           alert("Incorrect Username or Password");
         }
