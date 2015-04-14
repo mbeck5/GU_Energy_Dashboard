@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
+  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc, $timeout) {
     var compareList = [];
     var currentList = [];
     var changeList = [];
@@ -11,7 +11,6 @@ angular.module('clientApp')
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
-      compEditSvc.saveCompGraphScope($scope);
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
@@ -62,7 +61,6 @@ angular.module('clientApp')
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
-        //valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
@@ -121,6 +119,12 @@ angular.module('clientApp')
           return selectedComp.start_date + ' - ' + selectedComp.end_date
         }
       }
+    };
+
+    $scope.fixGraph = function () {
+      $timeout(function () {
+        $scope.api.update();
+      }, 100);
     };
 
     function createCompareList(data){

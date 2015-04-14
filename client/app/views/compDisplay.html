@@ -78,7 +78,7 @@
   </div>
 
   <div class="col-md-8">
-    <div class="panel panel-default panel-transparent">
+    <div  class="panel panel-default panel-transparent">
       <div class="panel-heading">Competition Info</div>
       <div class="panel-body">
         <div id="current-comp-scroll">
@@ -124,9 +124,9 @@
                 </div>
               </div>
             </tab>
-            <tab id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]" ng-click="fixGraph()"
+            <tab ng-controller="CompetitionGraphCtrl" id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]"
                  select="fixGraph()">
-              <div ng-controller="CompetitionGraphCtrl" id="comp-div">
+              <div id="comp-div">
                 <nvd3 options='options' id="comp-graph" data='data' api='api'></nvd3>
               </div>
             </tab>
