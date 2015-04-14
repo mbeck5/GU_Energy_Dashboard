@@ -77,7 +77,7 @@ angular.module('clientApp')
           showMaxMin: false
         },
         yAxis: {
-          axisLabel: "Percent Decreased",
+          axisLabel: "Percent Decrease in Electricity Consumption",
           tickFormat: function(d){
             return d3.format(',.2%')(d);
           }
@@ -94,7 +94,6 @@ angular.module('clientApp')
             '</style>' +
             '<table class="tg" style="undefined;">' +
             '<colgroup>' +
-              //'<col style="width: 134px">' +
             '</colgroup>' +
             '<tr>' +
             '<th class="tg-o8k2">' + x + '<br></th>' +
@@ -192,7 +191,6 @@ angular.module('clientApp')
         tempData.push({key: key, values: values});
       }
       $scope.data = angular.copy(tempData);
-
     }
 
     function shortenBuildingName(buildingName){
