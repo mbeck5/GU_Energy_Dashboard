@@ -11,6 +11,7 @@ angular.module('clientApp')
             if(data2[0]){
               //Successful Login.
               $cookies['loggedIn'] = 'true';
+              $cookies['user'] = email;
               $rootScope.$broadcast("login");
               $modalInstance.close(true);
             }

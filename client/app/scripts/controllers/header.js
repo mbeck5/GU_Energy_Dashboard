@@ -20,6 +20,7 @@ angular.module('clientApp')
 
         $scope.logout = function(){
           $cookies['loggedIn'] = false;
+          $cookies['user'] = '';
           $rootScope.$broadcast("logout");
           updateHeader();
         };
