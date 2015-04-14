@@ -9,9 +9,9 @@ angular.module('clientApp')
       return user.getList({email: email});
     }
 
-    function getPassword(email){
-      var password = Restangular.all("getPassword");
-      return password.getList({email: email});
+    function getPassword(email, password){
+      var compare = Restangular.all("getPassword");
+      return compare.getList({email: email, password: password});
     }
 
     return {

@@ -13,13 +13,22 @@ exports.getUser = function(req, res){
 
 exports.getPassword = function(req, res) {
     var user = req.query.email;
+    var password = req.query.password;
+    console.log(password);
     var queryString = "SELECT password FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function (err, rows) {
         if (err) {
             throw err;
         }
         else {
-            res.send(rows);
+            bcrypt.compare(password, rows[0].password, function(err, same){
+                if(same){
+                    res.send([true]);
+                }
+                else{
+                    res.send([false]);
+                }
+            });
         }
     });
 };
@@ -28,13 +37,15 @@ exports.addUser = function(req, res){
     var email = req.body.email;
     var username = email.substring(0, email.indexOf("@"));
     var password = req.body.password;
-    var queryString = "INSERT INTO users (email, username, password) VALUES ('" + email + "', '" + username + "', '" + password + "')";
-    connection.query(queryString, function (err, rows) {
-        if (err) {
-            throw err;
-        }
-        else {
-            res.send([]);
-        }
+    bcrypt.hash(password, null, null, function(err, hash){
+        var queryString = "INSERT INTO users (email, username, password) VALUES ('" + email + "', '" + username + "', '" + hash + "')";
+        connection.query(queryString, function (err, rows) {
+            if (err) {
+                throw err;
+            }
+            else {
+                res.send([]);
+            }
+        });
     });
 };

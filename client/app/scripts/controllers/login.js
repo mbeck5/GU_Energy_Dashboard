@@ -7,8 +7,8 @@ angular.module('clientApp')
       loginSvc.getUser(email).then(function(data){
         if(data.length == 1){
           //The user exists, check if passwords match
-          loginSvc.getPassword(email).then(function(data2){
-            if(data2[0].password === password){
+          loginSvc.getPassword(email, password).then(function(data2){
+            if(data2[0]){
               //Successful Login.
               $cookies['loggedIn'] = 'true';
               $rootScope.$broadcast("login");
