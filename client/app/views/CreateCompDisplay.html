@@ -10,12 +10,16 @@
             <div>
               <label>Competition Name</label>
             </div>
+
+            <!--competition name input -->
             <div>
               <input type="text" ng-model="name" class="form-control">
             </div>
             <div>
               <label>Start Date</label>
             </div>
+
+            <!-- date picker -->
             <div ng-controller="DatepickerCtrl">
               <p class="input-group">
                 <input class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="startDate"
@@ -31,6 +35,8 @@
             <div>
               <label>End Date</label>
             </div>
+
+            <!-- date picker -->
             <div ng-controller="DatepickerCtrl">
               <p class="input-group">
                 <input class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="endDate"
@@ -46,6 +52,8 @@
           </div>
         </td>
         <td>
+
+          <!-- building list -->
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
               <div class="checked-list-item" ng-repeat="building in buildings">
