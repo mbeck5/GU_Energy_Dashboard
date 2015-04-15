@@ -2,260 +2,266 @@
 
 angular.module('clientApp')
   .controller('BuildingDisplayCtrl', function ($scope, $location, $timeout, buildingSvc, usSpinnerService) {
-      var selectedResource = 2; //default resource
-      var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
-      var tempData = [];
-      var isDetailed = true;  //used by code
-      $scope.isDetailed = true; //for gui
-      $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
-      $scope.date2 = moment().format('DD/MMMM/YYYY');
-      $scope.dateOpen1 = false;
-      $scope.dateOpen2 = false;
-      $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
-      $scope.spinnerActive = false;
-      $scope.isDatesChanged = false;  //toggles when date inputs are changed
+    var selectedResource = 2; //default resource
+    var colorMap = {2: '#FFCC00', 3: '#F20000', 7: '#1F77B4'};
+    var tempData = [];
+    var isDetailed = true;  //used by code
+    $scope.isDetailed = true; //for gui
+    $scope.date1 = moment().subtract(1, 'years').format('DD/MMMM/YYYY'); //default start is one year ago
+    $scope.date2 = moment().format('DD/MMMM/YYYY');
+    $scope.dateOpen1 = false;
+    $scope.dateOpen2 = false;
+    $scope.selectedBuildings = buildingSvc.getSelectedBuildings();
+    $scope.spinnerActive = false;
+    $scope.isDatesChanged = false;  //toggles when date inputs are changed
 
-      checkRefresh();
-      getBuildingData(null);  //initial call to get data of default type
+    checkRefresh();
+    getBuildingData(null);  //initial call to get data of default type
 
-      $scope.data = [];
+    $scope.data = [];
 
-      $scope.options = {
-        chart: {
-          type: 'lineChart',
-          height: 600,
-          margin: {
-            left: 65
-          },
-          xAxis: {
-            axisLabel: 'Date',
-            showMaxMin: false,
-            tickFormat: function(d) {
-              return d3.time.format('%m/%d/%y')(new Date(d));
-            }
-          },
-          yAxis: {
-            axisLabel: 'kWh', //will change with resource toggle
-            showMaxMin: false,
-            axisLabelDistance: 25,
-            tickPadding: [10]
-          },
-          lines: {
-            forceY:[0]
-          },
-          tooltips: true,
-          transitionDuration: 500,
-          useInteractiveGuideline: true,
-          noData: 'No Data Available for Selected Resource'
+    $scope.options = {
+      chart: {
+        type: 'lineChart',
+        height: 600,
+        margin: {
+          left: 65
         },
-        title: {
-          enable: true,
-          text: 'Daily Electricity Usage'
-        }
-      };
+        xAxis: {
+          axisLabel: 'Date',
+          showMaxMin: false,
+          tickFormat: function (d) {
+            return d3.time.format('%m/%d/%y')(new Date(d));
+          }
+        },
+        yAxis: {
+          axisLabel: 'kWh', //will change with resource toggle
+          showMaxMin: false,
+          axisLabelDistance: 25,
+          tickPadding: [10]
+        },
+        lines: {
+          forceY: [0]
+        },
+        tooltips: true,
+        transitionDuration: 500,
+        useInteractiveGuideline: true,
+        noData: 'No Data Available for Selected Resource'
+      },
+      title: {
+        enable: true,
+        text: 'Daily Electricity Usage'
+      }
+    };
 
-      $scope.selectResource = function (resourceType) {
+    $scope.selectResource = function (resourceType) {
+      //don't need to reselect if already select
+      if (resourceType != selectedResource) {
         resetData();
         selectedResource = resourceType;
         getBuildingData();
-      };
+      }
+    };
 
-      //when date inputs have been changed
-      $scope.datesChanged = function() {
-        $scope.isDatesChanged = true;
-      };
+    //when date inputs have been changed
+    $scope.datesChanged = function () {
+      $scope.isDatesChanged = true;
+    };
 
-      $scope.toggleDetailed = function() {
-        isDetailed = !isDetailed;
-        $scope.applyGraphOptions();
-      };
+    $scope.toggleDetailed = function () {
+      isDetailed = !isDetailed;
+      $scope.applyGraphOptions();
+    };
 
-      //applies toggle and date filter options and retrieves new data
-      $scope.applyGraphOptions = function() {
-        $scope.isDatesChanged = false;
-        checkIfEqual();
-        resetData();
-        getBuildingData();
-      };
+    //applies toggle and date filter options and retrieves new data
+    $scope.applyGraphOptions = function () {
+      $scope.isDatesChanged = false;
+      checkIfEqual();
+      resetData();
+      getBuildingData();
+    };
 
-      //toggles date picker visibility
-      $scope.openDate = function($event, val) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        if (val === 1) {
-          $scope.dateOpen1 = true;
-        }
-        else {
-          $scope.dateOpen2 = true;
-        }
-      };
+    //toggles date picker visibility
+    $scope.openDate = function ($event, val) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      if (val === 1) {
+        $scope.dateOpen1 = true;
+      }
+      else {
+        $scope.dateOpen2 = true;
+      }
+    };
 
-      function checkIfEqual() {
-        //convert back to moment objects
-        if(moment.isDate($scope.date1))
-          $scope.date1 = moment($scope.date1);
-        else  //string
-          $scope.date1 = moment($scope.date1, 'DD/MMMM/YYYY');
+    function checkIfEqual() {
+      //convert back to moment objects
+      if (moment.isDate($scope.date1))
+        $scope.date1 = moment($scope.date1);
+      else  //string
+        $scope.date1 = moment($scope.date1, 'DD/MMMM/YYYY');
 
-        if(moment.isDate($scope.date2))
-          $scope.date2 = moment($scope.date2);
-        else  //string
-          $scope.date2 = moment($scope.date2, 'DD/MMMM/YYYY');
+      if (moment.isDate($scope.date2))
+        $scope.date2 = moment($scope.date2);
+      else  //string
+        $scope.date2 = moment($scope.date2, 'DD/MMMM/YYYY');
 
 
-        //if dates are equal date 2 += 1 because user doesn't understand
-        if (moment($scope.date1).isSame($scope.date2)) {
-          $scope.date2 = moment($scope.date2).add(1, 'day').format('DD/MMMM/YYYY'); // +1 day
-        }
-        else {
-          $scope.date2 = $scope.date2.format('DD/MMMM/YYYY'); //else, just convert to string
-        }
-
-        $scope.date1 = moment($scope.date1).format('DD/MMMM/YYYY'); //convert back to string
+      //if dates are equal date 2 += 1 because user doesn't understand
+      if (moment($scope.date1).isSame($scope.date2)) {
+        $scope.date2 = moment($scope.date2).add(1, 'day').format('DD/MMMM/YYYY'); // +1 day
+      }
+      else {
+        $scope.date2 = $scope.date2.format('DD/MMMM/YYYY'); //else, just convert to string
       }
 
-      //Changed this to just push to temporary data variable.
-      function createGraphData(data){
-        var values = [];
-        var buildingName = '';
-        if(typeof data[0] !== 'undefined') {
-          buildingName = data[0].name;
-        }
+      $scope.date1 = moment($scope.date1).format('DD/MMMM/YYYY'); //convert back to string
+    }
 
-        if (data) {
-          //create graph points
-          values = new Array(data.length);
-          for (var j = 0; j < data.length; j++) {
-            values[j] = {x: Date.parse(data[j].date), y: Math.round(data[j].consumption)};
-          }
-        }
-        tempData.push({values: values, key: buildingName});
-
-        //postpone graph initialization until all points have been created
-        if(tempData.length === $scope.selectedBuildings.length){
-          initGraph();
-        }
+    //Changed this to just push to temporary data variable.
+    function createGraphData(data) {
+      var values = [];
+      var buildingName = '';
+      if (typeof data[0] !== 'undefined') {
+        buildingName = data[0].name;
       }
 
-      function getBuildingData(index) {
-        $scope.spinnerActive = true;
-        usSpinnerService.spin('spinner');
-        var i = 0;
-        var stopCondition = $scope.selectedBuildings.length;
-        if(index != null){
-          i = index;
-          stopCondition = i + 1;
+      if (data) {
+        //create graph points
+        values = new Array(data.length);
+        for (var j = 0; j < data.length; j++) {
+          values[j] = {x: Date.parse(data[j].date), y: Math.round(data[j].consumption)};
         }
-        for(i; i < stopCondition; i++) {
-          //if going to building page directly or refreshing, steal name from url (basically a hack)
-          if (typeof $scope.selectedBuildings[0].id === 'undefined') {
-            var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
-            $scope.selectedBuildings[i] = {};
-            $scope.selectedBuildings[i].name = tempName;
+      }
+      tempData.push({values: values, key: buildingName});
 
-            //get resource info for building from name rather than ID
-            buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
-              createGraphData(data);
-            });
+      //postpone graph initialization until all points have been created
+      if (tempData.length === $scope.selectedBuildings.length) {
+        initGraph();
+      }
+    }
+
+    function getBuildingData(index) {
+      $scope.spinnerActive = true;
+      usSpinnerService.spin('spinner');
+      var i = 0;
+      var stopCondition = $scope.selectedBuildings.length;
+      if (index != null) {
+        i = index;
+        stopCondition = i + 1;
+      }
+      for (i; i < stopCondition; i++) {
+        //if going to building page directly or refreshing, steal name from url (basically a hack)
+        if (typeof $scope.selectedBuildings[0].id === 'undefined') {
+          var tempName = $location.path().replace('/buildings/', '').replace('--', '/');
+          $scope.selectedBuildings[i] = {};
+          $scope.selectedBuildings[i].name = tempName;
+
+          //get resource info for building from name rather than ID
+          buildingSvc.getBuildingDataFromName(tempName, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+
+            createGraphData(data);
+          });
+        }
+
+        //if coming from the building select page
+        else {
+          //get resource info for building
+          buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
+
+            createGraphData(data);
+
+          });
+        }
+      }
+    }
+
+    //called once data is retrieved
+    function initGraph() {
+      var longestLabel;
+      $scope.data = tempData;
+      setResourceLabel();
+      $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
+      longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
+      $scope.options.chart.yAxis.axisLabelDistance = 25 - longestLabel;
+      $scope.spinnerActive = false;
+      usSpinnerService.stop('spinner');
+    }
+
+    function setResourceLabel() {
+      $scope.data[0].color = colorMap[selectedResource];
+      switch (selectedResource) {
+        case 2:
+          $scope.options.chart.yAxis.axisLabel = 'kWh';
+          if (isDetailed) {
+            $scope.options.title.text = 'Daily Electricity Usage';
           }
-
-          //if coming from the building select page
           else {
-            //get resource info for building
-            buildingSvc.getBuildingData($scope.selectedBuildings[i].id, selectedResource, isDetailed, $scope.date1, $scope.date2).then(function (data) {
-              createGraphData(data);
-            });
+            $scope.options.title.text = 'Monthly Electricity Usage';
+          }
+          break;
+        case 3:
+          $scope.options.chart.yAxis.axisLabel = 'kBTU';
+          if (isDetailed) {
+            $scope.options.title.text = 'Daily Gas Usage';
+          }
+          else {
+            $scope.options.title.text = 'Monthly Gas Usage';
+          }
+          break;
+        case 7:
+          $scope.options.chart.yAxis.axisLabel = 'Water';
+          if (isDetailed) {
+            $scope.options.title.text = 'Daily Water Usage';
+          }
+          else {
+            $scope.options.title.text = 'Monthly Water Usage';
+          }
+          break;
+        default:
+          $scope.options.chart.yAxis.axisLabel = 'Whatever';
+          if (isDetailed) {
+            $scope.options.title.text = 'Daily Whatever Usage';
+          }
+          else {
+            $scope.options.title.text = 'Monthly Whatever Usage';
+          }
+          break;
+      }
+    }
+
+    //if routing directing to comparison, go back home
+    function checkRefresh() {
+      if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
+        $location.path('/');
+      }
+    }
+
+    //Returns the max y value of all datasets in $scope.data
+    function getMaxPlusPadding(denom) {
+      var max = 0;
+      for (var i = 0; i < $scope.selectedBuildings.length; i++) {
+        if ($scope.data[i]) {
+          var data = $scope.data[i].values;
+          for (var j = 0; j < data.length; j++) {
+            if (data[j].y > max) {
+              max = data[j].y;
+            }
           }
         }
       }
-
-      //called once data is retrieved
-      function initGraph() {
-        var longestLabel;
-        $scope.data = tempData;
-        setResourceLabel();
-        $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
-        longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
-        $scope.options.chart.yAxis.axisLabelDistance = 25 - longestLabel;
-        $scope.spinnerActive = false;
-        usSpinnerService.stop('spinner');
+      var padding = 0;
+      if (denom === -1) {
+        padding = 0;
       }
-
-      function setResourceLabel() {
-        $scope.data[0].color = colorMap[selectedResource];
-        switch (selectedResource) {
-          case 2:
-            $scope.options.chart.yAxis.axisLabel = 'kWh';
-            if(isDetailed) {
-              $scope.options.title.text = 'Daily Electricity Usage';
-            }
-            else{
-              $scope.options.title.text = 'Monthly Electricity Usage';
-            }
-            break;
-          case 3:
-            $scope.options.chart.yAxis.axisLabel = 'kBTU';
-            if(isDetailed) {
-              $scope.options.title.text = 'Daily Gas Usage';
-            }
-            else{
-              $scope.options.title.text = 'Monthly Gas Usage';
-            }
-            break;
-          case 7:
-            $scope.options.chart.yAxis.axisLabel = 'Water';
-            if(isDetailed) {
-              $scope.options.title.text = 'Daily Water Usage';
-            }
-            else{
-              $scope.options.title.text = 'Monthly Water Usage';
-            }
-            break;
-          default:
-            $scope.options.chart.yAxis.axisLabel = 'Whatever';
-            if(isDetailed) {
-              $scope.options.title.text = 'Daily Whatever Usage';
-            }
-            else{
-              $scope.options.title.text = 'Monthly Whatever Usage';
-            }
-            break;
-        }
+      else {
+        padding = max / denom;
       }
+      return max + padding;
+    }
 
-      //if routing directing to comparison, go back home
-      function checkRefresh() {
-        if (buildingSvc.getSelectedBuildings()[0] === 'DESELECTED' && $location.path() === '/comparison') {
-          $location.path('/');
-        }
-      }
-
-      //Returns the max y value of all datasets in $scope.data
-      function getMaxPlusPadding(denom){
-        var max = 0;
-        for(var i = 0; i < $scope.selectedBuildings.length; i++){
-          if($scope.data[i]) {
-            var data = $scope.data[i].values;
-            for (var j = 0; j < data.length; j++) {
-              if (data[j].y > max) {
-                max = data[j].y;
-              }
-            }
-          }
-        }
-        var padding = 0;
-        if(denom === -1){
-          padding = 0;
-        }
-        else{
-          padding = max / denom;
-        }
-        return max + padding;
-      }
-
-      //clears all data
-      function resetData() {
-        $scope.data = [];
-        tempData = [];
-      }
+    //clears all data
+    function resetData() {
+      $scope.data = [];
+      tempData = [];
+    }
   });

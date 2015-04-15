@@ -1,5 +1,7 @@
 <div class="row">
+  <!--resource toggles -->
   <div class="col-sm-2">
+    <!--electricity -->
     <div class="panel panel-success panel-shadow resource-div-effects" ng-click="selectResource(2)">
       <div class="panel-heading">
         <h3 class="panel-title">Electricity</h3>
@@ -11,6 +13,7 @@
       </div>
     </div>
 
+    <!--water -->
     <div class="panel panel-primary panel-shadow resource-div-effects" ng-click="selectResource(7)">
       <div class="panel-heading">
         <h3 class="panel-title">Water</h3>
@@ -22,6 +25,7 @@
       </div>
     </div>
 
+    <!--gas -->
     <div class="panel panel-warning panel-shadow resource-div-effects" ng-click="selectResource(3)">
       <div class="panel-heading">Gas</div>
       <div class="panel-body" id="gas-panel-background" >
@@ -37,13 +41,18 @@
       <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
       <div class="panel-body">
         <div class="row">
+          <!--loading spinner -->
           <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
+
+          <!--detailed toggle switch -->
           <div id="detailed-toggle-wrapper" class="col-sm-2">
             <label id="detailed-toggle" popover="Helpful for looking at large data sets." popover-trigger="mouseenter" popover-placement="bottom">
               <toggle-switch model="isDetailed" on-change="toggleDetailed()" ></toggle-switch>
               Detailed View
             </label>
           </div>
+
+          <!--From date picker -->
           <div class="col-sm-4">
             <span>From</span>
             <div class="input-group">
@@ -55,6 +64,8 @@
               </span>
             </div>
           </div>
+
+          <!--To date picker -->
           <div class="col-sm-4">
             <span>To</span>
             <div class="input-group">
@@ -66,12 +77,16 @@
               </span>
             </div>
           </div>
+
+          <!--apply button -->
           <div class="col-sm-2">
             <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()" ng-disabled="!isDatesChanged">
               Apply
             </button>
           </div>
         </div>
+
+        <!--graph -->
         <div class="row">
           <div id="graph">
             <nvd3 options='options' data='data' api="api"></nvd3>

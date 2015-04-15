@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, $timeout) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     $scope.searchInput = {input: ''};
@@ -12,12 +12,6 @@ angular.module('clientApp')
 
     //retrieve initial data
     refreshCompList();
-
-    $scope.fixGraph = function () {
-      $timeout(function () {
-        compEditSvc.refreshCompGraph();
-      });
-    };
 
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
@@ -238,12 +232,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
         }
         else {
           //get dates from service daved from datepicker controller
-
-
           var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
-
-
           var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+
           //save the new competition to the database
           compEditSvc.getComp().then(function (data) {
             var maxCid = 0;
@@ -254,13 +245,16 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               }
             }
             maxCid = maxCid + 1;
-            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
-            for (var property in $scope.checkedBuildings) {
-              if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-                compEditSvc.addCompBuilding(maxCid, property);
+            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+              if (data === "OK") {
+                for (var property in $scope.checkedBuildings) {
+                  if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                    compEditSvc.addCompBuilding(maxCid, property);
+                  }
+                }
               }
-            }
-            $modalInstance.close(true);
+              $modalInstance.close(true);
+            });
           });
         }
       }
@@ -341,15 +335,18 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
         }
         else {
           //delete old buildings saved for the competition
-          compEditSvc.deleteCompBuildings(cid).then(function () {
-            //get dates saved from service from datepicker
-            var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
-            var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
-            //update in database
-            compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
-              //save new building selections
-              compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
-            });
+          compEditSvc.deleteCompBuildings(cid).then(function (data) {
+            if (data === "OK") {
+              //get dates saved from service from datepicker
+              var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
+              var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+              //update in database
+              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+                //save new building selections
+                if (data === "OK")
+                  compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
+              });
+            }
             $modalInstance.close(true);
           });
         }
