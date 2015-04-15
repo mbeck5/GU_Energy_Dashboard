@@ -1,49 +1,63 @@
 <div class="row">
   <div class="col-md-4">
-    <div class="panel panel-default panel-shadow">
+    <!--competition panel -->
+    <div class="panel panel-default panel-transparent">
       <div class="panel-heading">Competition Select</div>
       <div class="panel-body">
-        <tabset justified="true">
-          <tab heading="Past Competitions" active="tabActivity[0]" ng-click="filterComps()">
+        <!--tabs-->
+        <tabset justified="true" id="tab-op">
+          <!--past competitions tab-->
+          <tab heading="Past Competitions" active="compTabActivity[0]" ng-click="compTabClick()">
+            <!--search-->
             <div class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">
             </div>
+
+            <!--competition list -->
             <div class="scroll">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
           </tab>
 
-          <tab heading="Running Competitions" active="tabActivity[1]" ng-click="filterComps()">
+          <!-- running competitions tab-->
+          <tab heading="Running Competitions" active="compTabActivity[1]" ng-click="compTabClick()">
+            <!-- search -->
             <div class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">
             </div>
+
+            <!-- competition list -->
             <div class="scroll">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
           </tab>
 
-          <tab heading="Upcoming Competitions" active="tabActivity[2]" ng-click="filterComps()">
+          <!-- upcoming competitions -->
+          <tab heading="Upcoming Competitions" active="compTabActivity[2]" ng-click="compTabClick()">
+            <!-- search -->
             <div id="building-search" class="form-group">
               <input type="search" class="form-control" placeholder="Search" ng-model="searchInput.input"
                      ng-change="filterComps()">
             </div>
+
+            <!-- competition list-->
             <div class="scroll">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
-                  {{competition.comp_name}}
+                  {{competition.comp_name}} <i class="fa fa-bolt pull-right"></i>
                 </a>
               </div>
             </div>
@@ -52,6 +66,7 @@
       </div>
       <div ng-if="loggedIn" class="panel-footer">
         <div id="action-footer">
+          <!-- create competition button -->
           <div>
             <script type="text/ng-template" id="myModalContent1.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
@@ -59,18 +74,20 @@
             <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
           </div>
 
+          <!-- edit competition button -->
           <div>
             <script type="text/ng-template" id="myModalContent2.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')">Edit</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')" ng-disabled="!isCompetitionSelected()">Edit</button>
           </div>
 
+          <!-- delete competition button-->
           <div>
             <script type="text/ng-template" id="myModalContent3.html">
               <div ng-include src="'views/DeleteCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()">Delete</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()" ng-disabled="!isCompetitionSelected()">Delete</button>
           </div>
         </div>
       </div>
@@ -89,17 +106,72 @@
   </div>
 
   <div class="col-md-8">
-    <div class="panel panel-default panel-shadow">
+    <!-- competition graph and results-->
+    <div class="panel panel-default panel-transparent">
       <div class="panel-heading">Competition Info</div>
       <div class="panel-body">
         <div id="current-comp-scroll">
-          <div ng-controller="CompetitionGraphCtrl">
-            <nvd3 options='options' data='data' api='api'></nvd3>
-          </div>
+          <!-- tabs -->
+          <tabset justified="true">
+            <!-- top buildings tab -->
+            <tab heading="Top Buildings" active="compDisplayTabActivity[0]">
+              <div>
+                <!-- first place -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="panel panel-default panel-shadow" id="top-building">
+                      <div class="panel-heading">First Place</div>
+                      <div class="panel-body">
+                        <div align="center">
+                          <img src="/images/first_place.png" alt="first" height="200" width="200">
+                          <span style="font-size: 30pt">{{getTopThree()[0]}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- second place -->
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="panel panel-default panel-shadow" id="mid-building">
+                      <div class="panel-heading">Second Place</div>
+                      <div class="panel-body">
+                        <div align="center">
+                          <img src="/images/second_place.png" alt="first" height="200" width="200">
+                          <span style="font-size: 17pt">{{getTopThree()[1]}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- third plaec -->
+                  <div class="col-md-6">
+                    <div class="panel panel-default panel-shadow" id="bottom-building">
+                      <div class="panel-heading">Third Place</div>
+                      <div class="panel-body">
+                        <div align="center">
+                          <img src="/images/third_place.png" alt="first" height="200" width="200">
+                          <span style="font-size: 17pt">{{getTopThree()[2]}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tab>
+
+            <!-- competition graph -->
+            <tab ng-controller="CompetitionGraphCtrl" id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]"
+                 select="fixGraph()">
+              <div id="comp-div">
+                <nvd3 options='options' id="comp-graph" data='data' api='api'></nvd3>
+              </div>
+            </tab>
+          </tabset>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 

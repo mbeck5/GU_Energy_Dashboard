@@ -1,16 +1,20 @@
 <div>
   <div class="row">
     <div class="col-md-3">
-      <div class="panel panel-default panel-shadow" id="building-list-panel">
+      <!-- building selector panel -->
+      <div class="panel panel-default panel-transparent" id="building-list-panel">
         <div class="panel-heading">Campus Building Select</div>
 
         <div class="panel-body">
           <div id="building-filter">
             <div>
+              <!-- search -->
               <div class="form-group">
                 <input type="search" class="form-control" placeholder="Search" ng-model="searchInput"
                        ng-change="filterBuildingsBySearch()">
               </div>
+
+              <!--building type dropdown -->
               <div class="btn-group" dropdown>
                 <button class="btn btn-default dropdown-toggle" dropdown-toggle type="button" data-toggle="dropdown">
                   Type
@@ -25,6 +29,7 @@
             </div>
           </div>
 
+          <!--building list-->
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
               <div class="checked-list-item" ng-repeat="building in filteredBuildings">
@@ -39,6 +44,8 @@
             </div>
           </div>
         </div>
+
+        <!--comparison buttons-->
         <div class="panel-footer">
           <button id="comparison-close" class="btn btn-danger" ng-show="compareEnabled" ng-click="disableComparison()"><i class="fa fa-remove"></i></button>
           <button class="btn btn-block" ng-class="{'btn-default': !compareEnabled, 'btn-primary': compareEnabled}"
@@ -46,7 +53,8 @@
         </div>
       </div>
 
-      <div class="panel panel-default panel-shadow" id="tip-panel">
+      <!--tips panel-->
+      <div class="panel panel-default panel-transparent" id="tip-panel">
         <div class="panel-heading">Energy Saving Tips</div>
         <div class="panel-body">
           <tabset justified="true" type="pills">
@@ -75,11 +83,15 @@
         </div>
       </div>
     </div>
+
+    <!--campus summary panel-->
     <div class="col-md-9" id="graph-panel">
     <div ng-controller="SummaryCtrl">
-      <div class="panel panel-default panel-shadow" id="graph-alignment">
+      <div class="panel panel-default panel-transparent" id="graph-alignment">
         <div class="panel-heading">Where Does Our Energy Go?</div>
         <div class="panel-body">
+
+          <!--knobs!-->
           <div id="knobs" class="row">
             <div id="knob-header">
               <span>Percent Increase from Previous {{selectedKnobTime}} for Entire Campus:</span>
@@ -101,6 +113,8 @@
               <div knob value="{{knobData[2]}}" warn-higher-than="0" danger-higher-than="20" min="-100" max="100" sign="%"></div>
             </div>
           </div>
+
+          <!--building type bar graphs-->
           <div class="row">
             <h3 id="building-type-graph-header">Daily Consumption by Building Type For Previous Day:</h3>
             <nvd3 options='barOptions' data='barData' api="barApi" config="{refreshDataOnly: true}"></nvd3>

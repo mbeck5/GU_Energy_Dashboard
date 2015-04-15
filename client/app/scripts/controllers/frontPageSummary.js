@@ -67,7 +67,7 @@ angular.module('clientApp')
       barWater.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-          barWater.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+          barWater.values.push({label: shortenTypeName(data[i].type), value: Math.round(data[i].total_cons)});
       }
     }
     function createBarElectricityData(data){
@@ -75,7 +75,7 @@ angular.module('clientApp')
       barElectricity.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barElectricity.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barElectricity.values.push({label: shortenTypeName(data[i].type), value: Math.round(data[i].total_cons)});
       }
     }
     function createBarGasData(data){
@@ -83,7 +83,7 @@ angular.module('clientApp')
       barGas.values = [];
       //create data points
       for (var i = 0; i < data.length; i++) {
-        barGas.values.push({label: shortenTypeName(data[i].type), value: data[i].total_cons});
+        barGas.values.push({label: shortenTypeName(data[i].type), value: Math.round(data[i].total_cons)});
       }
     }
     function createBarData(){

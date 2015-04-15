@@ -5,10 +5,25 @@ angular.module('clientApp')
     var selectedComp = 'DESELECTED';
     var startDate = '';
     var endDate = '';
+    var topThree = [];
 
     function getComp() {
       var allComps = Restangular.all('getCompetitions');
       return allComps.getList();
+    }
+
+    function getWindowWidth()
+    {
+      return window.innerWidth;
+    }
+
+    function setTopThree(topThreeIn) {
+      if (topThreeIn.length > 0)
+        topThree = angular.copy(topThreeIn);
+    }
+
+    function getTopThree() {
+      return topThree;
     }
 
     function saveNewComp(cid, startDate, endDate, compName) {
@@ -41,8 +56,7 @@ angular.module('clientApp')
       return newBuildingList.getList({cid: cid});
     }
 
-    function saveListOfBuildings(bidList, cid)
-    {
+    function saveListOfBuildings(bidList, cid) {
       for (var property in bidList) {
         if (bidList[property]) {
           addCompBuilding(cid, property);
@@ -50,7 +64,7 @@ angular.module('clientApp')
       }
     }
 
-    function getBuildingTotals(startDate, endDate, competitionId){
+    function getBuildingTotals(startDate, endDate, competitionId) {
       var buildingTotalList = Restangular.all('getBuildingTotals');
       return buildingTotalList.getList({startDate: startDate, endDate: endDate, competitionId: competitionId});
     }
@@ -85,6 +99,9 @@ angular.module('clientApp')
 
     return {
       getComp: getComp,
+      getWindowWidth: getWindowWidth,
+      setTopThree: setTopThree,
+      getTopThree: getTopThree,
       saveNewComp: saveNewComp,
       editNewComp: editNewComp,
       deleteComp: deleteComp,

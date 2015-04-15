@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
+  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc, $timeout) {
     var compareList = [];
     var currentList = [];
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
+    $scope.topThree = [];
 
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
@@ -40,15 +41,15 @@ angular.module('clientApp')
             calcAllChanges();
             sortChanges();
             createData();
+            if($scope.data.length >= 1)
+              compEditSvc.setTopThree([$scope.data[0].key, $scope.data[1].key, $scope.data[2].key]);
           });
         });
       }
     });
-
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
     $scope.data = [];
-
     $scope.options = {
       chart: {
         type: 'multiBarHorizontalChart',
@@ -60,7 +61,6 @@ angular.module('clientApp')
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
-        //valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
@@ -77,7 +77,7 @@ angular.module('clientApp')
           showMaxMin: false
         },
         yAxis: {
-          axisLabel: "Percent Decreased",
+          axisLabel: "Percent Decrease in Electricity Consumption",
           tickFormat: function(d){
             return d3.format(',.2%')(d);
           }
@@ -94,7 +94,6 @@ angular.module('clientApp')
             '</style>' +
             '<table class="tg" style="undefined;">' +
             '<colgroup>' +
-              //'<col style="width: 134px">' +
             '</colgroup>' +
             '<tr>' +
             '<th class="tg-o8k2">' + x + '<br></th>' +
@@ -104,7 +103,8 @@ angular.module('clientApp')
             '</tr>' +
             '</table>' +
             '</div>';
-        }
+        },
+        noData: 'Competition Coming Soon!'
       },
       title: {
         enable: true,
@@ -118,6 +118,12 @@ angular.module('clientApp')
           return selectedComp.start_date + ' - ' + selectedComp.end_date
         }
       }
+    };
+
+    $scope.fixGraph = function () {
+      $timeout(function () {
+        $scope.api.update();
+      }, 100);
     };
 
     function createCompareList(data){
@@ -148,7 +154,7 @@ angular.module('clientApp')
 
     function calcAllChanges(){
       if(compareList.length == currentList.length) {
-        for (var i = 0; i < compareList.length; i++){
+        for (var i = 0; i < compareList.length; i++) {
           var percentChange = calcPercentChange(compareList[i].total_cons, currentList[i].total_cons);
           changeList.push({building: compareList[i], change: percentChange});
         }
@@ -184,7 +190,7 @@ angular.module('clientApp')
         }
         tempData.push({key: key, values: values});
       }
-      $scope.data = tempData;
+      $scope.data = angular.copy(tempData);
     }
 
     function shortenBuildingName(buildingName){

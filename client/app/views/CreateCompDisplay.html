@@ -1,5 +1,5 @@
 <div>
-  <div class="modal-header">
+<div class="modal-header">
     <h3 class="modal-title">{{title}}</h3>
   </div>
   <div class="modal-body" id="create-comp-body">
@@ -10,18 +10,22 @@
             <div>
               <label>Competition Name</label>
             </div>
+
+            <!--competition name input -->
             <div>
               <input type="text" ng-model="name" class="form-control">
             </div>
             <div>
               <label>Start Date</label>
             </div>
+
+            <!-- date picker -->
             <div ng-controller="DatepickerCtrl">
               <p class="input-group">
                 <input class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="startDate"
                        is-open="opened" min-date="minDate"
                        datepicker-options="dateOptions" ng-required="true"
-                       close-text="Close" ng-change="saveDate(startDate, true)"/>
+                       close-text="Close" ng-change="saveDate(startDate, true)" onkeypress="return false"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
                   class="fa fa-calendar"></i></button>
@@ -31,14 +35,16 @@
             <div>
               <label>End Date</label>
             </div>
+
+            <!-- date picker -->
             <div ng-controller="DatepickerCtrl">
               <p class="input-group">
                 <input class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="endDate"
                        is-open="opened" min-date="minDate"
                        datepicker-options="dateOptions"  ng-required="true"
-                       close-text="Close" ng-change="saveDate(endDate, false)"/>
+                       close-text="Close" ng-change="saveDate(endDate, false)" onkeypress="return false"/>
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                <button type="button" class="btn btn-default" ng-click="open($event)" ><i
                   class="fa fa-calendar"></i></button>
               </span>
               </p>
@@ -46,6 +52,8 @@
           </div>
         </td>
         <td>
+
+          <!-- building list -->
           <div id="building-scroll" class="scroll">
             <div id="building-list" class="list-group">
               <div class="checked-list-item" ng-repeat="building in buildings">
