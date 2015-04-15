@@ -40,9 +40,9 @@ angular
         templateUrl: 'views/compDisplay.html',
         controller: 'CompDisplayCtrl'
         })
-      .when('/Login', {
-        templateUrl: 'views/loginDisplay.html',
-        controller: 'LoginCtrl'
+      .when('/verify', {
+        templateUrl: 'views/verify.html',
+        controller: 'VerifyCtrl'
       })
       .otherwise({
         redirectTo: '/'

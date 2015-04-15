@@ -21,3 +21,4 @@ app.get('/api/getBuildingTotals', compQController.getBuildingTotals);
 app.get('/api/getUser', loginController.getUser);
 app.get('/api/getPassword', loginController.getPassword);
 app.post('/api/addUser', loginController.addUser);
+app.post('/api/confirmUser', loginController.confirmUser);
