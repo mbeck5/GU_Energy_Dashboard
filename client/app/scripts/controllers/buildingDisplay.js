@@ -135,7 +135,7 @@ angular.module('clientApp')
       tempData.push({values: values, key: buildingName});
 
       //postpone graph initialization until all points have been created
-      if (tempData.length == $scope.selectedBuildings.length) {
+      if (tempData.length === $scope.selectedBuildings.length) {
         replaceMissingBuildingNames();
         initGraph();
       }
