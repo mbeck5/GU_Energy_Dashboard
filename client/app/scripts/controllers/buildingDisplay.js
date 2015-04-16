@@ -124,10 +124,6 @@ angular.module('clientApp')
       if (typeof data[0] !== 'undefined') {
         buildingName = data[0].name;
       }
-     // if( buildingName === "")
-      //  buildingName = $scope.selectedBuildings[getDataCount].name;
-      //getDataCount++;
-
 
       if (data) {
         //create graph points
