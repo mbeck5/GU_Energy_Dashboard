@@ -223,8 +223,8 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount < 2) {
-        alert("2 or more buildings must be selected")
+      if (clickedBuildingCount < 3) {
+        alert("3 or more buildings must be selected")
       }
       else {
         if (!(startDateStrMoment.diff(endDateStrMoment, 'days') < 1)) {
@@ -326,8 +326,8 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount < 2) {
-        alert("2 or more buildings must be selected")
+      if (clickedBuildingCount < 3) {
+        alert("3 or more buildings must be selected")
       }
       else {
         if (!(startDateStrMoment.diff(endDateStrMoment, 'days') < 1)) {
