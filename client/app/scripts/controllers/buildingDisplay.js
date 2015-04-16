@@ -144,26 +144,28 @@ angular.module('clientApp')
     //replaces the labels of buildings that would otherwise be missing in comparision graphs
     //due to them having no data
     function replaceMissingBuildingNames(){
+      //get a temp list of all selected names
+      var selectedBuildingNames = [];
+      for(var j = 0; j < $scope.selectedBuildings.length; j++) {
+        selectedBuildingNames.push($scope.selectedBuildings[j].name);
+      }
+      //remove any name that is already labeled
+      for (var j = 0; j < tempData.length; j++) {
+        for (var x = 0; x < selectedBuildingNames.length; x++) {
+          if (tempData[j].key == selectedBuildingNames[x])
+            selectedBuildingNames[x] = "";
+        }
+      }
       for(var i = 0; i < tempData.length; i++) {
         if (tempData[i].key == "") {
-          //get a temp list of all selected names
-          var selectedBuildingNames = [];
-          for(var j = 0; j < $scope.selectedBuildings.length; j++) {
-            selectedBuildingNames.push($scope.selectedBuildings[j].name);
-          }
-          //remove any name that is already labeled
-          for (var j = 0; j < tempData.length; j++) {
-            for (var x = 0; x < selectedBuildingNames.length; x++) {
-              if (tempData[j].key == selectedBuildingNames[x])
-                selectedBuildingNames[x] = "";
-            }
-          }
           //choose from one of the names that are left
           //order doesnt matter because they have no data and
           //will not be displayed anyway
           for (var j = 0; j < selectedBuildingNames.length; j++) {
             if (selectedBuildingNames[j] != "") {
               tempData[i].key = selectedBuildingNames[j];
+              selectedBuildingNames[j] = "";
+              break;
             }
           }
         }
