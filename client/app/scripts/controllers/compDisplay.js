@@ -4,7 +4,7 @@ angular.module('clientApp')
   .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc, loginSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
-    var user;
+    var user = $cookies['user'];
     var confirmedUser;
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
