@@ -76,16 +76,15 @@ angular.module('clientApp')
 
     //when clicking on competition
     $scope.selectComp = function (index) {
+      compEditSvc.setTopThree(["","",""]);
       //don't select if nothing there
       if ($scope.filteredComps[getSelectedTimeline()].length > index) {
-        compEditSvc.setTopThree(["","",""]);
         $scope.displayedCompIndex = index;
         selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
         setDates();
         compEditSvc.setSelectedComp(selectedComp);
       }
       else {
-        compEditSvc.setTopThree(["","",""]);
         selectedComp = null;
         $scope.displayedCompIndex = -1; //deselect item
       }
