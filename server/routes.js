@@ -22,3 +22,4 @@ app.get('/api/getUser', loginController.getUser);
 app.get('/api/getPassword', loginController.getPassword);
 app.post('/api/addUser', loginController.addUser);
 app.post('/api/confirmUser', loginController.confirmUser);
+app.get('/api/isConfirmed', loginController.isConfirmed);

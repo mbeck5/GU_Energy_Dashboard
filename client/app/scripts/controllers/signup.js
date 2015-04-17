@@ -8,6 +8,7 @@ angular.module('clientApp')
         if (password === passwordConfirm) {
           signupSvc.addUser(email, password).then(function (data) {
               if(typeof data.code === 'undefined'){
+                alert("A confirmation email has been sent to your entered email address.  Please verify your email to access full functionality.")
                 $modalInstance.close(true);
               }
               else if(data.code === 'ER_DUP_ENTRY'){

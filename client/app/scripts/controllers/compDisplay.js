@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc, loginSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
+    var user;
+    var confirmedUser;
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
@@ -13,8 +15,10 @@ angular.module('clientApp')
     //retrieve initial data
     refreshCompList();
     showFooter();
+    isConfirmedEmail();
     $scope.$on("logout", function(){
       showFooter();
+      user = $cookies['user']
     });
 
     function showFooter(){
@@ -161,12 +165,24 @@ angular.module('clientApp')
       loginModal.result.then(function(loggedin){
         if(loggedin){
           showFooter();
+          user = $cookies['user']
+          isConfirmedEmail();
         }
       });
     };
 
-    $scope.isCompetitionSelected = function() {
+    $scope.allowClick = function(){
+      return isCompetitionSelected() && confirmedUser;
+    };
+
+    function isCompetitionSelected(){
       return selectedComp != null;
+    };
+
+    function isConfirmedEmail(){
+      loginSvc.isConfirmed(user).then(function(data){
+        confirmedUser = data[0].confirmed;
+      });
     };
 
     //retrieves all competition info

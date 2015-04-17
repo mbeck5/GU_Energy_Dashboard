@@ -14,8 +14,14 @@ angular.module('clientApp')
       return compare.getList({email: email, password: password});
     }
 
+    function isConfirmed(user){
+      var confirmed = Restangular.all("isConfirmed");
+      return confirmed.getList({user: user});
+    }
+
     return {
       getUser: getUser,
-      getPassword: getPassword
+      getPassword: getPassword,
+      isConfirmed: isConfirmed
     };
   });

@@ -84,7 +84,7 @@ exports.addUser = function(req, res){
     });
 };
 
-exports.confirmUser = function(req, res){
+exports.confirmUser = function(req, res) {
     var email = req.body.email;
     var token = req.body.token;
     var queryString = "UPDATE users SET confirmed = 1 WHERE token = '" + token + "' AND email = '" + email + "'";
@@ -94,6 +94,19 @@ exports.confirmUser = function(req, res){
         }
         else {
             res.send([]);
+        }
+    });
+};
+
+exports.isConfirmed = function(req, res){
+    var user = req.query.user;
+    var queryString = "SELECT confirmed FROM users WHERE username = '" + user + "'";
+    connection.query(queryString, function (err, rows) {
+        if (err) {
+            throw(err);
+        }
+        else {
+            res.send(rows);
         }
     });
 };
