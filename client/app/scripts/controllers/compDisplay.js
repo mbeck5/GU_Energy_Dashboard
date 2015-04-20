@@ -96,6 +96,7 @@ angular.module('clientApp')
 
     //when clicking on competition
     $scope.selectComp = function (index) {
+      compEditSvc.setTopThree(["","",""]);
       //don't select if nothing there
       if ($scope.filteredComps[getSelectedTimeline()].length > index) {
         $scope.displayedCompIndex = index;
@@ -268,7 +269,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount <= 2) {
+      if (clickedBuildingCount < 3) {
         alert("3 or more buildings must be selected")
       }
       else {
@@ -371,7 +372,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount <= 2) {
+      if (clickedBuildingCount < 3) {
         alert("3 or more buildings must be selected")
       }
       else {
@@ -388,11 +389,16 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
               //update in database
               compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
                 //save new building selections
-                if (data === "OK")
+                if (data === "OK") {
                   compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
+                }
+
+                $modalInstance.close(true);
               });
             }
-            $modalInstance.close(true);
+            else {
+              $modalInstance.close(true);
+            }
           });
         }
       }
