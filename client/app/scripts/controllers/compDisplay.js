@@ -177,7 +177,7 @@ angular.module('clientApp')
     };
 
     function isCompetitionSelected(){
-      return selectedComp != null;
+      return (selectedComp != null) || (sortedComps.running.length == 0);
     };
 
     function isConfirmedEmail(){
@@ -216,8 +216,9 @@ angular.module('clientApp')
   });
 
 //controller for creating competition
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, $cookies, compEditSvc, buildingSvc) {
   //view variables
+  var user = $cookies['user'];
   $scope.name = '';
   $scope.checkedBuildings = [];
   $scope.buildings = [];
@@ -291,7 +292,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               }
             }
             maxCid = maxCid + 1;
-            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"), user).then(function (data) {
               if (data === "OK") {
                 for (var property in $scope.checkedBuildings) {
                   if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
@@ -315,8 +316,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 });
 
 //controller for edit modal
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, $cookies, compEditSvc, buildingSvc) {
   //variables
+  var user = $cookies['user'];
   $scope.selectedResourceComp = 'Select Resource';
   var selectedComp = compEditSvc.getSelectedComp();
   $scope.name = selectedComp.comp_name;
@@ -387,7 +389,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
               var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
               var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
               //update in database
-              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''"), user).then(function (data) {
                 //save new building selections
                 if (data === "OK") {
                   compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);

@@ -26,14 +26,15 @@ angular.module('clientApp')
       return topThree;
     }
 
-    function saveNewComp(cid, startDate, endDate, compName) {
+    function saveNewComp(cid, startDate, endDate, compName, createdBy) {
       var newComp = Restangular.all('saveNewComp');
-      return newComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
+      return newComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName, createdBy: createdBy});
     }
 
-    function editNewComp(cid, startDate, endDate, compName) {
+    function editNewComp(cid, startDate, endDate, compName, editedBy) {
+      var edited = "," + editedBy;
       var editedComp = Restangular.all('editNewComp');
-      return editedComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName});
+      return editedComp.post({cid: cid, startDate: startDate, endDate: endDate, compName: compName, editedBy: edited});
     }
 
     function deleteComp(cid) {

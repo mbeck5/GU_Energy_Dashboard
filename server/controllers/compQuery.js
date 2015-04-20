@@ -18,8 +18,8 @@ exports.getCompetitions = function (req, res) {
 };
 
 exports.saveNewComp = function (req, res) {
-    var addCompQueryString = "INSERT INTO competitions (cid, start_date, end_date, comp_name, resource) " +
-            "VALUES (" + req.body.cid + ",DATE('" + req.body.startDate + "'),DATE('" + req.body.endDate + "'),'" + req.body.compName + "', 2);"
+    var addCompQueryString = "INSERT INTO competitions (start_date, end_date, comp_name, resource, created_by, edited_by) " +
+            "VALUES (" + "DATE('" + req.body.startDate + "'),DATE('" + req.body.endDate + "'),'" + req.body.compName + "', 2, '" + req.body.createdBy + "', '');";
     connection.query(addCompQueryString, function (err, rows) {
         if (err) {
             throw err;
@@ -32,7 +32,7 @@ exports.saveNewComp = function (req, res) {
 
 exports.editNewComp = function (req, res) {
     var editCompQueryString = "UPDATE competitions SET start_date=DATE('" + req.body.startDate+ "'), end_date=DATE('" + req.body.endDate + "')," +
-       " comp_name='" + req.body.compName + "' WHERE cid=" + req.body.cid + ";";
+       " comp_name='" + req.body.compName + "', edited_by = CONCAT(edited_by, '" + req.body.editedBy + "') WHERE cid=" + req.body.cid + ";";
     connection.query(editCompQueryString, function (err, rows) {
         if (err) {
             console.log(err);
@@ -98,6 +98,30 @@ exports.getCompBuildingList = function (req, res) {
         }
     });
 };
+
+exports.getCompCreator = function(req, res){
+    var queryString = "SELECT created_by FROM competitions WHERE cid = " + req. query.cid;
+    connection.query(queryString, function (err, rows) {
+        if (err) {
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
+exports.getCompEditor = function(req, res){
+    var queryString = "SELECT edited_by FROM competitions WHERE cid = " + req. query.cid;
+    connection.query(queryString, function (err, rows) {
+        if (err) {
+            throw err;
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
 
 exports.getBuildingTotals = function(req, res){
     var startDate = req.query.startDate;

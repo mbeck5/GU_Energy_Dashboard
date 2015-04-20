@@ -18,6 +18,8 @@ app.post('/api/addCompBuilding', compQController.addCompBuilding);
 app.post('/api/deleteCompBuildings', compQController.deleteCompBuildings);
 app.get('/api/getCompBuildingList', compQController.getCompBuildingList);
 app.get('/api/getBuildingTotals', compQController.getBuildingTotals);
+app.get('/api/getCompCreator', compQController.getCompCreator);
+app.get('/api/getCompEditor', compQController.getCompEditor);
 app.get('/api/getUser', loginController.getUser);
 app.get('/api/getPassword', loginController.getPassword);
 app.post('/api/addUser', loginController.addUser);
