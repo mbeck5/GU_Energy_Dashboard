@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc, $timeout) {
+  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc, $timeout, usSpinnerService) {
     var compareList = [];
     var currentList = [];
     var changeList = [];
@@ -9,8 +9,10 @@ angular.module('clientApp')
     var longestLabel = 0;
     $scope.topThree = [];
 
+
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
+      usSpinnerService.spin('spinner');
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
@@ -46,6 +48,7 @@ angular.module('clientApp')
           });
         });
       }
+      usSpinnerService.stop('spinner');
     });
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];

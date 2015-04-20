@@ -46,7 +46,7 @@ angular
   })
   .config(function (usSpinnerConfigProvider) {
     usSpinnerConfigProvider.setDefaults({
-      color: '#DFD7CA',
+      color: '#3E3F3A',
       lines: 11,
       length: 0,
       width: 7,
