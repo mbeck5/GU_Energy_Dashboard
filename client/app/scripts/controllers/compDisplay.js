@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc, loginSvc) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc, usSpinnerService, loginSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     var user = $cookies['user'];
@@ -11,6 +11,7 @@ angular.module('clientApp')
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
     $scope.compDisplayTabActivity = [false, true];  //podium, all
     $scope.displayedCompIndex = 0;
+    $scope.spinnerActive = false;
 
     //retrieve initial data
     refreshCompList();
@@ -96,6 +97,8 @@ angular.module('clientApp')
 
     //when clicking on competition
     $scope.selectComp = function (index) {
+      $scope.spinnerActive = true;
+      usSpinnerService.spin('spinner');
       compEditSvc.setTopThree(["","",""]);
       //don't select if nothing there
       if ($scope.filteredComps[getSelectedTimeline()].length > index) {
@@ -108,6 +111,8 @@ angular.module('clientApp')
         selectedComp = null;
         $scope.displayedCompIndex = -1; //deselect item
       }
+      $scope.spinnerActive = false;
+      usSpinnerService.stop('spinner');
     };
 
     function setDates() {
