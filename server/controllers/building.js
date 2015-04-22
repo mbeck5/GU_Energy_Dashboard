@@ -140,12 +140,12 @@ exports.getResourcesByType = function(req, res){
     }
 
     queryString = "SELECT building_type.building_type as type, SUM(consumption) as total_cons FROM " +
-                    "(SELECT meters_dly_data.consumption as consumption, building.building_type_id " +
+                    "(SELECT SUM(DISTINCT meters_dly_data.consumption) as consumption, building.building_type_id " +
                         "FROM building, building_meters, meters, meters_dly_data " +
                         "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date = '" + date +
                         "' AND building_meters.building_id IN (SELECT building.building_id FROM building WHERE building_id != 1) " +
                         " AND meter_type_id = " + req.query.meterType + " AND building.building_id = building_meters.building_id " +
-                            "GROUP BY building.building_id HAVING consumption > AVG(consumption) - (3 * STDDEV(consumption)) AND consumption < AVG(consumption) + (3 * STDDEV(consumption))) as t, building_type " +
+                            "GROUP BY building.building_id) as t, building_type " +
                     "WHERE t.building_type_id = building_type.building_type_id AND building_type.building_type_id != 1 GROUP BY t.building_type_id;";
 
     connection.query(queryString, function(err, rows){
@@ -172,7 +172,7 @@ exports.getResourceSum = function(req, res){
     queryString = "SELECT SUM(total_cons) as res_sum " +
                     "FROM " +
                         "(SELECT building_type.building_type as type, SUM(consumption) as total_cons FROM " +
-                            "(SELECT meters_dly_data.consumption as consumption, building.building_type_id " +
+                            "(SELECT SUM(DISTINCT meters_dly_data.consumption) as consumption, building.building_type_id " +
                                 "FROM building, building_meters, meters, meters_dly_data " +
                                 "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date = '" + date +
                                 "' AND building_meters.building_id IN (SELECT building.building_id FROM building WHERE building_id != 1) " +
