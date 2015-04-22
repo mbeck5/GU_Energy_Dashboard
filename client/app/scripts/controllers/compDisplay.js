@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, $timeout) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, usSpinnerService) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     $scope.searchInput = {input: ''};
@@ -9,15 +9,10 @@ angular.module('clientApp')
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
     $scope.compDisplayTabActivity = [false, true];  //podium, all
     $scope.displayedCompIndex = 0;
+    $scope.spinnerActive = false;
 
     //retrieve initial data
     refreshCompList();
-
-    $scope.fixGraph = function () {
-      $timeout(function () {
-        compEditSvc.refreshCompGraph();
-      });
-    };
 
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
@@ -82,6 +77,9 @@ angular.module('clientApp')
 
     //when clicking on competition
     $scope.selectComp = function (index) {
+      $scope.spinnerActive = true;
+      usSpinnerService.spin('spinner');
+      compEditSvc.setTopThree(["","",""]);
       //don't select if nothing there
       if ($scope.filteredComps[getSelectedTimeline()].length > index) {
         $scope.displayedCompIndex = index;
@@ -93,6 +91,8 @@ angular.module('clientApp')
         selectedComp = null;
         $scope.displayedCompIndex = -1; //deselect item
       }
+      $scope.spinnerActive = false;
+      usSpinnerService.stop('spinner');
     };
 
     function setDates() {
@@ -229,7 +229,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount <= 2) {
+      if (clickedBuildingCount < 3) {
         alert("3 or more buildings must be selected")
       }
       else {
@@ -238,12 +238,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
         }
         else {
           //get dates from service daved from datepicker controller
-
-
           var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
-
-
           var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+
           //save the new competition to the database
           compEditSvc.getComp().then(function (data) {
             var maxCid = 0;
@@ -254,13 +251,16 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               }
             }
             maxCid = maxCid + 1;
-            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"));
-            for (var property in $scope.checkedBuildings) {
-              if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
-                compEditSvc.addCompBuilding(maxCid, property);
+            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+              if (data === "OK") {
+                for (var property in $scope.checkedBuildings) {
+                  if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
+                    compEditSvc.addCompBuilding(maxCid, property);
+                  }
+                }
               }
-            }
-            $modalInstance.close(true);
+              $modalInstance.close(true);
+            });
           });
         }
       }
@@ -332,7 +332,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
           clickedBuildingCount++;
         }
       }
-      if (clickedBuildingCount <= 2) {
+      if (clickedBuildingCount < 3) {
         alert("3 or more buildings must be selected")
       }
       else {
@@ -341,16 +341,24 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
         }
         else {
           //delete old buildings saved for the competition
-          compEditSvc.deleteCompBuildings(cid).then(function () {
-            //get dates saved from service from datepicker
-            var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
-            var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
-            //update in database
-            compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function () {
-              //save new building selections
-              compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
-            });
-            $modalInstance.close(true);
+          compEditSvc.deleteCompBuildings(cid).then(function (data) {
+            if (data === "OK") {
+              //get dates saved from service from datepicker
+              var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
+              var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
+              //update in database
+              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+                //save new building selections
+                if (data === "OK") {
+                  compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);
+                }
+
+                $modalInstance.close(true);
+              });
+            }
+            else {
+              $modalInstance.close(true);
+            }
           });
         }
       }

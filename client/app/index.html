@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>GU Energy Dashboard</title>
-    <meta name="description" content="">
+    <meta name="description" content="Energy Dashboard for Gonzaga University">
+    <meta name="keywords" content="GU,Gonzaga,University,green,energy,dashboard,sustainability,electricity">
+    <meta name="author" content="Mark Beck, DJ Corisis, Dylan Kaai, Tyler Doster">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -19,20 +21,17 @@
   <body ng-app="clientApp">
   <!-- set the background image based on time-->
   <script type="text/javascript">
-    var currentTime = new Date().getHours();
-    if (6 <= currentTime && currentTime < 12) {
-      if (document.body) {
-        document.body.background = "../images/morning.jpg";
+    //dynamically sets background for app
+    if (document.body) {
+      var currentTime = new Date().getHours();
+      if (6 <= currentTime && currentTime < 12) {
+        document.body.className = 'background-morning';
       }
-    }
-    else if (12 <= currentTime && currentTime < 17) {
-      if (document.body) {
-        document.body.background = "../images/gonzaga_backgroundone.jpg";
+      else if (12 <= currentTime && currentTime < 17) {
+        document.body.className = 'background-afternoon';
       }
-    }
-    else {
-      if (document.body) {
-        document.body.background = "../images/gonzaga_backgroundtwo.jpg";
+      else {
+        document.body.className = 'background-evening';
       }
     }
   </script>

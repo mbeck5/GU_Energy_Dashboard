@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc) {
+  .controller('CompetitionGraphCtrl', function ($scope, buildingSvc, compEditSvc, $timeout, usSpinnerService) {
     var compareList = [];
     var currentList = [];
     var changeList = [];
@@ -9,9 +9,10 @@ angular.module('clientApp')
     var longestLabel = 0;
     $scope.topThree = [];
 
+
     //when new competition is selected, retrieve new data
     $scope.$watch(compEditSvc.getSelectedComp, function(newVal, oldVal){
-      compEditSvc.saveCompGraphScope($scope);
+      usSpinnerService.spin('spinner');
       var compareEnd;
       if(compEditSvc.getSelectedComp() !== 'DESELECTED' && newVal != oldVal){
         longestLabel = 0;
@@ -47,6 +48,7 @@ angular.module('clientApp')
           });
         });
       }
+      usSpinnerService.stop('spinner');
     });
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
@@ -62,7 +64,6 @@ angular.module('clientApp')
         y: function(d){ return d.value; },
         showControls: false,
         showValues: true,
-        //valueFormat: function(d) {return d3.format(".0%")(d)},  //convert to percentage
         showLegend: false,
         stacked: true,
         transitionDuration: 500,
@@ -79,7 +80,7 @@ angular.module('clientApp')
           showMaxMin: false
         },
         yAxis: {
-          axisLabel: "Percent Decreased",
+          axisLabel: "Percent Decrease in Electricity Consumption",
           tickFormat: function(d){
             return d3.format(',.2%')(d);
           }
@@ -96,7 +97,6 @@ angular.module('clientApp')
             '</style>' +
             '<table class="tg" style="undefined;">' +
             '<colgroup>' +
-              //'<col style="width: 134px">' +
             '</colgroup>' +
             '<tr>' +
             '<th class="tg-o8k2">' + x + '<br></th>' +
@@ -121,6 +121,12 @@ angular.module('clientApp')
           return selectedComp.start_date + ' - ' + selectedComp.end_date
         }
       }
+    };
+
+    $scope.fixGraph = function () {
+      $timeout(function () {
+        $scope.api.update();
+      }, 100);
     };
 
     function createCompareList(data){
@@ -188,7 +194,6 @@ angular.module('clientApp')
         tempData.push({key: key, values: values});
       }
       $scope.data = angular.copy(tempData);
-
     }
 
     function shortenBuildingName(buildingName){

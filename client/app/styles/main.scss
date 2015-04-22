@@ -3,6 +3,17 @@
 @import "buildingDisplay";
 @import "compDisplay";
 
+//backgrounds set in js depending on time
+.background-morning {
+  background-image: url("../images/morning.jpg");
+}
+.background-afternoon {
+  background-image: url("../images/gonzaga_backgroundone.jpg");
+}
+.background-evening {
+  background-image: url("../images/gonzaga_backgroundtwo.jpg");
+}
+
 //main app body (everything not header)
 body {
   padding-bottom: 20px;
@@ -12,11 +23,11 @@ body {
   background-size: cover;
   height: 100%;
 
+  //if small screen kill background
   @media (max-width: $screen-md) {
     background-color: $gray;
-    background-size: 0%;
+    background-size: 0;
   }
-
 }
 
 #navbar {
