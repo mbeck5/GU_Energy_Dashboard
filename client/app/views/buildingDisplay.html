@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-2">
+  <div class="col-md-2">
 
     <div class="panel panel-default panel-transparent">
       <div class="panel-heading">Options</div>
@@ -32,7 +32,7 @@
             </div>
           </div>
           <div>
-            <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
+
             <label id="detailed-toggle" popover="Helpful for looking at large data sets" popover-trigger="mouseenter"
                    popover-placement="bottom">
               <toggle-switch model="isDetailed"></toggle-switch>
@@ -83,6 +83,7 @@
 
   <div class="col-md-10">
     <div class="panel panel-default panel-transparent" >
+      <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
       <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
       <div class="panel-body">
         <div class="row">
