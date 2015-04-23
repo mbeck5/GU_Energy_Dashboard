@@ -2,19 +2,19 @@
 
 ## Contents
 
-Installation
+[Installation](#installation)
 
-Running
+[Running](#running)
 
 - Development
 - Production
 
-Dependencies
+[Dependencies](#dependencies)
 
 - For development
 - For the application
 
-The application
+[The Application](#the-application)
 
 - Client
   - Views
@@ -23,7 +23,7 @@ The application
 - Server
 - Database
 
-Deliverables
+[Deliverables](#deliverables)
 
 ## Installation
 
