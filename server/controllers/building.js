@@ -1,5 +1,4 @@
 var moment = require('moment');
-var stdDev = require('../services/standardDeviation');
 
 exports.getBuildings = function(req, res){
     connection.query("SELECT DISTINCT BUILDING_NAME AS name, BUILDING_ID as id, BUILDING_TYPE_ID as buildingTypeId FROM building WHERE BUILDING_NAME != 'undefined' ORDER BY BUILDING_NAME", function(err, rows){
@@ -71,7 +70,6 @@ exports.getResources = function(req, res){
             throw err;
         }
         else {
-            //res.send(stdDev.standardDeviationFilter(rows));
             res.send(rows);
         }
     });
@@ -121,7 +119,6 @@ exports.getResourcesFromName = function(req, res) {
             throw err;
         }
         else {
-            //res.send(stdDev.standardDeviationFilter(rows));
             res.send(rows)
         }
     });
