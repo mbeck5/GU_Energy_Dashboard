@@ -59,14 +59,15 @@ angular.module('clientApp')
         return $scope.filteredBuildings[index].name.replace("/", "--");
     }
 
+    //when selecting the 'X' button after 'Select Multiple' was pressed
     $scope.disableComparison = function() {
       $scope.compareEnabled = false;
       $scope.comparisonText = 'Select Multiple';
       $scope.checkedBuildings = []; //reset checked buildings
     };
 
+    //action for when user selects the Compare/select multiple button
     $scope.comparisonSelect = function() {
-      //if 2 or more buildings selected
       if ($scope.comparisonSelectable()) {
         //if compare already enabled, compare!
         if ($scope.compareEnabled) {
@@ -78,8 +79,8 @@ angular.module('clientApp')
               tempList.push({id: property, name: findNameById(property)});
             }
           }
-          buildingSvc.setSelectedBuilding(tempList);
-          $location.path('comparison'); //change to comparison path
+          buildingSvc.setSelectedBuilding(tempList);  //save checked buildings to service
+          $location.path('comparison'); //navigate to comparison path
         }
         //enter compare mode
         else {
@@ -89,7 +90,7 @@ angular.module('clientApp')
       }
     };
 
-    //if 2 or more buildings selected
+    //return true if the comparison/select multiple button is selectable
     $scope.comparisonSelectable = function() {
       //always return true if comparison isn't enabled
       if (!$scope.compareEnabled) {
@@ -97,6 +98,7 @@ angular.module('clientApp')
       }
       else {
         var count = 0;
+        //iterate over properties which are buildings
         for (var property in $scope.checkedBuildings) {
           if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
             count++;

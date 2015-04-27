@@ -10,12 +10,12 @@ angular.module('clientApp')
     $scope.selectedKnobTime = 'Day';  //day or year
     $scope.isKnobYearly = false;
 
+    //initial calls
     getKnobData(false);
     populateBuildingTypes();
     createBarData();
 
-    $scope.knobData = [];
-
+    //graph configuration
     $scope.barOptions = {
       chart: {
         type: 'multiBarChart',
@@ -39,6 +39,7 @@ angular.module('clientApp')
       }
     };
 
+    //graph data
     $scope.barData = [barElectricity, barGas, barWater];
 
     //when user hits the toggle for the knobs

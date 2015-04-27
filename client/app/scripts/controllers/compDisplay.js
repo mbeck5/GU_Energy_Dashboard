@@ -33,6 +33,7 @@ angular.module('clientApp')
       $scope.filteredComps = angular.copy(sortedComps);
     }
 
+    //returns key to selectedTimeline associative array
     function getSelectedTimeline() {
       var index = $scope.compTabActivity.indexOf(true);
       switch (index) {
@@ -45,6 +46,7 @@ angular.module('clientApp')
       }
     }
 
+    //return topThree buildings from service
     $scope.getTopThree = function () {
       return compEditSvc.getTopThree();
     };
@@ -95,11 +97,13 @@ angular.module('clientApp')
       usSpinnerService.stop('spinner');
     };
 
+    //converts dates to correct format
     function setDates() {
       selectedComp.start_date = moment(selectedComp.start_date).format('DD/MMMM/YYYY');
       selectedComp.end_date = moment(selectedComp.end_date).format('DD/MMMM/YYYY');
     }
 
+    //opens create competition modal
     $scope.openCreateModal = function (size) {
       var createModal = $modal.open({
         templateUrl: 'myModalContent1.html',
@@ -107,12 +111,14 @@ angular.module('clientApp')
         size: size
       });
 
+      //upon close of modal
       createModal.result.then(function (created) {
         if (created)  //only refresh if user added new
           refreshCompList();
       });
     };
 
+    //opens edit competition modal
     $scope.openEditModal = function (size) {
       var editModal = $modal.open({
         templateUrl: 'myModalContent2.html',
@@ -120,12 +126,14 @@ angular.module('clientApp')
         size: size
       });
 
+      //upon close of modal
       editModal.result.then(function (edited) {
         if (edited)  //only refresh if user edited
           refreshCompList();
       });
     };
 
+    //opens delete competition modal
     $scope.openDeleteModal = function (size) {
       var deleteModal = $modal.open({
         templateUrl: 'myModalContent3.html',
@@ -133,6 +141,7 @@ angular.module('clientApp')
         size: size
       });
 
+      //upon close of modal
       deleteModal.result.then(function (deleted) {
         if (deleted) {  //only refresh if user deleted
           $scope.searchInput.input = '';  //reset search
@@ -154,7 +163,7 @@ angular.module('clientApp')
       });
     }
 
-    //removes current item from front-end ui
+    //removes current item from ui
     function deleteCurrentItem() {
       var selectedTimeline = getSelectedTimeline();
       var index = getOriginalIndex(selectedTimeline);
