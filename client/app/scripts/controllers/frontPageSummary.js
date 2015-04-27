@@ -41,7 +41,7 @@ angular.module('clientApp')
 
     //graph data
     $scope.barData = [barElectricity, barGas, barWater];
-	$scope.knobData = [];
+    $scope.knobData = [];
 
     //when user hits the toggle for the knobs
     $scope.toggleKnobs = function() {
