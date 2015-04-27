@@ -15,11 +15,13 @@ angular.module('clientApp')
     $scope.spinnerActive = false;
     $scope.isDatesChanged = false;  //toggles when date inputs are changed
 
-    checkRefresh();
+    checkRefresh(); //ensures user is navigating directly to comparison page
     getBuildingData(null);  //initial call to get data of default type
 
+    //graph data
     $scope.data = [];
 
+    //graph configuration
     $scope.options = {
       chart: {
         type: 'lineChart',
@@ -54,6 +56,7 @@ angular.module('clientApp')
       }
     };
 
+    //resource toggle
     $scope.selectResource = function (resourceType) {
       //don't need to reselect if already select
       if (resourceType != selectedResource) {
@@ -68,6 +71,7 @@ angular.module('clientApp')
       $scope.isDatesChanged = true;
     };
 
+    //when user toggles toggle
     $scope.toggleDetailed = function () {
       isDetailed = !isDetailed;
       $scope.applyGraphOptions();
@@ -93,6 +97,8 @@ angular.module('clientApp')
       }
     };
 
+    //checks if user has selected the same date in both date pickers
+    //and automatically increments the "To" date by one day
     function checkIfEqual() {
       //convert back to moment objects
       if (moment.isDate($scope.date1))
@@ -117,7 +123,7 @@ angular.module('clientApp')
       $scope.date1 = moment($scope.date1).format('DD/MMMM/YYYY'); //convert back to string
     }
 
-    //Changed this to just push to temporary data variable.
+    //cleans data return from server to graph compatible format
     function createGraphData(data) {
       var values = [];
       var buildingName = '';
@@ -172,6 +178,7 @@ angular.module('clientApp')
       }
     }
 
+    //retrieves data from server
     function getBuildingData(index) {
       $scope.spinnerActive = true;
       usSpinnerService.spin('spinner');
