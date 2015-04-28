@@ -5,23 +5,33 @@ angular.module('clientApp')
 
     $scope.login = function(email, password){
       loginSvc.getUser(email).then(function(data){
-        if(data.length == 1){
-          //The user exists, check if passwords match
-          loginSvc.getPassword(email, password).then(function(data2){
-            if(data2[0]){
-              //Successful Login.
-              $cookies['loggedIn'] = 'true';
-              $cookies['user'] = email;
-              $rootScope.$broadcast("login");
-              $modalInstance.close(true);
-            }
-            else{
-              //Wrong password entered.
-              $scope.email = '';
-              $scope.password = '';
-              alert("Incorrect Email or Password");
-            }
-          });
+        if(data[0]){
+          var salt = data[0]; //receive hash
+
+          //create hash
+          try {
+            bcrypt.hashpw(password, salt, function (hash) {
+              //The user exists, check if passwords match
+              loginSvc.getPassword(email, hash).then(function(data2){
+                if(data2[0]){
+                  //Successful Login.
+                  $cookies['loggedIn'] = 'true';
+                  $cookies['user'] = email;
+                  $rootScope.$broadcast("login");
+                  $modalInstance.close(true);
+                }
+                else{
+                  //Wrong password entered.
+                  $scope.email = '';
+                  $scope.password = '';
+                  alert("Incorrect Email or Password");
+                }
+              });
+            });
+          }
+          catch (err) {
+            alert (err);
+          }
         }
         else{
           //Wrong username entered.

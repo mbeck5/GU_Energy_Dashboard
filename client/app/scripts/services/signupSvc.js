@@ -13,8 +13,14 @@ angular.module('clientApp')
       return confirm.post({email: email, token: token});
     }
 
+    function addUserPassword(email, hash) {
+      var post = Restangular.all('addUserPassword');
+      post.post({email: email, hash: hash});
+    }
+
     return {
       addUser: addUser,
-      confirmUser: confirmUser
+      confirmUser: confirmUser,
+      addUserPassword: addUserPassword
     };
   });
