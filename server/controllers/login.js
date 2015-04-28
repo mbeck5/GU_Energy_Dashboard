@@ -85,7 +85,7 @@ exports.addUserPassword = function(req, res){
                 res.send(err);
             }
             else {
-                var link = req.protocol + '://' + req.get('host') + "/#/verify?email=" + email + "&token=" + token;
+                var link = req.protocol + '://' + hostURL + "/#/verify?email=" + email + "&token=" + token;
                 send(link, email);
                 res.send('OK');
             }
