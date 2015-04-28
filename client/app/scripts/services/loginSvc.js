@@ -9,9 +9,9 @@ angular.module('clientApp')
       return user.getList({email: email});
     }
 
-    function getPassword(email, password){
+    function getPassword(email, hash){
       var compare = Restangular.all("getPassword");
-      return compare.getList({email: email, password: password});
+      return compare.getList({email: email, hash: hash});
     }
 
     function isConfirmed(user){
