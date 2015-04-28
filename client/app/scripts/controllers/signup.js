@@ -9,7 +9,7 @@ angular.module('clientApp')
           signupSvc.addUserEmail(email).then(function (data) {
               if(typeof data.code === 'undefined'){
 
-                var salt = data[0];
+                var salt = data;
 
                 //create hash
                 try {

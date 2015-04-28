@@ -6,7 +6,7 @@ angular.module('clientApp')
     $scope.login = function(email, password){
       loginSvc.getUser(email).then(function(data){
         if(data[0]){
-          var salt = data[0]; //receive hash
+          var salt = data[0].salt; //receive hash
 
           //create hash
           try {
@@ -14,7 +14,7 @@ angular.module('clientApp')
             bcrypt.hashpw(password, salt, function (hash) {
               //The user exists, check if passwords match
               loginSvc.getPassword(email, hash).then(function(data2){
-                if(data2[0]){
+                if(data2){
                   //Successful Login.
                   $cookies['loggedIn'] = 'true';
                   $cookies['user'] = email;

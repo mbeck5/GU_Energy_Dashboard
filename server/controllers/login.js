@@ -30,7 +30,7 @@ function send(link, to){
 }
 
 exports.getUser = function(req, res){
-    var user = req.query.email;
+    var user = req.query.email.split('@')[0];
     var queryString = "SELECT salt FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function(err, rows){
         if(err){
@@ -43,7 +43,7 @@ exports.getUser = function(req, res){
 };
 
 exports.getPassword = function(req, res) {
-    var user = req.query.email;
+    var user = req.query.email.split('@')[0];
     var hash = req.query.hash;
     var queryString = "SELECT password FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function (err, rows) {
@@ -51,9 +51,8 @@ exports.getPassword = function(req, res) {
             throw err;
         }
         else {
-            if(hash === rows[0]){
-                console.log(rows[0]);
-                res.send(true);
+            if(hash === rows[0].password){
+                res.send([true]);
             }
         }
     });
