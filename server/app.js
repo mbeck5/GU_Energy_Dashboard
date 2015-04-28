@@ -31,6 +31,8 @@ if (app.get('env') === 'development') {
         database: 'energy_report'
     });
 
+    hostURL = 'localhost:7457';
+
     // Error Handling
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
@@ -53,6 +55,8 @@ else if (app.get('env') === 'production') {
         user: 'tdoster',
         database: 'energydash'
     });
+
+    hostURL = 'energy.gonzaga.edu'
 
     // production error handler
     // no stacktraces leaked to user
