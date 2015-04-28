@@ -32,7 +32,6 @@ exports.standardDeviationFilter = function(data) {
     var stdDev = standardDeviation(data, avg);
     var low = avg - (dev_bounds * stdDev);
     var high = avg + (dev_bounds * stdDev);
-
     return data.filter(function (element) {
         return (element[property] > low) && (element[property] < high);
     });

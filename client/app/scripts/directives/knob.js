@@ -37,7 +37,13 @@ angular.module('clientApp').directive('knob', function() {
         fgColor : fgColor,
         readOnly: "true", //hardcoded, sorry
         rtl : (attr.dir == 'rtl'),
-        draw : function () { $(this.i).val(this.cv + sign); }
+        draw : function () {
+          //if no data, print message rather than NaN
+          if (isNaN(val))
+            $(this.i).val("N/A");
+          else
+            $(this.i).val(this.cv + sign);
+        }
       };
       tmpl.knob(options);
 

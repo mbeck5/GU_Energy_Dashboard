@@ -1,19 +1,21 @@
 var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
-/*var transporter = nodemailer.createTransport({
-    auth: {
-        user: 'debert@zagmail.gonzaga.edu',
-        pass: ''
+
+
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth:{
+        user: 'guenergydashboard@gmail.com',
+        pass: 'MarkDJDylanTyler'
     }
-});*/
-var transporter = nodemailer.createTransport();
+});
 
 function send(link, to){
     //Using direct transport isn't reliable because it uses port 25, which is often blocked by default.
     //Prefer to use a SMTP provider, but that wasn't working for me.
     var mailOptions = {
-        from: 'Gonzaga Energy Dashboard <debert@zagmail.gonzaga.edu>',
+        from: 'Gonzaga Energy Dashboard <960288368451-9qp5cbrk9h0kso1nm90l4tbr7rgnd7nb@developer.gserviceaccount.com>',
         to: to,
         subject: "Please confirm your email account.",
         html: "Hello,<br><br> Please <a href="+link+">click here</a> to verify your email.<br><br>Thank you,<br> GU Energy Dashboard Team"

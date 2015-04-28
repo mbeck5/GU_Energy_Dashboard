@@ -7,7 +7,7 @@ angular.module('clientApp')
     var changeList = [];
     var selectedComp = {};
     var longestLabel = 0;
-    $scope.topThree = [];
+    $scope.topThree = []; //holds top 3 buildings in competition
 
 
     //when new competition is selected, retrieve new data
@@ -50,6 +50,7 @@ angular.module('clientApp')
       }
       usSpinnerService.stop('spinner');
     });
+
     //Gold, Silver, Bronze, Other
     var colorArray = ["#FFD700", "#ACAFB2", "#CD7F32", "#0000FF"];
     $scope.data = [];

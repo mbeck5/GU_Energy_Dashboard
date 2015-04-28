@@ -2,19 +2,19 @@
 
 ## Contents
 
-Installation
+[Installation](#installation)
 
-Running
+[Running](#running)
 
 - Development
 - Production
 
-Dependencies
+[Dependencies](#dependencies)
 
 - For development
 - For the application
 
-The application
+[The Application](#the-application)
 
 - Client
   - Views
@@ -23,7 +23,7 @@ The application
 - Server
 - Database
 
-Deployment?
+[Deliverables](#deliverables)
 
 ## Installation
 
@@ -74,7 +74,7 @@ If you are on MAC or Linux change the section to look like this:
 
 ### Development mode
 
-Development mode will use non-minified and non-uglified code making debugging easier.  Additionally, listeners will be active in development mode that will watch for any changes in the code and apply those changes to the running application so you do not have to manually restart any services.  The webserver that is started will be serving content from the gu\_energy\_dashboard/client/app directory.
+Development mode will use non-minified and non-uglified code making debugging easier. Additionally, listeners will be active in development mode that will watch for any changes in the code and apply those changes to the running application so you do not have to manually restart any services. The webserver that is started will be serving content from the gu\_energy\_dashboard/client/app directory. Finally the database will point to the non-production database located in a senior design server. The data in this database is never updated.
 
 In the gu\_energy\_dashboard/server directory run: `npm test`
 
@@ -90,7 +90,7 @@ HTML and front-end JavaScript changes will be take change immediately as long th
 
 ### Production mode
 
-Production mode will use minified and uglified code so that the application will load faster, but will be harder to debug.  There are also no listeners watching for changes to the code.  The webserver that is started will be serving content from the gu\_energy\_dashboard/server/dist directory.
+Production mode will use minified and uglified code so that the application will load faster, but will be harder to debug.  There are also no listeners watching for changes to the code.  The webserver that is started will be serving content from the gu\_energy\_dashboard/server/dist directory. Additionally, the database will point to the production database in Barney that is continually updated. The web server will need to be running in Barney in order to access that database.
 
 In the gu\_energy\_dashboard/client directory run: `grunt -f`
 
@@ -198,7 +198,9 @@ services:
 
 - buildingSvc.js is used to communicate between the buildingSelector and buildingDisplay controllers. Additionally it executes REST calls relevant to buildings and their data.
 - compEditSvc.js is used to communicate the compDisplay, competitionGraph, and modal controllers. It also executes REST calls relevant to retrieving and editing competition information.
+
 directives:
+
 - knob.js provides a directive for the jQuery Knob components used on our home page.
 
 ### Server
@@ -227,3 +229,19 @@ services
 - standardDeviation.js implements a standard deviation filter that is used by our controllers to remove erroneous data points.
 
 ### Database
+
+## Deliverables
+
+### Deployment
+
+#### Web Server
+
+The web server is hosted on Barney.  The directory is /home/energydash/.  Access will need to be granted to this directory.  We were in contact with RyAnne Jones who is a Linux Administrator.  Any other questions related to the operation of thee web server should also go to RyAnne or another Linux Administrator.
+
+#### Database
+
+The production version of our database also resides in Barney. A script has been written to copy over data from Plant Services to our database daily. This process was created by Tim Powers who is an Enterprise Applications Administrator. Other production database related questions should also go to Tim or another Database Administrator.
+
+#### Google Analytics
+
+A Google Analytics account has been created an integrated with the application.  The account guenergydashboard@gmail.com is responsible for sending email confirmation for account creation and has also been given permission to manage the Analytics account. Here is a link to the account: [Google Analytics](https://www.google.com/analytics/web/?hl=en#report/visitors-overview/a59391709w93557215p98569197/).

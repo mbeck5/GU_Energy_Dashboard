@@ -138,12 +138,12 @@ exports.getBuildingTotals = function(req, res){
         endDate = moment(endDate).format("YYYY-MM-DD HH:mm:ss");
     }
 
-    var queryString = "SELECT building_name, sum(consumption) as consumption " +
+    var queryString = "SELECT building_name, sum(DISTINCT consumption) as consumption " +
                         "FROM competitions, building, competition_buildings, building_meters, meters, meters_dly_data " +
                         "WHERE building_meters.meter_id = meters.meter_id AND meters_dly_data.meter_id = meters.meter_id AND trend_date >= '" + startDate + "' " +
-                            "AND trend_date <= '" + endDate + "' AND bid = building_meters.building_id AND meter_type_id = competitions.resource " +
-                            "AND building.building_id = building_meters.building_id  AND competitions.cid = " + req.query.competitionId + " " +
-                            "AND competition_buildings.cid = competitions.cid GROUP BY bid";
+                        "AND trend_date <= '" + endDate + "' AND bid = building_meters.building_id AND meter_type_id = competitions.resource " +
+                        "AND building.building_id = building_meters.building_id  AND competitions.cid = " + req.query.competitionId + " " +
+                        "AND competition_buildings.cid = competitions.cid GROUP BY bid";
 
     connection.query(queryString, function(err, rows){
         if(err){

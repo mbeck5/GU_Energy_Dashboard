@@ -8,9 +8,10 @@ angular.module('clientApp')
         });
         $scope.navbarCollapsed = true;
 
-        $scope.isActive = function (location) {
-          return location === $location.path();
-        };
+    //returns which page is current selected
+    $scope.isActive = function (location) {
+      return location === $location.path();
+    };
 
         $scope.toggleCollapse = function() {
           //don't toggle if large screen
