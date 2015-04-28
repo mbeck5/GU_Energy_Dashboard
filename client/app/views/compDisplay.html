@@ -15,7 +15,7 @@
             </div>
 
             <!--competition list -->
-            <div class="scroll">
+            <div class="scroll comp-list">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.past" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
@@ -34,7 +34,7 @@
             </div>
 
             <!-- competition list -->
-            <div class="scroll">
+            <div class="scroll comp-list">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.running" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
@@ -53,7 +53,7 @@
             </div>
 
             <!-- competition list-->
-            <div class="scroll">
+            <div class="scroll comp-list">
               <div class="list-group">
                 <a ng-repeat="competition in filteredComps.upcoming" class="list-group-item clickable"
                    ng-class="{active: displayedCompIndex === $index}" ng-click="selectComp($index)">
@@ -72,7 +72,7 @@
             <script type="text/ng-template" id="myModalContent1.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')" ng-disabled="!allowClick()">Create</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')" ng-disabled="!confirmedUser">Create</button>
           </div>
 
           <!-- edit competition button -->

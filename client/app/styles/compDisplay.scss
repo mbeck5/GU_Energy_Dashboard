@@ -1,11 +1,10 @@
-#comp-list {
-  background-color: transparent;
-}
-
 .scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
-  height: 500px;
+}
+
+.comp-list {
+  height: 515px;
 }
 
 #tab-op .nav-tabs li a{
@@ -108,8 +107,6 @@
   width: 100%;
 }
 
-
-#comp-graph
-{
+#comp-graph {
   width: 900px;
 }
