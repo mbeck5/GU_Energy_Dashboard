@@ -10,6 +10,7 @@ angular.module('clientApp')
 
           //create hash
           try {
+            var bcrypt = new bCrypt();
             bcrypt.hashpw(password, salt, function (hash) {
               //The user exists, check if passwords match
               loginSvc.getPassword(email, hash).then(function(data2){

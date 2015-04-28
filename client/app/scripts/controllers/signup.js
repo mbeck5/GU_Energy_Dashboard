@@ -4,18 +4,21 @@ angular.module('clientApp')
   .controller('SignupCtrl', function ($scope, $modalInstance, signupSvc) {
 
     $scope.ok = function(email, password, passwordConfirm){
+      console.log(email);
       if(properDomain(email)) {
         if (password === passwordConfirm) {
-          signupSvc.addUser(email).then(function (data) {
+          signupSvc.addUserEmail(email).then(function (data) {
               if(typeof data.code === 'undefined'){
-                alert("A confirmation email has been sent to your entered email address.  Please verify your email to access full functionality.");
+
                 var salt = data[0];
 
                 //create hash
                 try {
+                  var bcrypt = new bCrypt();
                   bcrypt.hashpw(password, salt, function (hash) {
                     //send hash to create password
                     signupSvc.addUserPassword(email, hash);
+                    alert("A confirmation email has been sent to your entered email address.  Please verify your email to access full functionality.");
                   });
                 }
                 catch (err) {
@@ -51,7 +54,8 @@ angular.module('clientApp')
     function properDomain(email){
       var properDomains = ["gonzaga.edu", "zagmail.gonzaga.edu"];
       var domain = email.split("@")[1];
-      return properDomains.indexOf(domain) == -1;
+      console.log(properDomains.indexOf(domain))
+      return properDomains.indexOf(domain) != -1;
     }
 
     function clearInputs(){

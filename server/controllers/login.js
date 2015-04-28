@@ -2,7 +2,6 @@ var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
 
-
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth:{
@@ -32,7 +31,7 @@ function send(link, to){
 
 exports.getUser = function(req, res){
     var user = req.query.email;
-    var queryString = "SELECT * FROM users WHERE username = '" + user + "'";
+    var queryString = "SELECT salt FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function(err, rows){
         if(err){
             throw err;
@@ -45,43 +44,52 @@ exports.getUser = function(req, res){
 
 exports.getPassword = function(req, res) {
     var user = req.query.email;
-    var password = req.query.password;
+    var hash = req.query.hash;
     var queryString = "SELECT password FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function (err, rows) {
         if (err) {
             throw err;
         }
         else {
-            bcrypt.compare(password, rows[0].password, function(err, same){
-                if(same){
-                    res.send([true]);
-                }
-                else{
-                    res.send([false]);
-                }
-            });
+            if(hash === rows[0]){
+                console.log(rows[0]);
+                res.send(true);
+            }
         }
     });
 };
 
-exports.addUser = function(req, res){
+exports.addUserEmail = function(req, res){
     var email = req.body.email;
     var username = email.substring(0, email.indexOf("@"));
-    var password = req.body.password;
-    bcrypt.hash(password, null, null, function(err, hash){
-        crypto.randomBytes(48, function(ex, buf){
-            var token = buf.toString('hex');
-            var queryString = "INSERT INTO users (email, username, password, token) VALUES ('" + email + "', '" + username + "', '" + hash + "', '" + token + "')";
-            connection.query(queryString, function (err, rows) {
-                if (err) {
-                    res.send(err);
-                }
-                else {
-                    var link = req.protocol + '://' + req.get('host') + "/#/verify?email=" + email + "&token=" + token;
-                    send(link, email);
-                    res.send([]);
-                }
-            });
+    bcrypt.genSalt(10, function(err, salt){
+        var queryString = "INSERT INTO users (email, username, salt) VALUES ('" + email + "', '" + username + "', '" + salt + "')";
+        connection.query(queryString, function (err, rows) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(salt);
+            }
+        });
+    });
+};
+
+exports.addUserPassword = function(req, res){
+    var email = req.body.email;
+    var hash = req.body.hash;
+    crypto.randomBytes(48, function(ex, buf){
+        var token = buf.toString('hex');
+        var queryString = "UPDATE users SET password = '" + hash + "', token = '" + token + "' WHERE email = '" + email + "'";
+        connection.query(queryString, function (err, rows) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                var link = req.protocol + '://' + req.get('host') + "/#/verify?email=" + email + "&token=" + token;
+                send(link, email);
+                res.send('OK');
+            }
         });
     });
 };

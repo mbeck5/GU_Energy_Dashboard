@@ -3,8 +3,8 @@
 angular.module('clientApp')
   .factory('signupSvc', function (Restangular) {
 
-    function addUser(email, password){
-      var newUser = Restangular.all("addUser");
+    function addUserEmail(email, password){
+      var newUser = Restangular.all("addUserEmail");
       return newUser.post({email: email, password: password});
     }
 
@@ -19,7 +19,7 @@ angular.module('clientApp')
     }
 
     return {
-      addUser: addUser,
+      addUserEmail: addUserEmail,
       confirmUser: confirmUser,
       addUserPassword: addUserPassword
     };

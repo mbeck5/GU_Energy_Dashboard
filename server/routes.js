@@ -22,6 +22,7 @@ app.get('/api/getCompCreator', compQController.getCompCreator);
 app.get('/api/getCompEditor', compQController.getCompEditor);
 app.get('/api/getUser', loginController.getUser);
 app.get('/api/getPassword', loginController.getPassword);
-app.post('/api/addUser', loginController.addUser);
+app.post('/api/addUserEmail', loginController.addUserEmail);
+app.post('/api/addUserPassword', loginController.addUserPassword);
 app.post('/api/confirmUser', loginController.confirmUser);
 app.get('/api/isConfirmed', loginController.isConfirmed);
