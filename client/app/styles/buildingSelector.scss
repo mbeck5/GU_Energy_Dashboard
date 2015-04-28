@@ -13,14 +13,6 @@
   margin-bottom: 15px;
 }
 
-#building-list {
-  background-color: transparent;
-  margin-bottom: 20px;
-  margin-outside: 20px;
-  height: 350px;
-}
-
-
 #building-list-panel{
   height: 25%;
 }
@@ -28,6 +20,7 @@
 #building-scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
+  height: 400px;
 }
 
 #graph-alignment {
