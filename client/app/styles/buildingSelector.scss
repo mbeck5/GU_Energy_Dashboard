@@ -20,7 +20,7 @@
 #building-scroll {
   overflow-x: hidden !important;
   overflow-y: auto;
-  height: 400px;
+  height: 353px;
 }
 
 #graph-alignment {
@@ -65,4 +65,11 @@
   position: absolute;
   float: left;
   z-index: 1;
+}
+
+#tips-body {
+  height: 210px;
+  @media (max-width: $screen-md) {
+    height: auto;
+  }
 }
