@@ -4,7 +4,6 @@ angular.module('clientApp')
   .controller('SignupCtrl', function ($scope, $modalInstance, signupSvc) {
 
     $scope.ok = function(email, password, passwordConfirm){
-      console.log(email);
       if(properDomain(email)) {
         if (password === passwordConfirm) {
           signupSvc.addUserEmail(email).then(function (data) {
@@ -54,7 +53,6 @@ angular.module('clientApp')
     function properDomain(email){
       var properDomains = ["gonzaga.edu", "zagmail.gonzaga.edu"];
       var domain = email.split("@")[1];
-      console.log(properDomains.indexOf(domain))
       return properDomains.indexOf(domain) != -1;
     }
 
