@@ -5,7 +5,7 @@ angular.module('clientApp')
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
     var user = $cookies['user'];
-    var confirmedUser;
+    $scope.confirmedUser = false;
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
@@ -187,7 +187,7 @@ angular.module('clientApp')
     };
 
     $scope.allowClick = function(){
-      return isCompetitionSelected() && confirmedUser;
+      return isCompetitionSelected() && $scope.confirmedUser;
     };
 
     function isCompetitionSelected(){
@@ -197,10 +197,10 @@ angular.module('clientApp')
     function isConfirmedEmail(){
       loginSvc.isConfirmed(user).then(function(data){
         if(data[0]) {
-          confirmedUser = data[0].confirmed;
+          $scope.confirmedUser = data[0].confirmed;
         }
       });
-    };
+    }
 
     //retrieves all competition info
     function refreshCompList() {
