@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('clientApp')
-  .controller('CompDisplayCtrl', function ($scope, $location, $modal, compEditSvc, usSpinnerService) {
+  .controller('CompDisplayCtrl', function ($scope, $location, $modal, $cookies, compEditSvc, usSpinnerService, loginSvc) {
     var sortedComps = {}; //past, running, upcoming
     var selectedComp;
+    var user = $cookies['user'];
+    var confirmedUser;
     $scope.searchInput = {input: ''};
     $scope.filteredComps = {};   //past, running, upcoming
     $scope.compTabActivity = [false, true, false];  //past, running, upcoming
@@ -13,6 +15,24 @@ angular.module('clientApp')
 
     //retrieve initial data
     refreshCompList();
+    showFooter();
+    isConfirmedEmail();
+    $scope.$on("logout", function(){
+      showFooter();
+      user = $cookies['user']
+    });
+
+    function showFooter(){
+      var isLoggedIn = $cookies['loggedIn'];
+      if(isLoggedIn === 'true'){
+        $scope.loggedIn = true;
+        $scope.loggedOut = false;
+      }
+      else{
+        $scope.loggedIn = false;
+        $scope.loggedOut = true;
+      }
+    }
 
     function sortCompsIntoTabs(allComps) {
       sortedComps = {past: [], running: [], upcoming: []};  //reset
@@ -150,8 +170,36 @@ angular.module('clientApp')
       });
     };
 
-    $scope.isCompetitionSelected = function() {
-      return selectedComp != null;
+    $scope.openLoginModal = function(size){
+      var loginModal = $modal.open({
+        templateUrl: 'loginModal.html',
+        controller: 'LoginCtrl',
+        size: size
+      })
+
+      loginModal.result.then(function(loggedin){
+        if(loggedin){
+          showFooter();
+          user = $cookies['user']
+          isConfirmedEmail();
+        }
+      });
+    };
+
+    $scope.allowClick = function(){
+      return isCompetitionSelected() && confirmedUser;
+    };
+
+    function isCompetitionSelected(){
+      return (selectedComp != null) || (sortedComps.running.length == 0);
+    };
+
+    function isConfirmedEmail(){
+      loginSvc.isConfirmed(user).then(function(data){
+        if(data[0]) {
+          confirmedUser = data[0].confirmed;
+        }
+      });
     };
 
     //retrieves all competition info
@@ -184,8 +232,9 @@ angular.module('clientApp')
   });
 
 //controller for creating competition
-angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('createModalInstanceCtrl', function ($scope, $modalInstance, $cookies, compEditSvc, buildingSvc) {
   //view variables
+  var user = $cookies['user'];
   $scope.name = '';
   $scope.checkedBuildings = [];
   $scope.buildings = [];
@@ -206,7 +255,6 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
   $scope.status = {
     isopen: false
   };
-
 
   //toggle check value by clicking on item
   $scope.selectBuilding = function (index) {
@@ -260,7 +308,7 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
               }
             }
             maxCid = maxCid + 1;
-            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+            compEditSvc.saveNewComp(maxCid, startDateStr, endDateStr, newName.replace("'", "''"), user).then(function (data) {
               if (data === "OK") {
                 for (var property in $scope.checkedBuildings) {
                   if ($scope.checkedBuildings.hasOwnProperty(property) && $scope.checkedBuildings[property]) {
@@ -284,8 +332,9 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
 });
 
 //controller for edit modal
-angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, compEditSvc, buildingSvc) {
+angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope, $modalInstance, $cookies, compEditSvc, buildingSvc) {
   //variables
+  var user = $cookies['user'];
   $scope.selectedResourceComp = 'Select Resource';
   var selectedComp = compEditSvc.getSelectedComp();
   $scope.name = selectedComp.comp_name;
@@ -356,7 +405,7 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
               var startDateStr = startDateStrMoment.format('YYYY/MM/DD');
               var endDateStr = endDateStrMoment.format('YYYY/MM/DD');
               //update in database
-              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''")).then(function (data) {
+              compEditSvc.editNewComp(compEditSvc.getSelectedCompCid(), startDateStr, endDateStr, newName.replace("'", "''"), user).then(function (data) {
                 //save new building selections
                 if (data === "OK") {
                   compEditSvc.saveListOfBuildings($scope.checkedBuildings, cid);

@@ -2,6 +2,7 @@ app = module.parent.exports;
 
 var buildingController = require('./controllers/building');
 var compQController = require('./controllers/compQuery');
+var loginController = require('./controllers/login');
 
 app.get('/api/getBuildings', buildingController.getBuildings);
 app.get('/api/getBuildingData', buildingController.getResources);
@@ -17,3 +18,11 @@ app.post('/api/addCompBuilding', compQController.addCompBuilding);
 app.post('/api/deleteCompBuildings', compQController.deleteCompBuildings);
 app.get('/api/getCompBuildingList', compQController.getCompBuildingList);
 app.get('/api/getBuildingTotals', compQController.getBuildingTotals);
+app.get('/api/getCompCreator', compQController.getCompCreator);
+app.get('/api/getCompEditor', compQController.getCompEditor);
+app.get('/api/getUser', loginController.getUser);
+app.get('/api/getPassword', loginController.getPassword);
+app.post('/api/addUserEmail', loginController.addUserEmail);
+app.post('/api/addUserPassword', loginController.addUserPassword);
+app.post('/api/confirmUser', loginController.confirmUser);
+app.get('/api/isConfirmed', loginController.isConfirmed);

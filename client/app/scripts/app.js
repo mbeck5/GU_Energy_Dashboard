@@ -40,6 +40,10 @@ angular
         templateUrl: 'views/compDisplay.html',
         controller: 'CompDisplayCtrl'
         })
+      .when('/verify', {
+        templateUrl: 'views/verify.html',
+        controller: 'VerifyCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

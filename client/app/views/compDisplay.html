@@ -64,14 +64,15 @@
           </tab>
         </tabset>
       </div>
-      <div class="panel-footer">
+      <!--If logged in, show competition control buttons -->
+      <div ng-if="loggedIn" class="panel-footer">
         <div id="action-footer">
           <!-- create competition button -->
           <div>
             <script type="text/ng-template" id="myModalContent1.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')">Create</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openCreateModal('lg')" ng-disabled="!allowClick()">Create</button>
           </div>
 
           <!-- edit competition button -->
@@ -79,7 +80,7 @@
             <script type="text/ng-template" id="myModalContent2.html">
               <div ng-include src="'views/CreateCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')" ng-disabled="!isCompetitionSelected()">Edit</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openEditModal('lg')" ng-disabled="!allowClick()">Edit</button>
           </div>
 
           <!-- delete competition button-->
@@ -87,7 +88,19 @@
             <script type="text/ng-template" id="myModalContent3.html">
               <div ng-include src="'views/DeleteCompDisplay.html'"></div>
             </script>
-            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()" ng-disabled="!isCompetitionSelected()">Delete</button>
+            <button class="btn btn-default comp-action-buttons" ng-click="openDeleteModal()" ng-disabled="!allowClick()">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!--If logged out, show login button -->
+      <div ng-if="loggedOut" class="panel-footer">
+        <div id="login-footer">
+          <div>
+            <script type="text/ng-template" id="loginModal.html">
+              <div ng-include src="'views/loginDisplay.html'"></div>
+            </script>
+            <button class="btn btn-default comp-action-buttons" ng-click="openLoginModal('sm')">Login</button>
           </div>
         </div>
       </div>

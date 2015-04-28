@@ -55,6 +55,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-class="{active: isActive('/')}" ng-click="toggleCollapse()"><a href="#/">Home</a></li>
             <li ng-class="{active: isActive('/Competitions')}" ng-click="toggleCollapse()"><a href="#/Competitions">Competitions</a></li>
+            <li ng-if="loggedIn" ng-click="logout()"><a>Logout</a></li>
           </ul>
         </div>
       </div>
@@ -95,6 +96,14 @@
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="bower_components/jquery-knob/js/jquery.knob.js"></script>
+    <script src="bower_components/js-bcrypt/bCrypt.js"></script>
+    <script src="bower_components/js-bcrypt/MochiKit/MochiKit.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/Base.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/ByteArray.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/Crypto/BigInt.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/Crypto/SHA.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/Crypto/AES.js"></script>
+    <script src="bower_components/js-bcrypt/Clipperz/Crypto/PRNG.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -106,8 +115,13 @@
     <script src="scripts/controllers/compDisplay.js"></script>
     <script src="scripts/controllers/frontPageSummary.js"></script>
     <script src="scripts/controllers/competitionGraph.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/signup.js"></script>
+    <script src="scripts/controllers/verify.js"></script>
     <script src="scripts/services/buildingSvc.js"></script>
     <script src="scripts/services/compEditSvc.js"></script>
+    <script src="scripts/services/loginSvc.js"></script>
+    <script src="scripts/services/signupSvc.js"></script>
     <script src="scripts/directives/knob.js"></script>
 
     <!-- endbuild -->
