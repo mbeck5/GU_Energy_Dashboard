@@ -54,6 +54,9 @@ exports.getPassword = function(req, res) {
             if(hash === rows[0].password){
                 res.send([true]);
             }
+            else{
+                res.send([false]);
+            }
         }
     });
 };
@@ -102,13 +105,13 @@ exports.confirmUser = function(req, res) {
             throw(err);
         }
         else {
-            res.send([]);
+            res.send('OK');
         }
     });
 };
 
 exports.isConfirmed = function(req, res){
-    var user = req.query.user;
+    var user = req.query.user.split('@')[0];
     var queryString = "SELECT confirmed FROM users WHERE username = '" + user + "'";
     connection.query(queryString, function (err, rows) {
         if (err) {

@@ -175,12 +175,12 @@ angular.module('clientApp')
         templateUrl: 'loginModal.html',
         controller: 'LoginCtrl',
         size: size
-      })
+      });
 
       loginModal.result.then(function(loggedin){
         if(loggedin){
           showFooter();
-          user = $cookies['user']
+          user = $cookies['user'];
           isConfirmedEmail();
         }
       });
