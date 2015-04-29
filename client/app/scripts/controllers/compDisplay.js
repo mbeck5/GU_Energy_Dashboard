@@ -196,7 +196,6 @@ angular.module('clientApp')
 
     function isConfirmedEmail(){
       loginSvc.isConfirmed(user).then(function(data){
-        console.log(data[0]);
         if(data[0]) {
           confirmedUser = data[0].confirmed;
         }
