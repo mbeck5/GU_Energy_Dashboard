@@ -54,6 +54,9 @@ exports.getPassword = function(req, res) {
             if(hash === rows[0].password){
                 res.send([true]);
             }
+            else{
+                res.send([false]);
+            }
         }
     });
 };

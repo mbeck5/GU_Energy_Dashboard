@@ -14,7 +14,7 @@ angular.module('clientApp')
             bcrypt.hashpw(password, salt, function (hash) {
               //The user exists, check if passwords match
               loginSvc.getPassword(email, hash).then(function(data2){
-                if(data2){
+                if(data2[0]){
                   //Successful Login.
                   $cookies['loggedIn'] = 'true';
                   $cookies['user'] = email;
