@@ -12,6 +12,7 @@ angular.module('clientApp')
     $scope.compDisplayTabActivity = [false, true];  //podium, all
     $scope.displayedCompIndex = 0;
     $scope.spinnerActive = false;
+    $scope.lastEditedBy = '';
 
     //retrieve initial data
     refreshCompList();
@@ -108,6 +109,7 @@ angular.module('clientApp')
         selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
         setDates();
         compEditSvc.setSelectedComp(selectedComp);
+        setLastEditedBy();
       }
       else {
         selectedComp = null;
@@ -191,8 +193,8 @@ angular.module('clientApp')
     };
 
     function isCompetitionSelected(){
-      return (selectedComp != null) || (sortedComps.running.length == 0);
-    };
+      return (selectedComp != null) || (sortedComps.running && sortedComps.running.length === 0);
+    }
 
     function isConfirmedEmail(){
       loginSvc.isConfirmed(user).then(function(data){
@@ -200,6 +202,17 @@ angular.module('clientApp')
           $scope.confirmedUser = data[0].confirmed;
         }
       });
+    }
+
+    function setLastEditedBy () {
+      //if no edits use created_by
+      if (selectedComp.edited_by === '') {
+        $scope.lastEditedBy = selectedComp.created_by.split('@')[0];  //cut off domain
+      }
+      else {
+        var edits = selectedComp.edited_by.split(',');
+        $scope.lastEditedBy = edits[edits.length - 1];  //get last person
+      }
     }
 
     //retrieves all competition info
