@@ -67,9 +67,6 @@
   z-index: 1;
 }
 
-#tips-body {
-  height: 210px;
-  @media (max-width: $screen-md) {
-    height: auto;
-  }
+.tips-body {
+  height: 161px;
 }
