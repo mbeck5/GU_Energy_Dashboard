@@ -55,6 +55,11 @@ body {
   box-shadow: 0 0 50px #CCCCCC;
 }
 
+.scroll {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+}
+
 //change graph line thickness
 .nvd3 g.nv-groups path.nv-line {
   stroke-width: 4px;

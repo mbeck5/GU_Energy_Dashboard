@@ -67,13 +67,6 @@
   z-index: 1;
 }
 
-#tips-body {
-  height: 210px;
-  @media (max-width: $screen-md) {
-    height: auto;
-  }
-}
-
-#tips-scroll {
-  overflow: scroll;
+.tips-body {
+  height: 161px;
 }
