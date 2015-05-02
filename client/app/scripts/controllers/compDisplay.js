@@ -197,11 +197,14 @@ angular.module('clientApp')
     }
 
     function isConfirmedEmail(){
-      loginSvc.isConfirmed(user).then(function(data){
-        if(data[0]) {
-          $scope.confirmedUser = data[0].confirmed;
-        }
-      });
+      //ensure user exists before checking
+      if (user) {
+        loginSvc.isConfirmed(user).then(function(data){
+          if(data[0]) {
+            $scope.confirmedUser = data[0].confirmed;
+          }
+        });
+      }
     }
 
     function setLastEditedBy () {
