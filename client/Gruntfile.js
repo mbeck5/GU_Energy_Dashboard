@@ -15,6 +15,8 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  grunt.loadNpmTasks('grunt-angular-architecture-graph');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -388,9 +390,19 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    angular_architecture_graph: {
+      diagram: {
+        files: {
+          // "PATH/TO/OUTPUT/FILES": ["PATH/TO/YOUR/FILES/*.js"]
+          "architecture": [
+            "<%= yeoman.app %>/scripts/**/*.js"
+          ]
+        }
+      }
     }
   });
-
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
