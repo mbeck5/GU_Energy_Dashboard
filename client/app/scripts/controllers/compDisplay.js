@@ -170,6 +170,7 @@ angular.module('clientApp')
       });
     };
 
+    //opens the modal to log in
     $scope.openLoginModal = function(size){
       var loginModal = $modal.open({
         templateUrl: 'loginModal.html',
@@ -177,6 +178,7 @@ angular.module('clientApp')
         size: size
       });
 
+      //when the modal closes
       loginModal.result.then(function(loggedin){
         if(loggedin){
           showFooter();
@@ -186,14 +188,17 @@ angular.module('clientApp')
       });
     };
 
+    //allow user to create, edit or delete if logged in
     $scope.allowClick = function(){
       return isCompetitionSelected() && $scope.confirmedUser;
     };
 
+    //checkm if a comp is selected
     function isCompetitionSelected(){
       return (selectedComp != null) || (sortedComps.running.length == 0);
     };
 
+    //check if email has been confirmed
     function isConfirmedEmail(){
       loginSvc.isConfirmed(user).then(function(data){
         if(data[0]) {
@@ -274,11 +279,12 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("Please specify a competition name");
     }
     else {
+      //reformat dates for sql
       var tempStart = compEditSvc.getStartDate();
       var tempEnd = compEditSvc.getEndDate();
 
-      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
-      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');
 
       var clickedBuildingCount = 0;
       for (var property in $scope.checkedBuildings) {
@@ -381,8 +387,8 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       var tempStart = compEditSvc.getStartDate();
       var tempEnd = compEditSvc.getEndDate();
 
-      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
-      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');
 
       var clickedBuildingCount = 0;
       for (var property in $scope.checkedBuildings) {
