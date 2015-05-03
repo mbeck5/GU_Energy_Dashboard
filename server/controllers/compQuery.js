@@ -2,7 +2,7 @@ var moment = require('moment');
 var stdDev = require('../services/standardDeviation');
 
 exports.getCompetitions = function (req, res) {
-    var queryString = "SELECT DISTINCT comp_name, cid, start_date, end_date " +
+    var queryString = "SELECT DISTINCT comp_name, cid, start_date, end_date, created_by, edited_by " +
         "FROM competitions " +
         "WHERE comp_name != 'undefined' " +
         "ORDER BY comp_name;";

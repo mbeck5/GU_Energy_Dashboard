@@ -6,7 +6,7 @@ angular.module('clientApp')
     $scope.login = function(email, password){
       loginSvc.getUser(email).then(function(data){
         if(data[0]){
-          var salt = data[0].salt; //receive hash
+          var salt = data[0].salt; //receive salt
 
           //create hash
           try {
@@ -48,10 +48,7 @@ angular.module('clientApp')
         templateUrl: 'signupModal.html',
         controller: 'SignupCtrl',
         size: size
-      })
-
-      //signupModal.result.then(function(result){
-      //});
+      });
     };
 
     $scope.cancel = function(){
