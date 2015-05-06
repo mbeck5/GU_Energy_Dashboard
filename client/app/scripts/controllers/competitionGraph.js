@@ -130,6 +130,7 @@ angular.module('clientApp')
       }, 100);
     };
 
+    //Creates the list of buildings and their respective values to compare to.
     function createCompareList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
@@ -143,6 +144,7 @@ angular.module('clientApp')
       }
     }
 
+    //Creates the list of buildings and their respective values from the start of the competition to now.
     function createCurrentList(data){
       if(data) {
         for (var i = 0; i < data.length; i++) {
@@ -151,11 +153,13 @@ angular.module('clientApp')
       }
     }
 
+    //Calculate the percent change of two values.
     function calcPercentChange(oldVal, newVal){
       var change = newVal - oldVal;
       return -(change / oldVal);
     }
 
+    //Calculates teh percent change for every building in the competition.
     function calcAllChanges(){
       if(compareList.length == currentList.length) {
         for (var i = 0; i < compareList.length; i++) {
@@ -165,6 +169,7 @@ angular.module('clientApp')
       }
     }
 
+    //Sorts changes from greatest to least.
     //Insertion Sort since we aren't sorting a lot buildings (max 30ish?)
     function sortChanges(){
       for(var i = 0; i < changeList.length; i++){
@@ -178,6 +183,8 @@ angular.module('clientApp')
       }
     }
 
+    //Creates the data for the nvd3 chart.
+    //Uses all buildings in each series to create better spacing on the graph.
     function createData(){
       var tempData = [];
       for(var i = 0; i < changeList.length; i++){
@@ -197,6 +204,7 @@ angular.module('clientApp')
       $scope.data = angular.copy(tempData);
     }
 
+    //Shortens building names to make it easier to put as labels.
     function shortenBuildingName(buildingName){
       if (buildingName.indexOf('(') > -1){
         return buildingName.substring(0, buildingName.indexOf(' '));

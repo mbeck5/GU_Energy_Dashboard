@@ -135,7 +135,7 @@ angular.module('clientApp')
       return difference / startTotal * 100;
     }
 
-    //TODO: Make it so this function doesn't depend on the order of the character. i.e. Residence Hall/Dormitory can return either Residence or Residence Hall
+    //Shortens the name of the types to make it easier to use as labels.
     function shortenTypeName(buildingType){
       if (buildingType.indexOf(' ') > -1){
         return buildingType.substring(0, buildingType.indexOf(' '));

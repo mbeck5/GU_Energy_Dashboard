@@ -118,7 +118,7 @@
           <!-- tabs -->
           <tabset justified="true">
             <!-- top buildings tab -->
-            <tab heading="Top Buildings" active="compDisplayTabActivity[0]" disabled="!isCompetitionSelected()">
+            <tab heading="Top Buildings" active="compDisplayTabActivity[0]">
               <div>
                 <!-- first place -->
                 <div class="row">
@@ -166,11 +166,12 @@
             </tab>
 
             <!-- competition graph -->
-            <tab ng-controller="CompetitionGraphCtrl" id="comp-tab" heading="Full View" active="compDisplayTabActivity[1]"
+            <tab ng-controller="CompetitionGraphCtrl" heading="Full View" active="compDisplayTabActivity[1]"
                  select="fixGraph()">
-              <div id="comp-div">
-                <nvd3 options='options' id="comp-graph" data='data' api='api'></nvd3>
+              <div>
+                <nvd3 options='options' data='data' api='api'></nvd3>
               </div>
+              <div>Last edited by: {{lastEditedBy}}</div>
             </tab>
           </tabset>
         </div>

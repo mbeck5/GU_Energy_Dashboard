@@ -12,6 +12,7 @@ angular.module('clientApp')
     $scope.compDisplayTabActivity = [false, true];  //podium, all
     $scope.displayedCompIndex = 0;
     $scope.spinnerActive = false;
+    $scope.lastEditedBy = '';
 
     //retrieve initial data
     refreshCompList();
@@ -108,6 +109,7 @@ angular.module('clientApp')
         selectedComp = angular.copy($scope.filteredComps[getSelectedTimeline()][index]);  //make deep copy to avoid date issues
         setDates();
         compEditSvc.setSelectedComp(selectedComp);
+        setLastEditedBy();
       }
       else {
         selectedComp = null;
@@ -170,6 +172,7 @@ angular.module('clientApp')
       });
     };
 
+    //opens the modal to log in
     $scope.openLoginModal = function(size){
       var loginModal = $modal.open({
         templateUrl: 'loginModal.html',
@@ -177,6 +180,7 @@ angular.module('clientApp')
         size: size
       });
 
+      //when the modal closes
       loginModal.result.then(function(loggedin){
         if(loggedin){
           showFooter();
@@ -186,20 +190,37 @@ angular.module('clientApp')
       });
     };
 
+    //allow user to create, edit or delete if logged in
     $scope.allowClick = function(){
       return isCompetitionSelected() && $scope.confirmedUser;
     };
 
+    //checkm if a comp is selected
     function isCompetitionSelected(){
-      return (selectedComp != null) || (sortedComps.running.length == 0);
-    };
+      return (selectedComp != null) || (sortedComps.running && sortedComps.running.length === 0);
+    }
 
+    //check if email has been confirmed
     function isConfirmedEmail(){
-      loginSvc.isConfirmed(user).then(function(data){
-        if(data[0]) {
-          $scope.confirmedUser = data[0].confirmed;
-        }
-      });
+      //ensure user exists before checking
+      if (user) {
+        loginSvc.isConfirmed(user).then(function(data){
+          if(data[0]) {
+            $scope.confirmedUser = data[0].confirmed;
+          }
+        });
+      }
+    }
+
+    function setLastEditedBy () {
+      //if no edits use created_by
+      if (selectedComp.edited_by === '') {
+        $scope.lastEditedBy = selectedComp.created_by.split('@')[0];  //cut off domain
+      }
+      else {
+        var edits = selectedComp.edited_by.split(',');
+        $scope.lastEditedBy = edits[edits.length - 1];  //get last person
+      }
     }
 
     //retrieves all competition info
@@ -274,11 +295,12 @@ angular.module('clientApp').controller('createModalInstanceCtrl', function ($sco
       alert("Please specify a competition name");
     }
     else {
+      //reformat dates for sql
       var tempStart = compEditSvc.getStartDate();
       var tempEnd = compEditSvc.getEndDate();
 
-      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
-      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');
 
       var clickedBuildingCount = 0;
       for (var property in $scope.checkedBuildings) {
@@ -381,8 +403,8 @@ angular.module('clientApp').controller('editModalInstanceCtrl', function ($scope
       var tempStart = compEditSvc.getStartDate();
       var tempEnd = compEditSvc.getEndDate();
 
-      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
-      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');//.format('YYYY/MM/DD');
+      var startDateStrMoment = moment(tempStart, 'DD/MMMM/YYYY');
+      var endDateStrMoment = moment(tempEnd, 'DD/MMMM/YYYY');
 
       var clickedBuildingCount = 0;
       for (var property in $scope.checkedBuildings) {
