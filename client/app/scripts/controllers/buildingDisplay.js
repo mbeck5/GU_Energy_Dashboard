@@ -218,6 +218,7 @@ angular.module('clientApp')
     function initGraph() {
       var longestLabel;
       $scope.data = tempData;
+      //If there is no data for the selected resource, say so.
       if($scope.data[0].values.length == 0){
         $scope.options.chart.noData = 'No Data Available for Selected Resource';
       }
