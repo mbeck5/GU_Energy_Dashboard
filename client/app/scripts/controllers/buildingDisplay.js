@@ -48,7 +48,7 @@ angular.module('clientApp')
         tooltips: true,
         transitionDuration: 500,
         useInteractiveGuideline: true,
-        noData: 'No Data Available for Selected Resource'
+        noData: ''
       },
       title: {
         enable: true,
@@ -218,6 +218,10 @@ angular.module('clientApp')
     function initGraph() {
       var longestLabel;
       $scope.data = tempData;
+      //If there is no data for the selected resource, say so.
+      if($scope.data[0].values.length == 0){
+        $scope.options.chart.noData = 'No Data Available for Selected Resource';
+      }
       setResourceLabel();
       $scope.options.chart.lines.forceY = [0, getMaxPlusPadding(10)];
       longestLabel = getMaxPlusPadding(10).toFixed().toString().length;
@@ -302,5 +306,6 @@ angular.module('clientApp')
     function resetData() {
       $scope.data = [];
       tempData = [];
+      $scope.options.chart.noData = '';
     }
   });
