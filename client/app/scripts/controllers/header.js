@@ -19,6 +19,7 @@ angular.module('clientApp')
             $scope.navbarCollapsed = !$scope.navbarCollapsed;
         };
 
+        //when logging out, updates all the cookies
         $scope.logout = function(){
           $cookies['loggedIn'] = false;
           $cookies['user'] = '';
@@ -26,6 +27,7 @@ angular.module('clientApp')
           updateHeader();
         };
 
+        //Add/Removes the logout button from the header.
         function updateHeader(){
           var isLoggedIn = $cookies['loggedIn'];
           if(isLoggedIn === 'true'){

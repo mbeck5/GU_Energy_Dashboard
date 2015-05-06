@@ -121,8 +121,10 @@ exports.getCompEditor = function(req, res){
             res.send(rows);
         }
     });
-}
+};
 
+//Gets the total consumption for all buildings in a competition
+//Pass in competition id, start date, and end date.
 exports.getBuildingTotals = function(req, res){
     var startDate = req.query.startDate;
     var endDate = req.query.endDate;

@@ -2,6 +2,7 @@ var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
 
+//Create the nodemailer transport for sending email.
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth:{
@@ -10,11 +11,12 @@ var transporter = nodemailer.createTransport({
     }
 });
 
+//Create and send the message to new users.
 function send(link, to){
     //Using direct transport isn't reliable because it uses port 25, which is often blocked by default.
     //Prefer to use a SMTP provider, but that wasn't working for me.
     var mailOptions = {
-        from: 'Gonzaga Energy Dashboard <960288368451-9qp5cbrk9h0kso1nm90l4tbr7rgnd7nb@developer.gserviceaccount.com>',
+        from: 'Gonzaga Energy Dashboard',
         to: to,
         subject: "Please confirm your email account.",
         html: "Hello,<br><br> Please <a href="+link+">click here</a> to verify your email.<br><br>Thank you,<br> GU Energy Dashboard Team"
@@ -29,6 +31,7 @@ function send(link, to){
     })
 }
 
+//Gets and returns the salt associated with a given user
 exports.getUser = function(req, res){
     var user = req.query.email.split('@')[0];
     var queryString = "SELECT salt FROM users WHERE username = '" + user + "'";
@@ -42,6 +45,7 @@ exports.getUser = function(req, res){
     });
 };
 
+//Gets the hashed password associated with a given user.
 exports.getPassword = function(req, res) {
     var user = req.query.email.split('@')[0];
     var hash = req.query.hash;
@@ -61,8 +65,10 @@ exports.getPassword = function(req, res) {
     });
 };
 
+//Adds a user's email, username, and generated salt to the database.
 exports.addUserEmail = function(req, res){
     var email = req.body.email;
+    //username is the same as their blackboard username (everything before the @ in their email).
     var username = email.substring(0, email.indexOf("@"));
     bcrypt.genSalt(10, function(err, salt){
         var queryString = "INSERT INTO users (email, username, salt) VALUES ('" + email + "', '" + username + "', '" + salt + "')";
@@ -77,6 +83,7 @@ exports.addUserEmail = function(req, res){
     });
 };
 
+//Adds the user's hashed password to the database.
 exports.addUserPassword = function(req, res){
     var email = req.body.email;
     var hash = req.body.hash;

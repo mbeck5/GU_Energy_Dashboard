@@ -9,6 +9,7 @@ angular.module('clientApp')
           signupSvc.addUserEmail(email).then(function (data) {
               if(typeof data.code === 'undefined'){
 
+                //Receive salt from server.
                 var salt = data;
 
                 //create hash
@@ -25,10 +26,12 @@ angular.module('clientApp')
                 }
                 $modalInstance.close(true);
               }
+              //The user already exists in the database.
               else if(data.code === 'ER_DUP_ENTRY'){
                 alert("User already exists");
                 clearInputs();
               }
+              //Some other error.  Fill in 'someone' with appropriate entity.
               else{
                 alert("Error! Please contact someone");
                 clearInputs();
@@ -50,12 +53,15 @@ angular.module('clientApp')
       $modalInstance.dismiss('cancel');
     };
 
+    //Checks if the email is a Gonzaga email.
+    //If more domains are added, just add them to the array.
     function properDomain(email){
       var properDomains = ["gonzaga.edu", "zagmail.gonzaga.edu"];
       var domain = email.split("@")[1];
       return properDomains.indexOf(domain) != -1;
     }
 
+    //Clears the input boxes.
     function clearInputs(){
       $scope.email = "";
       $scope.password = "";

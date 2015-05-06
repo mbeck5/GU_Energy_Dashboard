@@ -4,6 +4,7 @@ angular.module('clientApp')
   .controller('VerifyCtrl', function ($scope, $location, signupSvc) {
     verify();
 
+    //Gets the information from the link sent in the email to verify the user.
     function verify(){
       var url = $location.url();
       var params = url.substring(url.indexOf("?") + 1).split('&');
