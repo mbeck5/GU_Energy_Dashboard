@@ -1,5 +1,6 @@
 //Change all the values in here to the right ones.
 //Rename this file to config.js
+//Don't push config.js
 
 var config = {};
 
