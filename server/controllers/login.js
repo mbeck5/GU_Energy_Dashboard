@@ -1,13 +1,14 @@
 var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
+var config = require('../config');
 
 //Create the nodemailer transport for sending email.
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth:{
-        user: 'guenergydashboard@gmail.com',
-        pass: 'MarkDJDylanTyler'
+        user: config.emailUsername,
+        pass: config.emailPassword
     }
 });
 
