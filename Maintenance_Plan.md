@@ -219,6 +219,10 @@ routes.js
 
 - This file manages our routes used for our RESTful API and routes requests to the corresponding controller.
 
+configTemplate.js
+
+- This file is a template for a config file that holds passwords and other sensitive information.  Instructions on using this file are in the file itself.
+
 controllers
 
 - buildings.js executes queries related to buildings and their data. It is imperative that aliases in the queries **do not change**.
@@ -229,6 +233,62 @@ services
 - standardDeviation.js implements a standard deviation filter that is used by our controllers to remove erroneous data points.
 
 ### Database
+
+The database we are using contains many tables, but only a few of them are actually being used by our app.  The tables being used are
+
+- building
+    * Used to get information on a building (name, type id, id)
+- building_meters
+    * Used to match meters to buildings.
+- building_type
+    * Used to get building type names from building type ids.
+- meters
+    * Used to match meter ids to meter types. Basically used to get the resource the meter measures.
+- meters_dly_data
+    * Used to get daily consumption data for meters.
+- meters_mly_data
+    * Used to get monthly consumption data for meters.
+
+Other tables were created separately from the Plant Services database for other features.  This include
+
+- competitions
+    * Holds information about competitions (id, name, dates, etc.)
+
+            CREATE TABLE competitions (
+        	    cid INT NOT NULL AUTO_INCREMENT,
+        	    start_date DATE NOT NULL,
+        	    end_date DATE NOT NULL,
+        	    comp_name VARCHAR(100) NOT NULL,
+        	    resource INT NOT NULL,
+        	    created_by VARCHAR(50) NOT NULL,
+        	    edited_by VARCHAR(100) NOT NULL,
+        	    PRIMARY KEY (cid)
+            );
+
+- competition_buildings
+    * Contains the buildings associated with each competition
+
+            CREATE TABLE competition_buildings (
+                cid INT NOT NULL,
+                bid INT NOT NULL,
+                PRIMARY KEY (cid, bid)
+            );
+
+- users
+    * Contains information about users with accounts (email, username, etc.)
+
+            CREATE TABLE users (
+            	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            	email VARCHAR(50) NOT NULL UNIQUE,
+            	username VARCHAR(30) NOT NULL UNIQUE,
+            	salt VARCHAR(100) NOT NULL UNIQUE,
+            	password VARCHAR(60) NOT NULL,
+            	token VARCHAR(100) NOT NULL,
+            	confirmed TINYINT(1) NOT NULL DEFAULT 0,
+            	PRIMARY KEY (id)
+            );
+
+The queries used to get data from the database rely heavily on the schema of the database.  If the schema of any of these tables changes, the queries will need to be changed accordingly.  The function and logic of the more complex queries are documented in the appropriate files to make these changes easier.
 
 ## Deliverables
 

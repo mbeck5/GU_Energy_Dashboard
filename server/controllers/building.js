@@ -96,7 +96,7 @@ exports.getResourcesFromName = function(req, res) {
                         "FROM building, building_meters, meters, " + tableName + " " +
                         "WHERE building_meters.meter_id = meters.meter_id AND " + tableName + ".meter_id = meters.meter_id AND trend_date >= '" + startDate + "' AND trend_date <= '" + endDate + "' AND building.building_name = '" + req.query.building + "' AND meter_type_id = " + req.query.meterType + " AND building.building_id = building_meters.building_id " +
                         "GROUP BY date " +
-                            //Remove all values greater than 3 standard deviations from the average.
+                        //Remove all values greater than 3 standard deviations from the average.
                         "HAVING consumption > " +
                             "(SELECT AVG(consumption) - (3 * STDDEV(consumption)) " +
                             "FROM (" +
