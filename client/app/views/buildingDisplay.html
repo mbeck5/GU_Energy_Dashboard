@@ -1,14 +1,83 @@
 <div class="row">
   <!--resource toggles -->
   <div class="col-md-2">
+
+
+    <div class="panel panel-default panel-transparent">
+      <div class="panel-heading">Options</div>
+      <div class="panel-body">
+        <div id="date-detail-controls">
+          <!--From date picker -->
+          <div>
+            <span>From</span>
+
+            <div class="input-group">
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1"
+                     is-open="dateOpen1"
+                     close-text="Close" ng-change="datesChanged()"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!--To date picker -->
+          <div>
+            <span>To</span>
+
+            <div class="input-group">
+              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2"
+                     is-open="dateOpen2"
+                     close-text="Close" ng-change="datesChanged()"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!--apply button -->
+          <div>
+            <!--detailed toggle switch -->
+            <div id="detailed-toggle-wrapper">
+              <label id="detailed-toggle"
+                     popover="Displays daily data as opposed to monthly. This is helpful for looking at large amounta of data."
+                     popover-trigger="mouseenter" popover-placement="bottom">
+                <toggle-switch model="isDetailed" on-change="toggleDetailed()"></toggle-switch>
+                Detailed View
+              </label>
+            </div>
+            <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()"
+                    ng-disabled="!isDatesChanged">
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!--electricity -->
     <div class="panel panel-success panel-shadow resource-div-effects" ng-click="selectResource(2)">
       <div class="panel-heading">
         <h3 class="panel-title">Electricity</h3>
       </div>
-      <div class="panel-body" id="electricity-panel-background" >
+      <div class="panel-body" id="electricity-panel-background">
         <div class="toggles">
-          <img src="images/ELECTRICbaby.png" >
+          <img src="images/ELECTRICbaby.png">
+        </div>
+      </div>
+    </div>
+
+    <!--gas -->
+    <div class="panel panel-warning panel-shadow resource-div-effects" ng-click="selectResource(3)">
+      <div class="panel-heading">Gas</div>
+      <div class="panel-body" id="gas-panel-background">
+        <div class="toggles">
+          <img src="images/FIREbevel.png">
         </div>
       </div>
     </div>
@@ -25,65 +94,16 @@
       </div>
     </div>
 
-    <!--gas -->
-    <div class="panel panel-warning panel-shadow resource-div-effects" ng-click="selectResource(3)">
-      <div class="panel-heading">Gas</div>
-      <div class="panel-body" id="gas-panel-background" >
-        <div class="toggles">
-          <img src="images/FIREbevel.png" >
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="col-md-10">
-    <div class="panel panel-default panel-transparent" >
+    <div class="panel panel-default panel-transparent">
       <div class="panel-heading">{{selectedBuilding.name}} Energy Usage</div>
       <div class="panel-body">
         <div class="row">
           <!--loading spinner -->
           <span us-spinner spinner-key="spinner" spinner-start-active="true"></span>
 
-          <!--detailed toggle switch -->
-          <div id="detailed-toggle-wrapper" class="col-sm-2">
-            <label id="detailed-toggle" popover="Displays daily data as opposed to monthly. This is helpful for looking at large amounta of data." popover-trigger="mouseenter" popover-placement="bottom">
-              <toggle-switch model="isDetailed" on-change="toggleDetailed()" ></toggle-switch>
-              Detailed View
-            </label>
-          </div>
-
-          <!--From date picker -->
-          <div class="col-sm-4">
-            <span>From</span>
-            <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date1" is-open="dateOpen1" close-text="Close" ng-change="datesChanged()"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openDate($event, 1)">
-                  <i class="fa fa-calendar"></i>
-                </button>
-              </span>
-            </div>
-          </div>
-
-          <!--To date picker -->
-          <div class="col-sm-4">
-            <span>To</span>
-            <div class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd/MMMM/yyyy" ng-model="date2" is-open="dateOpen2" close-text="Close" ng-change="datesChanged()"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openDate($event, 2)">
-                  <i class="fa fa-calendar"></i>
-                </button>
-              </span>
-            </div>
-          </div>
-
-          <!--apply button -->
-          <div class="col-sm-2">
-            <button id="display-apply" type="button" class="btn btn-primary" ng-click="applyGraphOptions()" ng-disabled="!isDatesChanged">
-              Apply
-            </button>
-          </div>
         </div>
 
         <!--graph -->
@@ -96,4 +116,3 @@
     </div>
   </div>
 </div>
-
