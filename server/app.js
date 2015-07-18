@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var config = require('./config');
 
 var app = express();
 
@@ -25,10 +26,10 @@ if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../client/app')));
 
     connection = mysql.createConnection({
-        host: '147.222.165.3',
-        user: 'debert',
-        password: 'debert1234',
-        database: 'energy_report'
+        host: config.devDBHost,
+        user: config.devDBUser,
+        password: config.devDBPass,
+        database: config.devDB
     });
 
     hostURL = 'localhost:7457';
@@ -51,12 +52,12 @@ else if (app.get('env') === 'production') {
     app.use(express.static(path.join(__dirname, '/dist')));
 
     connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'tdoster',
-        database: 'energydash'
+        host: config.prodDBHost,
+        user: config.prodDBUser,
+        database: config.prodDB
     });
 
-    hostURL = 'energy.gonzaga.edu'
+    hostURL = 'energy.gonzaga.edu';
 
     // production error handler
     // no stacktraces leaked to user
